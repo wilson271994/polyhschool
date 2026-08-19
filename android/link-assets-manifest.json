@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/AniversBold.otf",
+      "sha1": "20a9edcc3430586e7ab67fa77837eaa00d6ff2ad"
+    },
+    {
+      "path": "src/assets/fonts/AniversRegular.otf",
+      "sha1": "4dbc075ed8082f1588a5de23730bcf81c28e2556"
+    }
+  ]
+}

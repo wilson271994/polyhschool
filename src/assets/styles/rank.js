@@ -1,0 +1,145 @@
+import { StyleSheet, Dimensions } from 'react-native';
+import { color } from 'react-native-elements/dist/helpers';
+const { width, height } = Dimensions.get('window');
+
+export const rankstyle = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F0F4F8',
+  },
+  header: {
+    height: 300,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  headerBackground: {
+    ...StyleSheet.absoluteFillObject,
+    resizeMode: 'cover',
+  },
+  headerOverlay: {
+    flex: 1,
+    paddingTop: 50,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0,0,0,0.5)', // Overlay for better text visibility
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 1,
+  },
+  closeButtonText: {
+    fontSize: 40,
+    color: 'white',
+    fontWeight: '300',
+  },
+  podiumContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    height: 150,
+  },
+  podiumStepOneContainer: {
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
+  podiumStepTwoContainer: {
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
+  podiumStepThreeContainer: {
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
+  podiumCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: 'white',
+    marginBottom: -30,
+    zIndex: 1,
+  },
+  podiumStepOne: {
+    backgroundColor: '#F59E0B',
+    width: 90,
+    height: 120,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  podiumStepTwo: {
+    backgroundColor: '#2A9D8F',
+    width: 90,
+    height: 90,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  podiumStepThree: {
+    backgroundColor: '#F48C06',
+    width: 90,
+    height: 70,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  podiumTextOne: {
+    position: 'absolute',
+    bottom: 5,
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: 'white',
+    zIndex: 2,
+  },
+  podiumTextTwo: {
+    position: 'absolute',
+    bottom: 5,
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: 'white',
+    zIndex: 2,
+  },
+  podiumTextThree: {
+    position: 'absolute',
+    bottom: 5,
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: 'white',
+    zIndex: 2,
+  },
+  rankingList: {
+    marginTop: 20,
+    paddingHorizontal: 20,
+  },
+  schoolItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  schoolRankCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#D1D5DB',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 15,
+  },
+  schoolName: {
+    fontSize: 16,
+    color: '#333',
+  },
+});
