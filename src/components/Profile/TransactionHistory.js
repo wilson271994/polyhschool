@@ -1,11 +1,25 @@
 import React, { PureComponent } from 'react';
-import { View, Text, FlatList, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Animated, Modal, Alert, ImageBackground, Image } from 'react-native';
+import {
+    SafeAreaView,
+    View,
+    Text,
+    FlatList,
+    TouchableOpacity,
+    TextInput,
+    ScrollView,
+    Animated,
+    Modal,
+    StatusBar,
+} from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+
 import { switchProfilPageAction } from '../../navigations/rootNavigation';
 import { transactionstyle } from '../../assets/styles/transactionhistory';
 import { styles } from '../../assets/styles';
+import { COLORS } from '../../assets/styles/theme';
 
 class TransactionHistory extends PureComponent {
     constructor(props) {
@@ -21,7 +35,6 @@ class TransactionHistory extends PureComponent {
             searchQuery: '',
             showFilterModal: false,
             scrollY: new Animated.Value(0),
-            scrollYvalue: 0,
             months: [
                 { id: 'all', name: 'Tous' },
                 { id: '01', name: 'Janvier' },
@@ -35,23 +48,24 @@ class TransactionHistory extends PureComponent {
                 { id: '09', name: 'Septembre' },
                 { id: '10', name: 'Octobre' },
                 { id: '11', name: 'Novembre' },
-                { id: '12', name: 'Décembre' }
+                { id: '12', name: 'Décembre' },
             ],
             paymentMethods: [
-                { id: 'all', name: 'Tous', icon: '💳' },
-                { id: 'carte', name: 'Carte bancaire', icon: '💳' },
-                { id: 'especes', name: 'Espèces', icon: '💰' },
-                { id: 'virement', name: 'Virement', icon: '🏦' },
-                { id: 'cheque', name: 'Chèque', icon: '📝' },
-                { id: 'mobile', name: 'Mobile Money', icon: '📱' }
+                { id: 'all', name: 'Tous', icon: 'credit-card-outline' },
+                { id: 'carte', name: 'Carte bancaire', icon: 'credit-card-outline' },
+                { id: 'especes', name: 'Espèces', icon: 'cash' },
+                { id: 'virement', name: 'Virement', icon: 'bank-outline' },
+                { id: 'cheque', name: 'Chèque', icon: 'file-document-outline' },
+                { id: 'mobile', name: 'Mobile Money', icon: 'cellphone-check' },
             ],
             statusOptions: [
-                { id: 'all', name: 'Tous', color: '#6B7280' },
-                { id: 'completed', name: 'Payé', color: '#10b981' },
-                { id: 'pending', name: 'En attente', color: '#f59e0b' }
+                { id: 'all', name: 'Tous' },
+                { id: 'completed', name: 'Payé' },
+                { id: 'pending', name: 'En attente' },
             ],
-            activeFilters: 0
+            activeFiltersCount: 0,
         };
+
         this.handleScroll = Animated.event(
             [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
             { useNativeDriver: false }
@@ -64,7 +78,7 @@ class TransactionHistory extends PureComponent {
 
     _navigateToProfil = () => {
         switchProfilPageAction(true);
-    }
+    };
 
     loadTransactions = () => {
         const mockData = [
@@ -78,7 +92,7 @@ class TransactionHistory extends PureComponent {
                 time: '14:30:25',
                 status: 'completed',
                 transactionId: 'TXN-001-2026',
-                description: 'Frais de scolarité - 2ème trimestre'
+                description: 'Frais de scolarité - 2ème trimestre',
             },
             {
                 id: '2',
@@ -90,7 +104,7 @@ class TransactionHistory extends PureComponent {
                 time: '09:15:42',
                 status: 'completed',
                 transactionId: 'TXN-002-2026',
-                description: 'Frais de scolarité + Activités'
+                description: 'Frais de scolarité + Activités',
             },
             {
                 id: '3',
@@ -102,7 +116,7 @@ class TransactionHistory extends PureComponent {
                 time: '16:45:10',
                 status: 'completed',
                 transactionId: 'TXN-003-2026',
-                description: 'Sortie scolaire'
+                description: 'Sortie scolaire',
             },
             {
                 id: '4',
@@ -114,7 +128,7 @@ class TransactionHistory extends PureComponent {
                 time: '11:20:33',
                 status: 'pending',
                 transactionId: 'TXN-004-2026',
-                description: 'Frais de scolarité - 2ème trimestre'
+                description: 'Frais de scolarité - 2ème trimestre',
             },
             {
                 id: '5',
@@ -126,50 +140,14 @@ class TransactionHistory extends PureComponent {
                 time: '08:55:18',
                 status: 'completed',
                 transactionId: 'TXN-005-2026',
-                description: 'Activités sportives'
+                description: 'Activités sportives',
             },
-            {
-                id: '6',
-                childName: 'Thomas Petit',
-                className: 'CE1 - Section A',
-                amount: 140000,
-                paymentMethod: 'carte',
-                date: '2026-02-25',
-                time: '13:40:05',
-                status: 'completed',
-                transactionId: 'TXN-006-2026',
-                description: 'Frais de scolarité'
-            },
-            {
-                id: '7',
-                childName: 'Emma Martin',
-                className: 'CP - Section A',
-                amount: 30000,
-                paymentMethod: 'mobile',
-                date: '2026-02-18',
-                time: '17:12:59',
-                status: 'completed',
-                transactionId: 'TXN-007-2026',
-                description: 'Bibliothèque'
-            },
-            {
-                id: '8',
-                childName: 'Chloé Dubois',
-                className: '6ème - Section A',
-                amount: 200000,
-                paymentMethod: 'virement',
-                date: '2026-01-10',
-                time: '10:25:47',
-                status: 'completed',
-                transactionId: 'TXN-008-2026',
-                description: 'Frais de scolarité - 1er trimestre'
-            }
         ];
 
         this.setState({
             transactions: mockData,
-            filteredTransactions: mockData
-        }, this.updateActiveFiltersCount);
+            filteredTransactions: mockData,
+        });
     };
 
     updateActiveFiltersCount = () => {
@@ -181,66 +159,47 @@ class TransactionHistory extends PureComponent {
         if (minAmount && minAmount !== '') count++;
         if (maxAmount && maxAmount !== '') count++;
         if (searchQuery && searchQuery !== '') count++;
-        this.setState({ activeFilters: count });
+        this.setState({ activeFiltersCount: count });
     };
 
-    // Fonction pour appliquer la recherche
     performSearch = () => {
         const { transactions, selectedMonth, selectedPaymentMethod, selectedStatus, minAmount, maxAmount, searchQuery } = this.state;
-
         let filtered = [...transactions];
 
-        // Filtre par recherche
         if (searchQuery && searchQuery !== '') {
             const query = searchQuery.toLowerCase();
-            filtered = filtered.filter(transaction =>
-                transaction.childName.toLowerCase().includes(query) ||
-                transaction.description.toLowerCase().includes(query) ||
-                transaction.transactionId.toLowerCase().includes(query) ||
-                transaction.className.toLowerCase().includes(query)
+            filtered = filtered.filter(
+                (t) =>
+                    t.childName.toLowerCase().includes(query) ||
+                    t.description.toLowerCase().includes(query) ||
+                    t.transactionId.toLowerCase().includes(query) ||
+                    t.className.toLowerCase().includes(query)
             );
         }
 
-        // Filtre par mois
         if (selectedMonth !== 'all') {
-            filtered = filtered.filter(transaction => {
-                const transactionMonth = transaction.date.split('-')[1];
-                return transactionMonth === selectedMonth;
-            });
+            filtered = filtered.filter((t) => t.date.split('-')[1] === selectedMonth);
         }
 
-        // Filtre par moyen de paiement
         if (selectedPaymentMethod !== 'all') {
-            filtered = filtered.filter(transaction =>
-                transaction.paymentMethod === selectedPaymentMethod
-            );
+            filtered = filtered.filter((t) => t.paymentMethod === selectedPaymentMethod);
         }
 
-        // Filtre par statut
         if (selectedStatus !== 'all') {
-            filtered = filtered.filter(transaction =>
-                transaction.status === selectedStatus
-            );
+            filtered = filtered.filter((t) => t.status === selectedStatus);
         }
 
-        // Filtre par montant minimum
         if (minAmount && minAmount !== '') {
             const min = parseFloat(minAmount);
-            if (!isNaN(min)) {
-                filtered = filtered.filter(transaction => transaction.amount >= min);
-            }
+            if (!isNaN(min)) filtered = filtered.filter((t) => t.amount >= min);
         }
 
-        // Filtre par montant maximum
         if (maxAmount && maxAmount !== '') {
             const max = parseFloat(maxAmount);
-            if (!isNaN(max)) {
-                filtered = filtered.filter(transaction => transaction.amount <= max);
-            }
+            if (!isNaN(max)) filtered = filtered.filter((t) => t.amount <= max);
         }
 
-        this.setState({ filteredTransactions: filtered });
-        this.updateActiveFiltersCount();
+        this.setState({ filteredTransactions: filtered }, this.updateActiveFiltersCount);
     };
 
     applyFilters = () => {
@@ -249,30 +208,29 @@ class TransactionHistory extends PureComponent {
     };
 
     clearFilters = () => {
-        this.setState({
-            selectedMonth: 'all',
-            selectedPaymentMethod: 'all',
-            selectedStatus: 'all',
-            minAmount: '',
-            maxAmount: '',
-            searchQuery: '',
-            filteredTransactions: this.state.transactions
-        }, () => {
-            this.updateActiveFiltersCount();
-            this.toggleFilterModal();
-        });
+        this.setState(
+            {
+                selectedMonth: 'all',
+                selectedPaymentMethod: 'all',
+                selectedStatus: 'all',
+                minAmount: '',
+                maxAmount: '',
+                searchQuery: '',
+                filteredTransactions: this.state.transactions,
+            },
+            () => {
+                this.updateActiveFiltersCount();
+                if (this.state.showFilterModal) this.toggleFilterModal();
+            }
+        );
     };
 
     toggleFilterModal = () => {
-        this.setState(prevState => ({ showFilterModal: !prevState.showFilterModal }));
+        this.setState((prevState) => ({ showFilterModal: !prevState.showFilterModal }));
     };
 
     formatAmount = (amount) => {
-        return new Intl.NumberFormat('fr-FR', {
-            style: 'currency',
-            currency: 'XAF',
-            minimumFractionDigits: 0
-        }).format(amount);
+        return `${amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} FCFA`;
     };
 
     formatDate = (date) => {
@@ -280,114 +238,98 @@ class TransactionHistory extends PureComponent {
         return `${day}/${month}/${year}`;
     };
 
-    formatTime = (time) => {
-        const [hours, minutes] = time.split(':');
-        return `${hours}:${minutes}`;
-    };
-
     getPaymentMethodIcon = (method) => {
-        const methods = {
-            carte: '💳',
-            especes: '💰',
-            virement: '🏦',
-            cheque: '📝',
-            mobile: '📱'
+        const icons = {
+            carte: 'credit-card-outline',
+            especes: 'cash',
+            virement: 'bank-outline',
+            cheque: 'file-document-outline',
+            mobile: 'cellphone-check',
         };
-        return methods[method] || '💳';
-    };
-
-    getStatusColor = (status) => {
-        return status === 'completed' ? '#10b981' : '#f59e0b';
-    };
-
-    getStatusText = (status) => {
-        return status === 'completed' ? '✓ Payé' : '⏳ En attente';
-    };
-
-    renderheader = () => {
-        const headerOpacity = this.state.scrollY.interpolate({
-            inputRange: [0, 100],
-            outputRange: [0, 1],
-            extrapolate: 'clamp',
-        });
-        console.log(headerOpacity)
-        return (
-            <Animated.View style={[transactionstyle.Header, { opacity: headerOpacity }]}>
-                <View style={styles.section}>
-                    <View style={transactionstyle.headerSection}>
-                        <View style={transactionstyle.headerbuttonContainer}>
-                            <TouchableOpacity
-                                style={transactionstyle.HeaderButton}
-                                onPress={this._navigateToProfil}>
-                                <Image style={styles.backstyle} source={require('../../assets/images/back.png')} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={transactionstyle.headertext}>
-                            <Text style={[transactionstyle.HeaderTitle, styles.textBold]}>Historique des transactions</Text>
-                        </View>
-                    </View>
-                </View>
-            </Animated.View>
-        );
+        return icons[method] || 'credit-card-outline';
     };
 
     renderTransactionItem = ({ item }) => {
+        const isCompleted = item.status === 'completed';
+
         return (
-            <TouchableOpacity style={transactionstyle.transactionCard}>
+            <TouchableOpacity style={transactionstyle.transactionCard} activeOpacity={0.8}>
                 <View style={transactionstyle.cardHeader}>
                     <View style={transactionstyle.childInfo}>
                         <View style={transactionstyle.avatarContainer}>
-                            <Text style={[transactionstyle.avatarText, styles.textBold]}>{item.childName.charAt(0)}</Text>
+                            <Text style={[styles.textBold, transactionstyle.avatarText]}>
+                                {item.childName.charAt(0)}
+                            </Text>
                         </View>
                         <View>
-                            <Text style={[transactionstyle.childName, styles.textBold]}>{item.childName}</Text>
-                            <Text style={[transactionstyle.className, styles.text]}>{item.className}</Text>
+                            <Text style={[styles.textBold, transactionstyle.childName]}>{item.childName}</Text>
+                            <Text style={[styles.text, transactionstyle.className]}>{item.className}</Text>
                         </View>
                     </View>
-                    <View style={[transactionstyle.statusBadge, { backgroundColor: this.getStatusColor(item.status) + '15' }]}>
-                        <Text style={[transactionstyle.statusText, styles.textBold, { color: this.getStatusColor(item.status) }]}>
-                            {this.getStatusText(item.status)}
+
+                    <View
+                        style={[
+                            transactionstyle.statusBadge,
+                            isCompleted ? transactionstyle.statusBadgeSuccess : transactionstyle.statusBadgePending,
+                        ]}
+                    >
+                        <Text
+                            style={[
+                                styles.textBold,
+                                transactionstyle.statusText,
+                                isCompleted ? transactionstyle.statusTextSuccess : transactionstyle.statusTextPending,
+                            ]}
+                        >
+                            {isCompleted ? '✓ Payé' : '⏳ En attente'}
                         </Text>
                     </View>
                 </View>
 
                 <View style={transactionstyle.cardDetails}>
-                    <View style={transactionstyle.detailRow}>
-                        <View style={transactionstyle.detailItem}>
-                            <Text style={[transactionstyle.detailLabel, styles.text]}>Montant</Text>
-                            <Text style={[transactionstyle.amountText, styles.text]}>{this.formatAmount(item.amount)}</Text>
+                    <Text style={[styles.textBold, transactionstyle.amountText]}>
+                        {this.formatAmount(item.amount)}
+                    </Text>
+                    <Text style={[styles.text, transactionstyle.description]}>{item.description}</Text>
+
+                    <View style={transactionstyle.metaRow}>
+                        <View style={transactionstyle.metaItem}>
+                            <Icon
+                                name={this.getPaymentMethodIcon(item.paymentMethod)}
+                                size={14}
+                                color={COLORS.textMuted}
+                            />
+                            <Text style={[styles.text, transactionstyle.metaText]}>
+                                {this.state.paymentMethods.find((m) => m.id === item.paymentMethod)?.name || item.paymentMethod}
+                            </Text>
                         </View>
-                        <View style={transactionstyle.detailItem}>
-                            <Text style={[transactionstyle.detailLabel, styles.text]}>Paiement</Text>
-                            <View style={transactionstyle.paymentMethod}>
-                                <Text style={[transactionstyle.paymentIcon, styles.text]}>{this.getPaymentMethodIcon(item.paymentMethod)}</Text>
-                                <Text style={[transactionstyle.paymentText, styles.text]}>
-                                    {this.state.paymentMethods.find(m => m.id === item.paymentMethod)?.name || item.paymentMethod}
-                                </Text>
-                            </View>
+
+                        <View style={transactionstyle.metaItem}>
+                            <Icon name="calendar-clock" size={14} color={COLORS.textMuted} />
+                            <Text style={[styles.text, transactionstyle.metaText]}>
+                                {this.formatDate(item.date)} • {item.time.substring(0, 5)}
+                            </Text>
                         </View>
                     </View>
 
-                    <View style={transactionstyle.detailRow}>
-                        <View style={transactionstyle.detailItem}>
-                            <Text style={[transactionstyle.detailLabel, styles.text]}>Date</Text>
-                            <Text style={[transactionstyle.detailValue, styles.textBold]}>{this.formatDate(item.date)}</Text>
-                        </View>
-                        <View style={transactionstyle.detailItem}>
-                            <Text style={[transactionstyle.detailLabel, styles.text]}>Heure</Text>
-                            <Text style={[transactionstyle.detailValue, styles.textBold]}>{this.formatTime(item.time)}</Text>
-                        </View>
-                    </View>
-
-                    <Text style={[transactionstyle.description, styles.text]}>{item.description}</Text>
-                    <Text style={[transactionstyle.transactionId, styles.text]}>ID: {item.transactionId}</Text>
+                    <Text style={[styles.text, transactionstyle.transactionId]}>Réf : {item.transactionId}</Text>
                 </View>
             </TouchableOpacity>
         );
     };
 
     renderFilterModal = () => {
-        const { showFilterModal, selectedMonth, selectedPaymentMethod, selectedStatus, minAmount, maxAmount, searchQuery, months, paymentMethods, statusOptions } = this.state;
+        const {
+            showFilterModal,
+            selectedMonth,
+            selectedPaymentMethod,
+            selectedStatus,
+            minAmount,
+            maxAmount,
+            searchQuery,
+            months,
+            paymentMethods,
+            statusOptions,
+        } = this.state;
 
         return (
             <Modal
@@ -399,129 +341,130 @@ class TransactionHistory extends PureComponent {
                 <View style={transactionstyle.modalOverlay}>
                     <View style={transactionstyle.modalContent}>
                         <View style={transactionstyle.modalHeader}>
-                            <Text style={[transactionstyle.modalTitle, styles.textBold]}>Filtres avancés</Text>
+                            <Text style={[styles.textBold, transactionstyle.modalTitle]}>🔍 Filtres avancés</Text>
                             <TouchableOpacity onPress={this.toggleFilterModal}>
-                                <Text style={transactionstyle.closeButton}>✕</Text>
+                                <Icon name="close" size={24} color={COLORS.textPrimary} />
                             </TouchableOpacity>
                         </View>
 
-                        <ScrollView showsVerticalScrollIndicator={false}>
-                            {/* Recherche */}
-                            <Text style={[transactionstyle.filterLabel, styles.textBold]}>Recherche</Text>
-                            <View style={transactionstyle.searchContainer}>
-                                <Icon name="magnify" size={20} color="#999" />
+                        <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 12 }}>
+                            {/* Mot-clé */}
+                            <Text style={[styles.textBold, transactionstyle.filterLabel]}>Recherche par mot-clé</Text>
+                            <View style={transactionstyle.searchBox}>
+                                <Icon name="magnify" size={20} color={COLORS.textMuted} />
                                 <TextInput
-                                    style={[transactionstyle.searchInput, styles.text, { color: '#000' }]}
-                                    placeholder="Nom, description ou ID..."
-                                    placeholderTextColor="#999"
+                                    style={[styles.text, transactionstyle.searchInput]}
+                                    placeholder="Enfant, motif, ID..."
+                                    placeholderTextColor={COLORS.textMuted}
                                     value={searchQuery}
                                     onChangeText={(text) => this.setState({ searchQuery: text })}
-                                    onSubmitEditing={this.performSearch}
                                 />
                             </View>
 
                             {/* Mois */}
-                            <Text style={[transactionstyle.filterLabel, styles.textBold]}>Mois</Text>
-                            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={transactionstyle.filterScroll}>
-                                {months.map(month => (
+                            <Text style={[styles.textBold, transactionstyle.filterLabel]}>Mois de règlement</Text>
+                            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={transactionstyle.chipRow}>
+                                {months.map((m) => (
                                     <TouchableOpacity
-                                        key={month.id}
+                                        key={m.id}
                                         style={[
-                                            transactionstyle.filterChip,
-                                            selectedMonth === month.id && transactionstyle.filterChipActive
+                                            transactionstyle.chip,
+                                            selectedMonth === m.id && transactionstyle.chipActive,
                                         ]}
-                                        onPress={() => this.setState({ selectedMonth: month.id })}
+                                        onPress={() => this.setState({ selectedMonth: m.id })}
                                     >
-                                        <Text style={[
-                                            transactionstyle.filterChipText, styles.text,
-                                            selectedMonth === month.id && transactionstyle.filterChipTextActive
-                                        ]}>
-                                            {month.name}
+                                        <Text
+                                            style={[
+                                                styles.text,
+                                                transactionstyle.chipText,
+                                                selectedMonth === m.id && transactionstyle.chipTextActive,
+                                            ]}
+                                        >
+                                            {m.name}
                                         </Text>
                                     </TouchableOpacity>
                                 ))}
                             </ScrollView>
 
                             {/* Moyen de paiement */}
-                            <Text style={[transactionstyle.filterLabel, styles.textBold]}>Moyen de paiement</Text>
-                            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={transactionstyle.filterScroll}>
-                                {paymentMethods.map(method => (
+                            <Text style={[styles.textBold, transactionstyle.filterLabel]}>Mode de paiement</Text>
+                            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={transactionstyle.chipRow}>
+                                {paymentMethods.map((pm) => (
                                     <TouchableOpacity
-                                        key={method.id}
+                                        key={pm.id}
                                         style={[
-                                            transactionstyle.filterChip,
-                                            selectedPaymentMethod === method.id && transactionstyle.filterChipActive
+                                            transactionstyle.chip,
+                                            selectedPaymentMethod === pm.id && transactionstyle.chipActive,
                                         ]}
-                                        onPress={() => this.setState({ selectedPaymentMethod: method.id })}
+                                        onPress={() => this.setState({ selectedPaymentMethod: pm.id })}
                                     >
-                                        <Text style={[transactionstyle.filterChipIcon, styles.text]}>{method.icon}</Text>
-                                        <Text style={[
-                                            transactionstyle.filterChipText, styles.text,
-                                            selectedPaymentMethod === method.id && transactionstyle.filterChipTextActive
-                                        ]}>
-                                            {method.name}
+                                        <Text
+                                            style={[
+                                                styles.text,
+                                                transactionstyle.chipText,
+                                                selectedPaymentMethod === pm.id && transactionstyle.chipTextActive,
+                                            ]}
+                                        >
+                                            {pm.name}
                                         </Text>
                                     </TouchableOpacity>
                                 ))}
                             </ScrollView>
 
                             {/* Statut */}
-                            <Text style={[transactionstyle.filterLabel, styles.textBold]}>Statut</Text>
-                            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={transactionstyle.filterScroll}>
-                                {statusOptions.map(status => (
+                            <Text style={[styles.textBold, transactionstyle.filterLabel]}>Statut de transaction</Text>
+                            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={transactionstyle.chipRow}>
+                                {statusOptions.map((st) => (
                                     <TouchableOpacity
-                                        key={status.id}
+                                        key={st.id}
                                         style={[
-                                            transactionstyle.filterChip,
-                                            selectedStatus === status.id && transactionstyle.filterChipActive
+                                            transactionstyle.chip,
+                                            selectedStatus === st.id && transactionstyle.chipActive,
                                         ]}
-                                        onPress={() => this.setState({ selectedStatus: status.id })}
+                                        onPress={() => this.setState({ selectedStatus: st.id })}
                                     >
-                                        <Text style={[
-                                            transactionstyle.filterChipText, styles.text,
-                                            selectedStatus === status.id && transactionstyle.filterChipTextActive
-                                        ]}>
-                                            {status.name}
+                                        <Text
+                                            style={[
+                                                styles.text,
+                                                transactionstyle.chipText,
+                                                selectedStatus === st.id && transactionstyle.chipTextActive,
+                                            ]}
+                                        >
+                                            {st.name}
                                         </Text>
                                     </TouchableOpacity>
                                 ))}
                             </ScrollView>
 
-                            {/* Montant */}
-                            <Text style={[transactionstyle.filterLabel, styles.textBold]}>Montant (XAF)</Text>
-                            <View style={transactionstyle.amountRangeContainer}>
-                                <View style={transactionstyle.amountInputWrapper}>
-                                    <Text style={[transactionstyle.amountPrefix, styles.text]}>Min</Text>
-                                    <TextInput
-                                        style={[transactionstyle.amountInput, styles.text, { color: '#000' }]}
-                                        placeholder="0"
-                                        placeholderTextColor="#999"
-                                        keyboardType="numeric"
-                                        value={minAmount}
-                                        onChangeText={(text) => this.setState({ minAmount: text })}
-                                    />
-                                </View>
-                                <Text style={[transactionstyle.amountSeparator, styles.text]}>-</Text>
-                                <View style={transactionstyle.amountInputWrapper}>
-                                    <Text style={[transactionstyle.amountPrefix, styles.text]}>Max</Text>
-                                    <TextInput
-                                        style={[transactionstyle.amountInput, styles.text, { color: '#000' }]}
-                                        placeholder="∞"
-                                        placeholderTextColor="#999"
-                                        keyboardType="numeric"
-                                        value={maxAmount}
-                                        onChangeText={(text) => this.setState({ maxAmount: text })}
-                                    />
-                                </View>
+                            {/* Plage de Montants */}
+                            <Text style={[styles.textBold, transactionstyle.filterLabel]}>Fourchette de montant (FCFA)</Text>
+                            <View style={transactionstyle.amountRangeWrapper}>
+                                <TextInput
+                                    style={[styles.text, transactionstyle.amountInput]}
+                                    placeholder="Min"
+                                    placeholderTextColor={COLORS.textMuted}
+                                    keyboardType="numeric"
+                                    value={minAmount}
+                                    onChangeText={(t) => this.setState({ minAmount: t })}
+                                />
+                                <Text style={[styles.text, { color: COLORS.textMuted }]}>à</Text>
+                                <TextInput
+                                    style={[styles.text, transactionstyle.amountInput]}
+                                    placeholder="Max"
+                                    placeholderTextColor={COLORS.textMuted}
+                                    keyboardType="numeric"
+                                    value={maxAmount}
+                                    onChangeText={(t) => this.setState({ maxAmount: t })}
+                                />
                             </View>
                         </ScrollView>
 
                         <View style={transactionstyle.modalFooter}>
-                            <TouchableOpacity style={transactionstyle.clearButton} onPress={this.clearFilters}>
-                                <Text style={[transactionstyle.clearButtonText, styles.text]}>Tout effacer</Text>
+                            <TouchableOpacity style={transactionstyle.clearBtn} onPress={this.clearFilters}>
+                                <Text style={[styles.textBold, transactionstyle.clearBtnText]}>Réinitialiser</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={transactionstyle.applyButton} onPress={this.applyFilters}>
-                                <Text style={[transactionstyle.applyButtonText, styles.text]}>Appliquer</Text>
+                            <TouchableOpacity style={transactionstyle.applyBtn} onPress={this.applyFilters}>
+                                <Text style={[styles.textBold, transactionstyle.applyBtnText]}>Appliquer</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -530,120 +473,95 @@ class TransactionHistory extends PureComponent {
         );
     };
 
-    renderHeader = () => {
-        const { filteredTransactions, activeFilters } = this.state;
+    renderEmptyState = () => (
+        <View style={transactionstyle.emptyState}>
+            <Icon name="receipt-text-remove-outline" size={54} color={COLORS.accentGold} />
+            <Text style={[styles.textBold, transactionstyle.emptyTitle]}>Aucune transaction trouvée</Text>
+            <Text style={[styles.text, transactionstyle.emptyText]}>
+                Aucun résultat ne correspond à vos filtres actuels.
+            </Text>
+            <TouchableOpacity style={transactionstyle.resetFiltersBtn} onPress={this.clearFilters}>
+                <Text style={[styles.textBold, transactionstyle.resetFiltersText]}>Effacer tous les filtres</Text>
+            </TouchableOpacity>
+        </View>
+    );
+
+    render() {
+        const { filteredTransactions, activeFiltersCount } = this.state;
         const totalAmount = filteredTransactions.reduce((sum, t) => sum + t.amount, 0);
 
         return (
-            <View style={transactionstyle.header}>
-
-
-                <View style={transactionstyle.headerTop}>
-                    <TouchableOpacity onPress={this._navigateToProfil} style={transactionstyle.backContainer}>
-                        <Image style={styles.backstyle} source={require('../../assets/images/back.png')} />
-                    </TouchableOpacity>
-                    <View style={transactionstyle.headerTextContainer}>
-                        <Text style={[transactionstyle.headerTitle, styles.textBold]}>Transactions</Text>
-                        <Text style={[transactionstyle.headerSubtitle, styles.text]}>Frais scolaires</Text>
-                    </View>
-                    <View>
-                        <TouchableOpacity
-                            style={transactionstyle.filterButton}
-                            onPress={this.toggleFilterModal}
-                        >
-                            
-                        <Icon name="magnify" style={transactionstyle.icon} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-
-
-                <View style={transactionstyle.statsRow}>
-                    <View style={transactionstyle.statItem}>
-                        <Text style={[transactionstyle.statValue, styles.textBold]}>{filteredTransactions.length}</Text>
-                        <Text style={[transactionstyle.statLabel, styles.text]}>Transactions</Text>
-                    </View>
-                    <View style={transactionstyle.statDivider} />
-                    <View style={transactionstyle.statItem}>
-                        <Text style={[transactionstyle.statValue, styles.textBold]}>{this.formatAmount(totalAmount)}</Text>
-                        <Text style={[transactionstyle.statLabel, styles.text]}>Total</Text>
-                    </View>
-                </View>
-            </View>
-        );
-    };
-
-    renderEmptyState = () => {
-        return (
-            <View style={transactionstyle.emptyState}>
-                <Text style={transactionstyle.emptyIcon}>📭</Text>
-                <Text style={[transactionstyle.emptyTitle, styles.textBold]}>Aucune transaction</Text>
-                <Text style={[transactionstyle.emptyText, styles.text]}>Aucune transaction ne correspond à vos critères</Text>
-                <TouchableOpacity style={transactionstyle.clearFiltersButton} onPress={this.clearFilters}>
-                    <Text style={[transactionstyle.clearFiltersText, styles.textBold]}>Effacer les filtres</Text>
-                </TouchableOpacity>
-            </View>
-        );
-    };
-
-
-    _handleScroll = (event) => { 
-        const scrollY = event.nativeEvent.contentOffset.y;
-        const scrollX = event.nativeEvent.contentOffset.x;
-        this.setState({
-            scrollY:new Animated.Value(scrollY),
-            scrollYvalue:scrollY,
-        });
-
-        Animated.event(
-            [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
-            { useNativeDriver: false }
-        )
-        console.log(scrollX, scrollY)
-    };
-
-
-    render() {
-        const { filteredTransactions, scrollYvalue } = this.state;
-        return (
             <SafeAreaView style={transactionstyle.container}>
-                <ImageBackground
-                    source={require('../../assets/images/background.jpg')}
-                    style={styles.backgroundapp}
-                    resizeMode="cover"
-                >
-                    <Animated.ScrollView
-                        ref={ref => this.scrollViewRef = ref}
-                        style={transactionstyle.scrollView}
-                        showsVerticalScrollIndicator={false}
-                        onScroll={this._handleScroll}
-                        scrollEventThrottle={16}
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} />
+
+                {/* Ambient Glows */}
+                <View style={transactionstyle.topGlow} pointerEvents="none" />
+                <View style={transactionstyle.bottomGlow} pointerEvents="none" />
+
+                {/* Navigation Bar */}
+                <View style={transactionstyle.headerNav}>
+                    <TouchableOpacity
+                        style={transactionstyle.backButton}
+                        onPress={this._navigateToProfil}
+                        activeOpacity={0.7}
                     >
-                        {this.renderHeader()}
-                        <FlatList
-                            data={filteredTransactions}
-                            keyExtractor={(item) => item.id}
-                            renderItem={this.renderTransactionItem}
-                            contentContainerStyle={transactionstyle.listContainer}
-                            showsVerticalScrollIndicator={false}
-                            ListEmptyComponent={this.renderEmptyState}
-                            scrollEnabled={false}
-                        />
-                    </Animated.ScrollView>
-                    {
-                        scrollYvalue > 16 ? this.renderheader() : null
-                    }
-                    {this.renderFilterModal()}
-                </ImageBackground>
+                        <Entypo name="chevron-left" size={24} color={COLORS.textPrimary} />
+                    </TouchableOpacity>
+
+                    <View style={transactionstyle.headerTitleWrapper}>
+                        <Text style={[styles.textBold, transactionstyle.headerTitle]}>Historique des Paiements</Text>
+                    </View>
+
+                    <TouchableOpacity
+                        style={transactionstyle.filterTriggerBtn}
+                        onPress={this.toggleFilterModal}
+                        activeOpacity={0.8}
+                    >
+                        <Icon name="filter-variant" size={20} color={COLORS.textPrimary} />
+                        {activeFiltersCount > 0 && (
+                            <View style={transactionstyle.filterBadgeDot}>
+                                <Text style={transactionstyle.filterBadgeText}>{activeFiltersCount}</Text>
+                            </View>
+                        )}
+                    </TouchableOpacity>
+                </View>
+
+                {/* Bannières de statistiques synthétiques */}
+                <View style={transactionstyle.statsBanner}>
+                    <View style={transactionstyle.statBox}>
+                        <Text style={[styles.textBold, transactionstyle.statNumber]}>
+                            {filteredTransactions.length}
+                        </Text>
+                        <Text style={[styles.text, transactionstyle.statLabel]}>Règlements</Text>
+                    </View>
+
+                    <View style={transactionstyle.statDivider} />
+
+                    <View style={transactionstyle.statBox}>
+                        <Text style={[styles.textBold, transactionstyle.statNumberGold]}>
+                            {this.formatAmount(totalAmount)}
+                        </Text>
+                        <Text style={[styles.text, transactionstyle.statLabel]}>Volume Total</Text>
+                    </View>
+                </View>
+
+                <FlatList
+                    data={filteredTransactions}
+                    keyExtractor={(item) => item.id}
+                    renderItem={this.renderTransactionItem}
+                    contentContainerStyle={transactionstyle.listContainer}
+                    showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={this.renderEmptyState}
+                />
+
+                {this.renderFilterModal()}
             </SafeAreaView>
         );
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    ...bindActionCreators({
-    }, dispatch),
+    ...bindActionCreators({}, dispatch),
 });
 
 const mapStateToProps = (state) => ({

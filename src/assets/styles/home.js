@@ -51,7 +51,7 @@ export const homestyle = StyleSheet.create({
     shadowRadius: 8,
   },
   profileImageBackground: {
-    width: '100%',
+    width: '105%',
     height: 120,
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
@@ -66,6 +66,7 @@ export const homestyle = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: COLORS.borderLight,
+    marginRight:10
   },
   profileIconWrapper: {
     marginTop: -40,
@@ -313,5 +314,111 @@ export const homestyle = StyleSheet.create({
     fontSize: 14,
     color: COLORS.textPrimary,
     fontWeight: 'bold',
+  },
+
+  // WELCOME SCREEN STYLES
+  welcomeContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 20,
+    backgroundColor: COLORS.bgPrimary,
+  },
+
+  welcomeCard: {
+    width: '100%',
+    backgroundColor: COLORS.cardBg,
+    borderRadius: 24,
+    paddingVertical: 28,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
+  },
+
+  /* Hero Badge & Effet Glow */
+  heroBadgeContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(255, 179, 0, 0.12)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 179, 0, 0.3)',
+    position: 'relative',
+  },
+  heroBadgeGlow: {
+    position: 'absolute',
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    backgroundColor: 'rgba(255, 179, 0, 0.08)',
+  },
+
+  /* Typographie */
+  welcomeTitle: {
+    fontSize: 16,
+    color: COLORS.textPrimary,
+    textAlign: 'center',
+    letterSpacing: 1.2,
+    lineHeight: 22,
+    marginBottom: 10,
+  },
+  brandHighlight: {
+    fontSize: 22,
+    color: COLORS.accentGold,
+    letterSpacing: 2,
+  },
+
+  welcomeMessage: {
+    fontSize: 12,
+    color: COLORS.textMuted,
+    textAlign: 'center',
+    lineHeight: 18,
+    paddingHorizontal: 12,
+    marginBottom: 22,
+  },
+
+  /* Badges de fonctionnalités */
+  welcomeIconRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 26,
+  },
+  iconBadge: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.04)',
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
+    alignItems: 'center',
+    gap: 4,
+  },
+  badgeLabel: {
+    fontSize: 10,
+    color: COLORS.textMuted,
+  },
+
+  /* Bouton CTA */
+  subscribeButton: {
+    width: '100%',
+    height: 48,
+    backgroundColor: COLORS.accentGold,
+    borderRadius: 14,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+  },
+  subscribeButtonText: {
+    fontSize: 13,
+    color: COLORS.textDark,
+    marginHorizontal: 8,
   },
 });

@@ -291,7 +291,7 @@ class ContactMedia extends PureComponent {
         return (
             <View style={mediastyle.container}>
                 <ImageBackground
-                    source={require('../../assets/images/background.jpg')}
+                    source={require('../../assets/images/background.png')}
                     style={styles.backgroundapp}
                     resizeMode="cover"
                 >

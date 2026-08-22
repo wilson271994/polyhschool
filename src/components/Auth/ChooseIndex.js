@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
+    SafeAreaView,
     View,
     Text,
     Image,
@@ -17,6 +18,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import { styles } from '../../assets/styles/index.js';
 import { choosestyle } from '../../assets/styles/choose.js';
+import { COLORS } from '../../assets/styles/theme.js';
 import { switchLoginFormAction, switchSchoolSelectionAction } from '../../navigations/rootNavigation.js';
 
 const dataaccount = [
@@ -30,7 +32,7 @@ const dataaccount = [
         label: 'Parent / Tuteur',
         subtitle: 'Suivez la scolarité, la présence et les paiements de vos enfants.',
         value: 'school_student_tutor',
-        icon: 'human-male',
+        icon: 'human-male-child',
     },
 ];
 
@@ -46,7 +48,7 @@ class ChooseIndex extends PureComponent {
         this._PersistData();
     }
 
-    // Restore previously saved user account choice from AsyncStorage
+    // Restaure le choix du type de compte depuis le stockage local
     _PersistData = async () => {
         try {
             const choosedata = await AsyncStorage.getItem('DataChoose');
@@ -62,7 +64,7 @@ class ChooseIndex extends PureComponent {
         }
     };
 
-    // Save selected account type locally
+    // Enregistre le type de compte sélectionné
     _selectAccountType = async (value) => {
         this.setState({ selectedType: value });
         try {
@@ -73,12 +75,12 @@ class ChooseIndex extends PureComponent {
         }
     };
 
-    // Navigate back to the login screen
+    // Navigation vers l'écran de connexion
     _navigateToLogin = () => {
         switchLoginFormAction(true);
     };
 
-    // Validate choice and navigate to school selection step
+    // Navigation vers la sélection d'établissement
     _NavigateToForm = async () => {
         const { selectedType } = this.state;
 
@@ -98,30 +100,30 @@ class ChooseIndex extends PureComponent {
         const { selectedType } = this.state;
 
         return (
-            <View style={choosestyle.container}>
-                <StatusBar barStyle="light-content" backgroundColor="#011638" />
+            <SafeAreaView style={choosestyle.container}>
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} />
 
-                {/* Ambient Glowing Orbs */}
-                <View style={choosestyle.topGlow} />
-                <View style={choosestyle.centerGlow} />
-                <View style={choosestyle.bottomGlow} />
+                {/* Dynamic Glows (Poly-H Theme) */}
+                <View style={choosestyle.topGlow} pointerEvents="none" />
+                <View style={choosestyle.centerGlow} pointerEvents="none" />
+                <View style={choosestyle.bottomGlow} pointerEvents="none" />
 
                 <ScrollView
                     contentContainerStyle={choosestyle.scrollContainer}
                     showsVerticalScrollIndicator={false}
                 >
-                    {/* Header Bar - Back Button */}
+                    {/* Header - Back Button */}
                     <View style={choosestyle.headerRow}>
                         <TouchableOpacity
                             style={choosestyle.backButton}
                             onPress={this._navigateToLogin}
                             activeOpacity={0.7}
                         >
-                            <Entypo name="chevron-left" size={24} color="#FFFFFF" />
+                            <Entypo name="chevron-left" size={24} color={COLORS.textPrimary} />
                         </TouchableOpacity>
                     </View>
 
-                    {/* Institution Logo & Slogan */}
+                    {/* Logo & Branding */}
                     <View style={choosestyle.logoContainer}>
                         <Image
                             source={require('../../assets/images/logo.png')}
@@ -135,7 +137,7 @@ class ChooseIndex extends PureComponent {
                         </Text>
                     </View>
 
-                    {/* Interactive Profile Selection Cards */}
+                    {/* Cards de sélection du type de compte */}
                     <View style={choosestyle.cardsContainer}>
                         {dataaccount.map((item) => {
                             const isSelected = selectedType === item.value;
@@ -158,8 +160,8 @@ class ChooseIndex extends PureComponent {
                                         >
                                             <MaterialCommunityIcons
                                                 name={item.icon}
-                                                size={28}
-                                                color={isSelected ? '#011638' : '#f6a100'}
+                                                size={26}
+                                                color={isSelected ? COLORS.textDark : COLORS.accentGold}
                                             />
                                         </View>
                                         <View
@@ -168,7 +170,7 @@ class ChooseIndex extends PureComponent {
                                                 isSelected && choosestyle.radioButtonSelected,
                                             ]}
                                         >
-                                            {isSelected && <Entypo name="check" size={14} color="#011638" />}
+                                            {isSelected && <Entypo name="check" size={14} color={COLORS.textDark} />}
                                         </View>
                                     </View>
 
@@ -201,11 +203,11 @@ class ChooseIndex extends PureComponent {
                         activeOpacity={0.85}
                     >
                         {is_loading ? (
-                            <ActivityIndicator size="small" color="#011638" />
+                            <ActivityIndicator size="small" color={COLORS.textDark} />
                         ) : (
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={[styles.textBold, choosestyle.buttonText]}>Continuer</Text>
-                                <Entypo name="arrow-right" size={18} color="#011638" style={{ marginLeft: 8 }} />
+                                <Entypo name="arrow-right" size={18} color={COLORS.textDark} style={{ marginLeft: 8 }} />
                             </View>
                         )}
                     </TouchableOpacity>
@@ -213,7 +215,7 @@ class ChooseIndex extends PureComponent {
                     {/* Login Link */}
                     <TouchableOpacity
                         onPress={this._navigateToLogin}
-                        style={{ marginTop: 24 }}
+                        style={{ marginTop: 20, alignItems: 'center' }}
                     >
                         <Text style={[styles.text, choosestyle.loginLinkText]}>
                             Vous avez déjà un compte ?{' '}
@@ -221,7 +223,7 @@ class ChooseIndex extends PureComponent {
                         </Text>
                     </TouchableOpacity>
                 </ScrollView>
-            </View>
+            </SafeAreaView>
         );
     }
 }

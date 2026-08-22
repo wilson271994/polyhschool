@@ -1,15 +1,26 @@
 import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, Image, ImageBackground, TextInput, Animated, ActivityIndicator } from 'react-native';
+import {
+    SafeAreaView,
+    View,
+    Text,
+    TouchableOpacity,
+    TextInput,
+    Animated,
+    ActivityIndicator,
+    StatusBar,
+} from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { styles } from '../../../assets/styles/index.js';
-import Toast from 'react-native-toast-message';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import Foundation from 'react-native-vector-icons/Foundation';
-import { checkAuthDataAction, UpdateProfilAction } from '../../../reducers/actions/index.js';
+
+import { styles } from '../../../assets/styles/index.js';
 import { profilstyle } from '../../../assets/styles/profil.js';
+import { COLORS } from '../../../assets/styles/theme.js';
+import { checkAuthDataAction, UpdateProfilAction } from '../../../reducers/actions/index.js';
 import { switchProfilPageAction } from '../../../navigations/rootNavigation.js';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class UpdateProfil extends PureComponent {
     constructor(props) {
@@ -26,6 +37,7 @@ class UpdateProfil extends PureComponent {
             email: '',
             scrollY: new Animated.Value(0),
         };
+
         this.handleScroll = Animated.event(
             [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
             { useNativeDriver: false }
@@ -37,35 +49,38 @@ class UpdateProfil extends PureComponent {
     }
 
     _fetchNecessaryData = () => {
-        const { user_infos, site_infos } = this.props;
-
-        
-        this.setState({
-            country             : user_infos.country,
-            city                : user_infos.city,
-            first_name          : user_infos.first_name,
-            last_name           : user_infos.last_name,
-            phone               : user_infos.phone,
-            email               : user_infos.email
-        })
+        const { user_infos } = this.props;
+        if (user_infos) {
+            this.setState({
+                country: user_infos.country || '',
+                city: user_infos.city || '',
+                first_name: user_infos.first_name || '',
+                last_name: user_infos.last_name || '',
+                phone: user_infos.phone || '',
+                email: user_infos.email || '',
+            });
+        }
         checkAuthDataAction();
-    }
+    };
 
     _navigateToProfil = () => {
         switchProfilPageAction(true);
-    }
+    };
 
     _toggleCountry = (item) => {
-        this.setState({ country: item.id })
-        this.setState({ cities: item.cities });
-    }
+        if (!item || !item.id) return;
+        this.setState({
+            country: item.id,
+            cities: item.cities || [],
+            city: '', // Réinitialise la ville au changement de pays
+        });
+    };
 
     _updateProfil = () => {
         const { navigation, user_token } = this.props;
         const { first_name, last_name, phone, email, country, city } = this.state;
 
         const formdata = new FormData();
-
         formdata.append('token', user_token);
         formdata.append('first_name', first_name);
         formdata.append('last_name', last_name);
@@ -74,53 +89,11 @@ class UpdateProfil extends PureComponent {
         formdata.append('country', country);
         formdata.append('city', city?.id || city || '');
 
-        console.log('FormData prêt pour envoi:', {
-            _parts: formdata._parts.map(part => ({
-                champ: part[0],
-                valeur: part[1]
-            }))
-        });
-
         UpdateProfilAction(formdata, navigation);
-    }
-
-    _toggleCountry = (item) => {
-        if (!item || !item.id) return;
-        this.setState({
-            country: item.id,
-            cities: item.cities || []
-        });
-    }
-
-    renderHeader = () => {
-        const headerOpacity = this.state.scrollY.interpolate({
-            inputRange: [0, 100],
-            outputRange: [0, 1],
-            extrapolate: 'clamp',
-        });
-
-        return (
-            <Animated.View style={[profilstyle.header, { opacity: headerOpacity }]}>
-                <View style={styles.section}>
-                    <View style={profilstyle.headerSection}>
-                        <View style={profilstyle.headerbuttonContainer}>
-                            <TouchableOpacity
-                                style={profilstyle.headerButton}
-                                onPress={this._navigateToProfil}>
-                                <Image style={styles.backstyle} source={require('../../../assets/images/back.png')} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={profilstyle.headertext}>
-                            <Text style={[profilstyle.headerTitle, styles.textBold]}>Informations Personnelles</Text>
-                        </View>
-
-                    </View>
-                </View>
-            </Animated.View>
-        );
     };
+
     render() {
-        const { user_infos, is_loading, site_infos } = this.props;
+        const { is_loading, site_infos } = this.props;
         const {
             countryFocus,
             country,
@@ -132,169 +105,194 @@ class UpdateProfil extends PureComponent {
             email,
             phone,
         } = this.state;
-        
+
         const countriesUnavailable = !site_infos?.countries?.length;
 
         return (
-            <View style={profilstyle.containerform}>
-                <ImageBackground
-                    source={require('../../../assets/images/background.jpg')}
-                    style={styles.backgroundapp}
-                    resizeMode="cover"
-                >
-                    <Animated.ScrollView
-                        style={profilstyle.container}
-                        onScroll={this.handleScroll}
-                        scrollEventThrottle={16}
-                        showsVerticalScrollIndicator={false}
+            <SafeAreaView style={profilstyle.containerform}>
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} />
+
+                {/* Orbes d'ambiance Poly-H */}
+                <View style={profilstyle.topGlow} pointerEvents="none" />
+                <View style={profilstyle.bottomGlow} pointerEvents="none" />
+
+                {/* Navigation Header Bar */}
+                <View style={profilstyle.headerNav}>
+                    <TouchableOpacity
+                        style={profilstyle.backButton}
+                        onPress={this._navigateToProfil}
+                        activeOpacity={0.7}
                     >
-                        <View style={profilstyle.headerform}>
-                            <View style={profilstyle.section}>
-                                <View style={styles.section}>
-                                    <View style={styles.back}>
-                                        <TouchableOpacity onPress={this._navigateToProfil}>
-                                            <Image style={styles.backstyle} source={require('../../../assets/images/back.png')} />
-                                        </TouchableOpacity>
-                                    </View>
-                                    <Text style={[styles.sectionTitle, styles.textBold]}>Informations personnelles</Text>
-                                </View>
+                        <Entypo name="chevron-left" size={24} color={COLORS.textPrimary} />
+                    </TouchableOpacity>
+
+                    <View style={profilstyle.headerTitleWrapper}>
+                        <Text style={[styles.textBold, profilstyle.headerTitle]}>Informations Personnelles</Text>
+                    </View>
+                </View>
+
+                <Animated.ScrollView
+                    contentContainerStyle={profilstyle.scrollContent}
+                    onScroll={this.handleScroll}
+                    scrollEventThrottle={16}
+                    showsVerticalScrollIndicator={false}
+                >
+                    <View style={profilstyle.formContainer}>
+                        {/* Nom */}
+                        <View style={profilstyle.cardItem}>
+                            <View style={profilstyle.fieldHeader}>
+                                <Icon name="account-outline" size={20} color={COLORS.accentGold} />
+                                <Text style={[styles.textBold, profilstyle.label]}>Nom de famille</Text>
                             </View>
+                            <TextInput
+                                style={[styles.text, profilstyle.textInput]}
+                                placeholder="Saisir votre nom"
+                                placeholderTextColor={COLORS.textMuted}
+                                onChangeText={(text) => this.setState({ first_name: text })}
+                                value={first_name}
+                            />
                         </View>
 
-                        <View style={profilstyle.formcontainer}>
-                        
-                            <View style={profilstyle.formitem}>
-                                <Text style={[styles.text, profilstyle.label]}>Nom</Text>
-                                <TextInput
-                                    style={[profilstyle.inputContainer, styles.textBold, profilstyle.inputext]}
-                                    placeholder="Saisir votre nom"
-                                    placeholderTextColor='#FFF'
-                                    onChangeText={text => this.setState({ first_name: text })}
-                                    value={first_name}
-                                />
+                        {/* Prénom */}
+                        <View style={profilstyle.cardItem}>
+                            <View style={profilstyle.fieldHeader}>
+                                <Icon name="account-details-outline" size={20} color={COLORS.accentCyan} />
+                                <Text style={[styles.textBold, profilstyle.label]}>Prénom</Text>
                             </View>
+                            <TextInput
+                                style={[styles.text, profilstyle.textInput]}
+                                placeholder="Saisir votre prénom"
+                                placeholderTextColor={COLORS.textMuted}
+                                onChangeText={(text) => this.setState({ last_name: text })}
+                                value={last_name}
+                            />
+                        </View>
 
-                            <View style={profilstyle.formitem}>
-                                <Text style={[styles.text, profilstyle.text]}>Prenom</Text>
-                                <TextInput
-                                    style={[profilstyle.inputContainer, styles.textBold, profilstyle.inputext]}
-                                    placeholder="Saisir votre prenom"
-                                    placeholderTextColor='#FFF'
-                                    onChangeText={text => this.setState({ last_name: text })}
-                                    value={last_name}
-                                />
+                        {/* Téléphone */}
+                        <View style={profilstyle.cardItem}>
+                            <View style={profilstyle.fieldHeader}>
+                                <Icon name="phone-outline" size={20} color={COLORS.accentGold} />
+                                <Text style={[styles.textBold, profilstyle.label]}>Numéro de téléphone</Text>
                             </View>
+                            <TextInput
+                                style={[styles.text, profilstyle.textInput]}
+                                placeholder="Ex: 6XXXXXXXX"
+                                placeholderTextColor={COLORS.textMuted}
+                                onChangeText={(text) => this.setState({ phone: text })}
+                                keyboardType="numeric"
+                                value={phone}
+                            />
+                        </View>
 
-                            <View style={profilstyle.formitem}>
-                                <Text style={[styles.text, profilstyle.label]}>Téléphone</Text>
-                                <TextInput
-                                    style={[profilstyle.inputContainer, styles.textBold, profilstyle.inputext]}
-                                    placeholder="Saisir votre numéro de téléphone"
-                                    placeholderTextColor='#FFF'
-                                    onChangeText={text => this.setState({ phone: text })}
-                                    keyboardType="numeric"
-                                    value={phone}
-                                />
+                        {/* Email */}
+                        <View style={profilstyle.cardItem}>
+                            <View style={profilstyle.fieldHeader}>
+                                <Icon name="email-outline" size={20} color={COLORS.accentCyan} />
+                                <Text style={[styles.textBold, profilstyle.label]}>Adresse email</Text>
                             </View>
+                            <TextInput
+                                style={[styles.text, profilstyle.textInput]}
+                                placeholder="exemple@poly-h.com"
+                                placeholderTextColor={COLORS.textMuted}
+                                onChangeText={(text) => this.setState({ email: text })}
+                                keyboardType="email-address"
+                                value={email}
+                            />
+                        </View>
 
-                            <View style={profilstyle.formitem}>
-                                <Text style={[styles.text, profilstyle.label, profilstyle.inputext]}>Adresse email</Text>
-                                <TextInput
-                                    style={[profilstyle.inputContainer, styles.textBold, profilstyle.inputext]}
-                                    placeholder="Saisir votre adresse email"
-                                    placeholderTextColor='#FFF'
-                                    onChangeText={text => this.setState({ phone: text })}
-                                    keyboardType="email-address"
-                                    value={email}
-                                />
+                        {/* Pays */}
+                        <View style={profilstyle.cardItem}>
+                            <View style={profilstyle.fieldHeader}>
+                                <Foundation name="flag" size={18} color={COLORS.accentGold} />
+                                <Text style={[styles.textBold, profilstyle.label]}>Pays de résidence</Text>
                             </View>
-
-                            <View style={profilstyle.formitem}>
-                                <Text style={[styles.text, profilstyle.label]}>Votre pays de résidence</Text>
-                                <Dropdown
-                                    style={[styles.text, profilstyle.inputContainer, countryFocus]}
-                                    placeholderStyle={[profilstyle.placeholderStyle, styles.text]}
-                                    selectedTextStyle={[profilstyle.selectedTextStyle, styles.textBold]}
-                                    itemTextStyle={[profilstyle.itemTextStyle, styles.text]}
-                                    containerStyle={profilstyle.containeritemdrop}
-                                    iconStyle={profilstyle.iconStyle}
-                                    dropdownPosition='auto'
-                                    data={countriesUnavailable ? [] : site_infos.countries}
-                                    labelField="name"
-                                    valueField="id"
-                                    placeholder={countriesUnavailable ? '⚠ Connexion instable...' : (!countryFocus ? 'Choisir votre Pays de résidence' : '...')}
-                                    value={country}
-                                    onFocus={() => this.setState({ countryFocus: true })}
-                                    onBlur={() => this.setState({ countryFocus: false })}
-                                    onChange={item => this._toggleCountry(item)}
-                                    renderLeftIcon={() => (<Foundation name='flag' color="#FFF"/>)}
-                                    disable={countriesUnavailable}
-                                    onPress={() => { }}
-                                />
-                            </View>
-
-                            <View style={profilstyle.formitem}>
-                                <Text style={[styles.text, profilstyle.label]}>Votre ville de résidence</Text>
-                                <Dropdown
-                                    style={[styles.text, profilstyle.inputContainer, cityFocus]}
-                                    placeholderStyle={[profilstyle.placeholderStyle, styles.text]}
-                                    selectedTextStyle={[profilstyle.selectedTextStyle, styles.textBold]}
-                                    itemTextStyle={[profilstyle.itemTextStyle, styles.text]}
-                                    containerStyle={profilstyle.containeritemdrop}
-                                    iconStyle={profilstyle.iconStyle}
-                                    dropdownPosition='auto'
-                                    data={cities}
-                                    labelField="name"
-                                    valueField="id"
-                                    placeholder={!cityFocus ? 'Choisir votre Ville de résidence' : '...'}
-                                    value={city}
-                                    onFocus={() => this.setState({ cityFocus: true })}
-                                    onBlur={() => this.setState({ cityFocus: false })}
-                                    onChange={item => this.setState({ city: item })}
-                                    renderLeftIcon={() => (<Foundation name='map' color="#FFF" />)}
-                                    disable={false}
-                                    onPress={() => { }}
-                                />
-                            </View>
-
-                            <TouchableOpacity onPress={this._updateProfil}
-                                style={profilstyle.submitButton}
-                                disabled={is_loading ? true : false}
-                            >
-                                {
-                                    is_loading ?
-                                        <ActivityIndicator size="small" color="#fff" />
-                                        :
-                                        <Text style={[styles.textBold, profilstyle.submitBtnText]}>Enregistrer</Text>
+                            <Dropdown
+                                style={[profilstyle.dropdown, countryFocus && profilstyle.dropdownFocus]}
+                                placeholderStyle={profilstyle.dropdownPlaceholder}
+                                selectedTextStyle={profilstyle.dropdownSelectedText}
+                                itemTextStyle={profilstyle.dropdownItemText}
+                                itemContainerStyle={profilstyle.dropdownItemContainer}
+                                containerStyle={profilstyle.dropdownMenu}
+                                activeColor="rgba(255, 179, 0, 0.2)"
+                                data={countriesUnavailable ? [] : site_infos.countries}
+                                labelField="name"
+                                valueField="id"
+                                placeholder={
+                                    countriesUnavailable
+                                        ? 'Chargement des pays...'
+                                        : 'Sélectionner votre pays'
                                 }
-                            </TouchableOpacity>
+                                value={country}
+                                onFocus={() => this.setState({ countryFocus: true })}
+                                onBlur={() => this.setState({ countryFocus: false })}
+                                onChange={(item) => this._toggleCountry(item)}
+                                disable={countriesUnavailable}
+                            />
                         </View>
-                        <View style={{ height: 60 }} />
-                    </Animated.ScrollView>
-                    {this.renderHeader()}
-                </ImageBackground>
-            </View>
+
+                        {/* Ville */}
+                        <View style={profilstyle.cardItem}>
+                            <View style={profilstyle.fieldHeader}>
+                                <Foundation name="map" size={18} color={COLORS.accentCyan} />
+                                <Text style={[styles.textBold, profilstyle.label]}>Ville de résidence</Text>
+                            </View>
+                            <Dropdown
+                                style={[profilstyle.dropdown, cityFocus && profilstyle.dropdownFocus]}
+                                placeholderStyle={profilstyle.dropdownPlaceholder}
+                                selectedTextStyle={profilstyle.dropdownSelectedText}
+                                itemTextStyle={profilstyle.dropdownItemText}
+                                itemContainerStyle={profilstyle.dropdownItemContainer}
+                                containerStyle={profilstyle.dropdownMenu}
+                                activeColor="rgba(54, 209, 220, 0.2)"
+                                data={cities}
+                                labelField="name"
+                                valueField="id"
+                                placeholder="Sélectionner votre ville"
+                                value={city}
+                                onFocus={() => this.setState({ cityFocus: true })}
+                                onBlur={() => this.setState({ cityFocus: false })}
+                                onChange={(item) => this.setState({ city: item })}
+                            />
+                        </View>
+
+                        {/* Bouton de soumission */}
+                        <TouchableOpacity
+                            onPress={this._updateProfil}
+                            style={profilstyle.submitButton}
+                            activeOpacity={0.85}
+                            disabled={is_loading}
+                        >
+                            {is_loading ? (
+                                <ActivityIndicator size="small" color={COLORS.textDark} />
+                            ) : (
+                                <Text style={[styles.textBold, profilstyle.submitBtnText]}>
+                                    Enregistrer les modifications
+                                </Text>
+                            )}
+                        </TouchableOpacity>
+                    </View>
+                </Animated.ScrollView>
+            </SafeAreaView>
         );
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        ...bindActionCreators({
+const mapDispatchToProps = (dispatch) => ({
+    ...bindActionCreators(
+        {
             checkAuthDataAction,
             switchProfilPageAction,
-            UpdateProfilAction
-        }, dispatch),
-    }
-};
+            UpdateProfilAction,
+        },
+        dispatch
+    ),
+});
 
-const mapStateToProps = (state) => {
-    return {
-        is_loading      : state.loader.is_loading,
-        user_infos      : state.auth.user_infos,
-        user_token      : state.auth.user_token,
-        site_infos      : state.auth.site_infos,
-    }
-}
+const mapStateToProps = (state) => ({
+    is_loading: state.loader.is_loading,
+    user_infos: state.auth.user_infos,
+    user_token: state.auth.user_token,
+    site_infos: state.auth.site_infos,
+});
 
-export default connect(mapStateToProps, mapDispatchToProps, null)(UpdateProfil);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateProfil);

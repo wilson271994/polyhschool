@@ -173,7 +173,7 @@ class StudentPlanning extends PureComponent {
         return (
             <SafeAreaView style={planningstyle.container}>
                 <ImageBackground
-                    source={require('../../assets/images/background.jpg')}
+                    source={require('../../assets/images/background.png')}
                     style={styles.backgroundapp}
                     resizeMode="cover"
                 >

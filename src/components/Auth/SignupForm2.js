@@ -24,6 +24,7 @@ import { styles } from '../../assets/styles/index.js';
 import { sigupstyle } from '../../assets/styles/signup.js';
 import { switchSignupForm1Action, switchSignupForm3Action } from '../../navigations/rootNavigation.js';
 import { SignupAction } from '../../reducers/actions/index.js';
+import { COLORS } from '../../assets/styles/theme.js';
 
 const datagender = [
     { label: 'Masculin', value: '0' },
@@ -316,7 +317,7 @@ class signUpForm2 extends Component {
 
         return (
             <View style={sigupstyle.container}>
-                <StatusBar barStyle="light-content" backgroundColor="#011638" />
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary}  />
 
                 {/* Ambient Glowing Orbs */}
                 <View style={sigupstyle.topGlow} />

@@ -100,7 +100,7 @@ class AdvanceMessageFilter extends PureComponent {
         return (
             <SafeAreaView style={advancesearchstyle.container}>
                 <ImageBackground
-                    source={require('../../assets/images/background.jpg')}
+                    source={require('../../assets/images/background.png')}
                     style={styles.backgroundapp}
                     resizeMode="cover"
                 >

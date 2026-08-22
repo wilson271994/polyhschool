@@ -1,15 +1,27 @@
-
 import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, Image, ImageBackground, Animated, ActivityIndicator } from 'react-native';
+import {
+    SafeAreaView,
+    View,
+    Text,
+    TouchableOpacity,
+    Switch,
+    Animated,
+    ActivityIndicator,
+    StatusBar,
+} from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+
 import { styles } from '../../../assets/styles/index.js';
 import { profilstyle } from '../../../assets/styles/profil.js';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5.js';
+import { COLORS } from '../../../assets/styles/theme.js';
 import { switchProfilPageAction } from '../../../navigations/rootNavigation.js';
+import { UpdateNotificationPermissionAction } from '../../../reducers/actions/index.js';
 
 const NOTIF_SETTINGS_KEY = 'notificationSettings';
 
@@ -19,8 +31,7 @@ class UpdateNotify extends PureComponent {
         this.state = {
             notifications: [],
             savingIds: [],
-
-            activeTab: 'notifications',
+            activeTab: 'notifications', // 'notifications' | 'subscriptions'
             selectedChild: null,
             scrollY: new Animated.Value(0),
         };
@@ -58,14 +69,8 @@ class UpdateNotify extends PureComponent {
             console.log('Erreur lecture cache notifications:', error);
         }
 
-        if (!cachedSettings || typeof cachedSettings !== 'object') {
-            cachedSettings = {};
-        }
-
         if (baseList.length === 0) {
-            const cachedValues = Object.keys(cachedSettings).length > 0
-                ? Object.values(cachedSettings)
-                : [];
+            const cachedValues = Object.keys(cachedSettings).length > 0 ? Object.values(cachedSettings) : [];
             this.setState({ notifications: cachedValues });
             return;
         }
@@ -142,11 +147,8 @@ class UpdateNotify extends PureComponent {
             ],
         };
 
-
-
         let result;
         try {
-            console.log('Valeurs envoyées dans _updateNotify:', payload);
             result = await UpdateNotificationPermissionAction(payload, { silent: true });
         } catch (error) {
             result = { success: false, error };
@@ -161,8 +163,8 @@ class UpdateNotify extends PureComponent {
                 type: 'info',
                 props: {
                     title: 'Synchronisation',
-                    description: 'Enregistré localement, la synchronisation reprendra dès que possible.',
-                }
+                    description: 'Modifications sauvegardées localement.',
+                },
             });
         }
     };
@@ -177,60 +179,53 @@ class UpdateNotify extends PureComponent {
         return [];
     };
 
-    renderFilterContainer = () => {
+    renderTabs = () => {
         const { activeTab } = this.state;
+
         return (
-            <View style={profilstyle.filterContainer}>
-                <View style={profilstyle.tabContainer}>
-                    <TouchableOpacity
-                        style={[profilstyle.tabButton, activeTab === 'notifications' && profilstyle.tabButtonActive]}
-                        onPress={() => this.setState({ activeTab: 'notifications' })}
+            <View style={profilstyle.tabRow}>
+                <TouchableOpacity
+                    style={[profilstyle.tabBtn, activeTab === 'notifications' && profilstyle.tabBtnActive]}
+                    onPress={() => this.setState({ activeTab: 'notifications' })}
+                    activeOpacity={0.8}
+                >
+                    <Icon
+                        name="bell-outline"
+                        size={16}
+                        color={activeTab === 'notifications' ? COLORS.textDark : COLORS.textMuted}
+                    />
+                    <Text
+                        style={[
+                            styles.textBold,
+                            profilstyle.tabText,
+                            activeTab === 'notifications' && profilstyle.tabTextActive,
+                        ]}
                     >
-                        <FontAwesome5Icon name="bell" size={14} color={activeTab === 'notifications' ? '#fff' : '#555'} />
-                        <Text style={[profilstyle.tabButtonText, activeTab === 'notifications' && profilstyle.tabButtonTextActive]}>
-                            Mes notifications
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[profilstyle.tabButton, activeTab === 'subscriptions' && profilstyle.tabButtonActive]}
-                        onPress={() => this.setState({ activeTab: 'subscriptions' })}
+                        Mes notifications
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={[profilstyle.tabBtn, activeTab === 'subscriptions' && profilstyle.tabBtnActive]}
+                    onPress={() => this.setState({ activeTab: 'subscriptions' })}
+                    activeOpacity={0.8}
+                >
+                    <Icon
+                        name="account-child-outline"
+                        size={18}
+                        color={activeTab === 'subscriptions' ? COLORS.textDark : COLORS.textMuted}
+                    />
+                    <Text
+                        style={[
+                            styles.textBold,
+                            profilstyle.tabText,
+                            activeTab === 'subscriptions' && profilstyle.tabTextActive,
+                        ]}
                     >
-                        <FontAwesome5Icon name="user-friends" size={14} color={activeTab === 'subscriptions' ? '#fff' : '#555'} />
-                        <Text style={[profilstyle.tabButtonText, activeTab === 'subscriptions' && profilstyle.tabButtonTextActive]}>
-                            Autres notifications
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+                        Autres notifications
+                    </Text>
+                </TouchableOpacity>
             </View>
-        );
-    };
-
-    renderHeader = () => {
-        const headerOpacity = this.state.scrollY.interpolate({
-            inputRange: [0, 100],
-            outputRange: [0, 1],
-            extrapolate: 'clamp',
-        });
-
-        return (
-            <Animated.View style={[profilstyle.header, { opacity: headerOpacity }]}>
-                <View style={styles.section}>
-                    <View style={profilstyle.headerSection}>
-                        <View style={profilstyle.headerbuttonContainer}>
-                            <TouchableOpacity
-                                style={profilstyle.headerButton}
-                                onPress={this._navigateToProfil}>
-                                <Image style={styles.backstyle} source={require('../../../assets/images/back.png')} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={profilstyle.headertext}>
-                            <Text style={[profilstyle.headerTitle, styles.textBold]}>
-                                Paramètres des notifications
-                            </Text>
-                        </View>
-                    </View>
-                </View>
-            </Animated.View>
         );
     };
 
@@ -239,42 +234,39 @@ class UpdateNotify extends PureComponent {
 
         if (!Array.isArray(notifications) || notifications.length === 0) {
             return (
-                <Text style={[styles.text, { color: '#fff', textAlign: 'center', marginTop: 12 }]}>
-                    Aucune notification disponible pour le moment.
-                </Text>
+                <View style={profilstyle.emptyContainer}>
+                    <Icon name="bell-off-outline" size={48} color={COLORS.accentGold} />
+                    <Text style={[styles.textBold, profilstyle.emptyTitle]}>Aucune notification réglable</Text>
+                    <Text style={[styles.text, profilstyle.emptyText]}>
+                        Aucun canal de notification disponible pour le moment.
+                    </Text>
+                </View>
             );
         }
 
         return notifications.map((notif) => {
             const isSaving = savingIds.includes(notif.notif_id);
+
             return (
-                <View key={notif.notif_id} style={profilstyle.formcheckitem}>
-                    <View style={profilstyle.labelcheckitem}>
-                        <Text style={[styles.textBold, profilstyle.label]}>{notif.notif_name}</Text>
-                        <Text style={[styles.text, profilstyle.sublabel]}>{notif.notif_description}</Text>
-                    </View>
-                    <View style={profilstyle.checkbtncont}>
-                        {isSaving ? (
-                            <ActivityIndicator size="small" color="#fff" />
-                        ) : (
-                            <TouchableOpacity
-                                onPress={() => this._onChangeNotification(notif)}
-                                style={[profilstyle.checkbtn, notif.can_received_alert ? profilstyle.ischeckbtn : '']}
-                            >
-                                {notif.can_received_alert ? <FontAwesome5Icon name='check' style={profilstyle.ischeckicon} /> : null}
-                            </TouchableOpacity>
-
+                <View key={notif.notif_id} style={profilstyle.notifCard}>
+                    <View style={profilstyle.notifInfo}>
+                        <Text style={[styles.textBold, profilstyle.notifTitle]}>{notif.notif_name}</Text>
+                        {notif.notif_description !== '' && (
+                            <Text style={[styles.text, profilstyle.notifDesc]}>{notif.notif_description}</Text>
                         )}
+                    </View>
 
-                        {/* <TouchableOpacity onPress={this._updateNotify}
-                            style={profilstyle.submitButton}
-                            disabled={is_loading}>
-                            {is_loading ? (
-                                <ActivityIndicator size="small" color="#fff" />
-                            ) : (
-                                <Text style={[styles.textBold, profilstyle.submitBtnText]}>Enregistrer</Text>
-                            )}
-                        </TouchableOpacity> */}
+                    <View style={profilstyle.switchWrapper}>
+                        {isSaving ? (
+                            <ActivityIndicator size="small" color={COLORS.accentGold} />
+                        ) : (
+                            <Switch
+                                value={notif.can_received_alert}
+                                onValueChange={() => this._onChangeNotification(notif)}
+                                trackColor={{ false: '#334155', true: COLORS.accentGold }}
+                                thumbColor={COLORS.textPrimary}
+                            />
+                        )}
                     </View>
                 </View>
             );
@@ -284,85 +276,94 @@ class UpdateNotify extends PureComponent {
     render() {
         const { activeTab, selectedChild } = this.state;
         const childrenList = this.getChildrenList();
-        const childrenDropdownData = childrenList.map(child => ({
+        const childrenDropdownData = childrenList.map((child) => ({
             label: child.name || `${child.first_name} ${child.last_name}`,
             value: child.id,
         }));
 
         return (
-            <View style={profilstyle.containerform}>
-                <ImageBackground
-                    source={require('../../../assets/images/background.jpg')}
-                    style={styles.backgroundapp}
-                    resizeMode="cover"
-                >
-                    <Animated.ScrollView
-                        style={profilstyle.container}
-                        onScroll={this.handleScroll}
-                        scrollEventThrottle={16}
-                        showsVerticalScrollIndicator={false}
+            <SafeAreaView style={profilstyle.containerform}>
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} />
+
+                {/* Ambient Glows */}
+                <View style={profilstyle.topGlow} pointerEvents="none" />
+                <View style={profilstyle.bottomGlow} pointerEvents="none" />
+
+                {/* Navigation Bar */}
+                <View style={profilstyle.headerNav}>
+                    <TouchableOpacity
+                        style={profilstyle.backButton}
+                        onPress={this._navigateToProfil}
+                        activeOpacity={0.7}
                     >
-                        <View style={profilstyle.section}>
-                            <View style={styles.section}>
-                                <View style={styles.back}>
-                                    <TouchableOpacity onPress={this._navigateToProfil}>
-                                        <Image style={styles.backstyle} source={require('../../../assets/images/back.png')} />
-                                    </TouchableOpacity>
+                        <Entypo name="chevron-left" size={24} color={COLORS.textPrimary} />
+                    </TouchableOpacity>
+
+                    <View style={profilstyle.headerTitleWrapper}>
+                        <Text style={[styles.textBold, profilstyle.headerTitle]}>Préférences d'Alerte</Text>
+                    </View>
+                </View>
+
+                <Animated.ScrollView
+                    contentContainerStyle={profilstyle.scrollContent}
+                    onScroll={this.handleScroll}
+                    scrollEventThrottle={16}
+                    showsVerticalScrollIndicator={false}
+                >
+                    {this.renderTabs()}
+
+                    {activeTab === 'notifications' ? (
+                        <View style={profilstyle.formContainer}>{this.renderNotificationList()}</View>
+                    ) : (
+                        <View style={profilstyle.formContainer}>
+                            <View style={profilstyle.cardItem}>
+                                <View style={profilstyle.fieldHeader}>
+                                    <Icon name="face-man-profile" size={20} color={COLORS.accentGold} />
+                                    <Text style={[styles.textBold, profilstyle.label]}>
+                                        Sélectionnez un profil rattaché
+                                    </Text>
                                 </View>
-                                <Text style={[styles.sectionTitle, styles.textBold]}>Paramètres des notifications</Text>
-                            </View>
-                        </View>
 
-                        {this.renderFilterContainer()}
-
-                        {activeTab === 'notifications' ? (
-                            <View style={profilstyle.formcontainer}>
-                                {this.renderNotificationList()}
-                            </View>
-                        ) : (
-                            <View style={profilstyle.formcontainer}>
-                                <Text style={[styles.textBold, profilstyle.label, { marginBottom: 12 }]}>
-                                    Sélectionnez un enfant pour voir ses informations
-                                </Text>
                                 <Dropdown
-                                    style={[styles.text, profilstyle.inputContainer, { marginBottom: 20 }]}
-                                    placeholderStyle={[profilstyle.placeholderStyle, styles.text]}
-                                    selectedTextStyle={[profilstyle.selectedTextStyle, styles.textBold]}
-                                    itemTextStyle={[profilstyle.itemTextStyle, styles.text]}
-                                    containerStyle={profilstyle.containeritemdrop}
-                                    iconStyle={profilstyle.iconStyle}
-                                    dropdownPosition="auto"
+                                    style={profilstyle.dropdown}
+                                    placeholderStyle={profilstyle.dropdownPlaceholder}
+                                    selectedTextStyle={profilstyle.dropdownSelectedText}
+                                    itemTextStyle={profilstyle.dropdownItemText}
+                                    itemContainerStyle={profilstyle.dropdownItemContainer}
+                                    containerStyle={profilstyle.dropdownMenu}
+                                    activeColor="rgba(255, 179, 0, 0.2)"
                                     data={childrenDropdownData}
                                     labelField="label"
                                     valueField="value"
-                                    placeholder="Choisir un enfant"
+                                    placeholder="Choisir un enfant..."
                                     value={selectedChild}
-                                    onChange={item => this.setState({ selectedChild: item.value })}
-                                    renderLeftIcon={() => <FontAwesome5Icon name="child" color="#FFF" style={{ marginRight: 8 }} />}
+                                    onChange={(item) => this.setState({ selectedChild: item.value })}
                                 />
-                                {selectedChild && (
-                                    <View style={{ marginTop: 16 }}>
-                                        <Text style={[styles.text, { color: '#fff', textAlign: 'center' }]}>
-                                            Fonctionnalité à venir : détails de l'enfant sélectionné.
-                                        </Text>
-                                    </View>
-                                )}
                             </View>
-                        )}
 
-                        <View style={{ height: 60 }} />
-                    </Animated.ScrollView>
-                    {this.renderHeader()}
-                </ImageBackground>
-            </View>
+                            {selectedChild && (
+                                <View style={profilstyle.childInfoBox}>
+                                    <Icon name="information-outline" size={24} color={COLORS.accentCyan} />
+                                    <Text style={[styles.text, profilstyle.childInfoText]}>
+                                        Synchronisation des paramètres de notifications pour le profil sélectionné.
+                                    </Text>
+                                </View>
+                            )}
+                        </View>
+                    )}
+                </Animated.ScrollView>
+            </SafeAreaView>
         );
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    ...bindActionCreators({
-        switchProfilPageAction
-    }, dispatch),
+    ...bindActionCreators(
+        {
+            switchProfilPageAction,
+        },
+        dispatch
+    ),
 });
 
 const mapStateToProps = (state) => ({
@@ -374,4 +375,4 @@ const mapStateToProps = (state) => ({
     school_notification_list: state.auth.school_notification_list,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps, null)(UpdateNotify);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateNotify);

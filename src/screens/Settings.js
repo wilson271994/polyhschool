@@ -16,10 +16,10 @@ class Settings extends PureComponent {
     _fechtData = async () => {
         //await switchHeaderAction(true);  
     } 
- 
+
     render(){
         return(
-                <SettingIndex/>
+            <SettingIndex/>
         )
     }
 } 

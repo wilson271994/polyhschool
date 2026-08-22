@@ -1,87 +1,147 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { COLORS } from './theme';
 
 export const descriptionstyle = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  mainContainer: {
-    flex: 1,
+    backgroundColor: COLORS.bgPrimary,
   },
 
-  section: {
-    top: 5,
-    right: 10
+  /* Glows */
+  topGlow: {
+    position: 'absolute',
+    top: -100,
+    right: -80,
+    width: 280,
+    height: 280,
+    borderRadius: 140,
+    backgroundColor: 'rgba(255, 179, 0, 0.12)',
   },
-  // Contenu principal
-  content: {
-    paddingHorizontal: 20,
+  bottomGlow: {
+    position: 'absolute',
+    bottom: -100,
+    left: -80,
+    width: 280,
+    height: 280,
+    borderRadius: 140,
+    backgroundColor: 'rgba(54, 209, 220, 0.10)',
   },
-  // Titre et compteur
-  titleRow: {
+
+  /* Header Bar */
+  headerNav: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 14,
+  },
+  backButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
+    marginRight: 12,
+  },
+  headerTitleWrapper: {
+    flex: 1,
+  },
+  headerBadge: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: COLORS.accentGold,
+    letterSpacing: 1.2,
+  },
+  headerTitle: {
+    fontSize: 16,
+    color: COLORS.textPrimary,
+  },
+
+  keyboardView: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+
+  contentWrapper: {
+    paddingHorizontal: 16,
+    marginTop: 10,
+  },
+
+  /* Input Card Glassmorphism */
+  inputCard: {
+    backgroundColor: COLORS.cardBg,
+    borderRadius: 18,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
+  },
+  inputCardFocused: {
+    borderColor: COLORS.accentGold,
+    backgroundColor: 'rgba(255, 179, 0, 0.03)',
+  },
+  cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 30,
-    marginBottom: 16,
+    marginBottom: 12,
   },
-  titleText: {
-    fontSize: 16,
-    color: '#FFFFFF',
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  cardTitle: {
+    fontSize: 14,
+    color: COLORS.textPrimary,
   },
   characterCount: {
-    fontSize: 16,
-    color: '#CCCCCC',
-  },
-  characterCountWarning: {
-    color: '#FF9800',
-    fontWeight: '500',
-  },
-  characterCountLimit: {
-    color: '#F44336',
-    fontWeight: '600',
+    fontSize: 11,
   },
 
-  inputWrapper: {
-    height: 120,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
   textInput: {
-    flex: 1,
-    fontSize: 16,
-    color: '#333333',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    textAlignVertical: 'top',
+    height: 140,
+    fontSize: 13,
+    color: COLORS.textPrimary,
+    lineHeight: 20,
   },
-  
+
+  helpText: {
+    fontSize: 11,
+    color: COLORS.textMuted,
+    marginTop: 10,
+    paddingHorizontal: 4,
+    lineHeight: 16,
+  },
+
+  /* Bottom Actions */
   bottomSaveContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: Platform.OS === 'ios' ? 30 : 20,
-    paddingTop: 15,
-    backgroundColor: 'transparent',
+    paddingHorizontal: 16,
+    paddingBottom: 20,
   },
-  saveButtonFull: {
-    width: '100%',
-    height: 50,
-    borderRadius: 25,
+  saveButton: {
+    height: 48,
+    borderRadius: 14,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
   saveButtonActive: {
-    backgroundColor: '#1B497D',
+    backgroundColor: COLORS.accentGold,
   },
   saveButtonInactive: {
-    backgroundColor: '#eee',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
   },
-  saveButtonFullText: {
-    fontSize: 16,
+  saveTextActive: {
+    color: COLORS.textDark,
+    fontSize: 14,
   },
-  saveButtonTextActive: {
-    color: '#000000',
-  },
-  saveButtonTextInactive: {
-    color: '#666',
+  saveTextInactive: {
+    color: COLORS.textMuted,
+    fontSize: 14,
   },
 });

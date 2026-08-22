@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import {
+    SafeAreaView,
     View,
     Text,
     Image,
@@ -19,6 +20,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 
 import { styles } from '../../assets/styles/index.js';
 import { sigupstyle } from '../../assets/styles/signup.js';
+import { COLORS } from '../../assets/styles/theme.js';
 import { switchSchoolSelectionAction, switchSignupForm2Action } from '../../navigations/rootNavigation.js';
 
 class signupForm1 extends PureComponent {
@@ -251,23 +253,26 @@ class signupForm1 extends PureComponent {
         }));
 
         return (
-            <View style={sigupstyle.container}>
-                <StatusBar barStyle="light-content" backgroundColor="#011638" />
+            <SafeAreaView style={sigupstyle.container}>
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} />
 
-                <View style={sigupstyle.topGlow} />
-                <View style={sigupstyle.bottomGlow} />
+                {/* Dynamic Glows (Poly-H Theme) */}
+                <View style={sigupstyle.topGlow} pointerEvents="none" />
+                <View style={sigupstyle.bottomGlow} pointerEvents="none" />
 
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={sigupstyle.scrollContent}
                     keyboardShouldPersistTaps="handled"
                 >
+                    {/* Back Button Row */}
                     <View style={sigupstyle.headerRow}>
                         <TouchableOpacity style={sigupstyle.backButton} onPress={this._navigateToChoose} activeOpacity={0.7}>
-                            <Entypo name="chevron-left" size={24} color="#FFFFFF" />
+                            <Entypo name="chevron-left" size={24} color={COLORS.textPrimary} />
                         </TouchableOpacity>
                     </View>
 
+                    {/* Branding */}
                     <View style={sigupstyle.logoContainer}>
                         <Image source={require('../../assets/images/logo.png')} style={sigupstyle.logo} resizeMode="contain" />
                         <Text style={[styles.textBold, sigupstyle.brandBadge]}>POLY-H SCHOOL</Text>
@@ -277,7 +282,9 @@ class signupForm1 extends PureComponent {
                         </Text>
                     </View>
 
+                    {/* Glassmorphic Form Card */}
                     <View style={sigupstyle.inputContainer}>
+                        {/* Prénom & Nom */}
                         <View style={sigupstyle.rowFields}>
                             <View style={sigupstyle.colField}>
                                 <Text style={[styles.text, sigupstyle.label]}>Prénom *</Text>
@@ -285,12 +292,13 @@ class signupForm1 extends PureComponent {
                                     <TextInput
                                         style={[styles.textBold, sigupstyle.input]}
                                         placeholder="Prénom"
-                                        placeholderTextColor="#64748B"
+                                        placeholderTextColor={COLORS.textMuted}
                                         value={first_name}
                                         onChangeText={(t) => this.setState({ first_name: t })}
                                         onFocus={() => this.setState({ focusedInput: 'first_name' })}
                                         onBlur={() => this.setState({ focusedInput: null })}
                                         autoCapitalize="words"
+                                        editable={!is_loading}
                                     />
                                 </View>
                             </View>
@@ -301,62 +309,69 @@ class signupForm1 extends PureComponent {
                                     <TextInput
                                         style={[styles.textBold, sigupstyle.input]}
                                         placeholder="Nom"
-                                        placeholderTextColor="#64748B"
+                                        placeholderTextColor={COLORS.textMuted}
                                         value={last_name}
                                         onChangeText={(t) => this.setState({ last_name: t })}
                                         onFocus={() => this.setState({ focusedInput: 'last_name' })}
                                         onBlur={() => this.setState({ focusedInput: null })}
                                         autoCapitalize="words"
+                                        editable={!is_loading}
                                     />
                                 </View>
                             </View>
                         </View>
 
+                        {/* Username */}
                         <Text style={[styles.text, sigupstyle.label]}>Nom d'utilisateur *</Text>
                         <View style={[sigupstyle.inputWrapper, focusedInput === 'username' && sigupstyle.inputWrapperFocused]}>
-                            <Icon name="at" size={20} color={focusedInput === 'username' ? '#f6a100' : '#64748B'} style={sigupstyle.inputIcon} />
+                            <Icon name="at" size={18} color={focusedInput === 'username' ? COLORS.accentGold : COLORS.textMuted} style={sigupstyle.inputIcon} />
                             <TextInput
                                 style={[styles.textBold, sigupstyle.input]}
                                 placeholder="Nom d'utilisateur"
-                                placeholderTextColor="#64748B"
+                                placeholderTextColor={COLORS.textMuted}
                                 value={username}
                                 onChangeText={(t) => this.setState({ username: t })}
                                 onFocus={() => this.setState({ focusedInput: 'username' })}
                                 onBlur={() => this.setState({ focusedInput: null })}
                                 autoCapitalize="none"
+                                editable={!is_loading}
                             />
                         </View>
 
+                        {/* Email */}
                         <Text style={[styles.text, sigupstyle.label]}>Email *</Text>
                         <View style={[sigupstyle.inputWrapper, focusedInput === 'email' && sigupstyle.inputWrapperFocused]}>
-                            <Icon name="email-outline" size={20} color={focusedInput === 'email' ? '#f6a100' : '#64748B'} style={sigupstyle.inputIcon} />
+                            <Icon name="email-outline" size={18} color={focusedInput === 'email' ? COLORS.accentGold : COLORS.textMuted} style={sigupstyle.inputIcon} />
                             <TextInput
                                 style={[styles.textBold, sigupstyle.input]}
                                 placeholder="exemple@email.com"
-                                placeholderTextColor="#64748B"
+                                placeholderTextColor={COLORS.textMuted}
                                 value={email}
                                 onChangeText={(t) => this.setState({ email: t })}
                                 onFocus={() => this.setState({ focusedInput: 'email' })}
                                 onBlur={() => this.setState({ focusedInput: null })}
                                 keyboardType="email-address"
                                 autoCapitalize="none"
+                                editable={!is_loading}
                             />
                         </View>
 
+                        {/* Naissance & Téléphone */}
                         <View style={sigupstyle.rowFields}>
                             <View style={sigupstyle.colField}>
                                 <Text style={[styles.text, sigupstyle.label]}>Naissance *</Text>
-                                <View style={[sigupstyle.inputWrapper, focusedInput === 'birthday_date' && sigupstyle.inputWrapperFocused, birthdayError ? { borderColor: '#F87171' } : null]}>
+                                <View style={[sigupstyle.inputWrapper, focusedInput === 'birthday_date' && sigupstyle.inputWrapperFocused, birthdayError ? { borderColor: '#F43F5E' } : null]}>
                                     <TextInput
                                         style={[styles.textBold, sigupstyle.input]}
                                         placeholder="AAAA-MM-JJ"
-                                        placeholderTextColor="#64748B"
+                                        placeholderTextColor={COLORS.textMuted}
                                         value={birthday_date}
                                         onChangeText={this._handleBirthdayChange}
                                         onFocus={() => this.setState({ focusedInput: 'birthday_date' })}
                                         onBlur={() => this.setState({ focusedInput: null })}
                                         keyboardType="numeric"
                                         maxLength={10}
+                                        editable={!is_loading}
                                     />
                                 </View>
                             </View>
@@ -367,13 +382,14 @@ class signupForm1 extends PureComponent {
                                     <TextInput
                                         style={[styles.textBold, sigupstyle.input]}
                                         placeholder="6 XX XX XX"
-                                        placeholderTextColor="#64748B"
+                                        placeholderTextColor={COLORS.textMuted}
                                         value={phone}
                                         onChangeText={this._handlePhoneChange}
                                         onFocus={() => this.setState({ focusedInput: 'phone' })}
                                         onBlur={() => this.setState({ focusedInput: null })}
                                         keyboardType="phone-pad"
                                         maxLength={14}
+                                        editable={!is_loading}
                                     />
                                 </View>
                             </View>
@@ -381,11 +397,12 @@ class signupForm1 extends PureComponent {
 
                         {birthdayError ? (
                             <View style={sigupstyle.errorBanner}>
-                                <Icon name="alert-circle" size={14} color="#F87171" />
+                                <Icon name="alert-circle" size={14} color="#F43F5E" />
                                 <Text style={[styles.textBold, sigupstyle.errorText]}>{birthdayError}</Text>
                             </View>
                         ) : null}
 
+                        {/* Inscription Étudiant (Dropdowns) */}
                         {isStudent && (
                             <>
                                 <Text style={[styles.text, sigupstyle.label]}>Type d'admission *</Text>
@@ -406,7 +423,7 @@ class signupForm1 extends PureComponent {
                                     onChange={this._handleAdmissionTypeChange}
                                     disable={is_loading || admissionTypesList.length === 0}
                                     renderLeftIcon={() => (
-                                        <Icon name="card-account-details-outline" size={18} color="#f6a100" style={{ marginRight: 8 }} />
+                                        <Icon name="card-account-details-outline" size={18} color={COLORS.accentGold} style={{ marginRight: 8 }} />
                                     )}
                                 />
 
@@ -430,7 +447,7 @@ class signupForm1 extends PureComponent {
                                     onChange={this._handleFieldChange}
                                     disable={is_loading || fieldList.length === 0}
                                     renderLeftIcon={() => (
-                                        <Icon name="school-outline" size={18} color="#f6a100" style={{ marginRight: 8 }} />
+                                        <Icon name="school-outline" size={18} color={COLORS.accentGold} style={{ marginRight: 8 }} />
                                     )}
                                 />
 
@@ -454,25 +471,26 @@ class signupForm1 extends PureComponent {
                                     onChange={this._handleClasseChange}
                                     disable={is_loading || classeList.length === 0}
                                     renderLeftIcon={() => (
-                                        <Icon name="google-classroom" size={18} color="#f6a100" style={{ marginRight: 8 }} />
+                                        <Icon name="google-classroom" size={18} color={COLORS.accentGold} style={{ marginRight: 8 }} />
                                     )}
                                 />
                             </>
                         )}
 
+                        {/* CTA Button */}
                         <TouchableOpacity onPress={this._navigateToForm2} style={sigupstyle.button} activeOpacity={0.85} disabled={is_loading}>
                             {is_loading ? (
-                                <ActivityIndicator size="small" color="#011638" />
+                                <ActivityIndicator size="small" color={COLORS.textDark} />
                             ) : (
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={[styles.textBold, sigupstyle.buttonText]}>{stepLabel}</Text>
-                                    <Entypo name="arrow-right" size={18} color="#011638" style={{ marginLeft: 8 }} />
+                                    <Entypo name="arrow-right" size={18} color={COLORS.textDark} style={{ marginLeft: 8 }} />
                                 </View>
                             )}
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
-            </View>
+            </SafeAreaView>
         );
     }
 }

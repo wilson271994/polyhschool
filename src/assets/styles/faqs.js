@@ -1,409 +1,346 @@
-import { StyleSheet, Dimensions, Platform } from 'react-native';
-
-const { width, height } = Dimensions.get('window');
+import { StyleSheet } from 'react-native';
+import { COLORS } from './theme';
 
 export const C = {
-    bg: "#0a0e14",
-    surface: "#1B497D",
-    surfaceAlt: "#1B497D",
-    accent: '#a8820e',
-    accentDim: "#1a9e4a",
-    accentGlow: "rgba(37,211,102,0.18)",
-    text: "#e8edf5",
-    textMuted: "#7a8ba0",
-    textTime: "#5a6b7d",
-    border: "rgba(255,255,255,0.06)",
-    headerBg: "#0d1520",
-    inputBg: "#151d2b",
-    red: "#e05c5c",
-    blue: "#4a9eff",
-    yellow: "#FFD700",
-    shadow: "0 8px 32px rgba(0,0,0,0.55)",
+    accent: COLORS.accentGold,
+    text: COLORS.textPrimary,
+    textMuted: COLORS.textMuted,
 };
 
 export const faqstyle = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: C.bg,
+        backgroundColor: COLORS.bgPrimary,
     },
-    scrollView: {
+
+    /* Glows */
+    topGlow: {
+        position: 'absolute',
+        top: -100,
+        right: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(255, 179, 0, 0.12)',
+    },
+    bottomGlow: {
+        position: 'absolute',
+        bottom: -100,
+        left: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(54, 209, 220, 0.10)',
+    },
+
+    /* Header Bar */
+    headerNav: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingTop: 10,
+        paddingBottom: 12,
+    },
+    backButton: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        marginRight: 12,
+    },
+    headerTitleWrapper: {
         flex: 1,
     },
-
-    // Header
-    header: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        padding: 10,
-        backgroundColor: `${C.headerBg}CC`,
-        backdropFilter: 'blur(10px)',
-        zIndex: 100,
-    },
-    headerSection:{
-        flexDirection: 'row',
-    },
-    headertext:{
-        width: '85%',
-        padding: 5
+    headerBadge: {
+        fontSize: 11,
+        fontWeight: 'bold',
+        color: COLORS.accentGold,
+        letterSpacing: 1.2,
     },
     headerTitle: {
-        fontSize: 20,
-        color: C.text,
-    },
-    headerbuttonContainer:{
-    },
-    headerButton: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: C.surfaceAlt,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    headerButton1: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: C.surfaceAlt,
-        alignItems: 'center',
-        justifyContent: 'center',
-        left: 140,
-        top: 50
-    },
-    // Hero Section
-    heroSection: {
-        paddingHorizontal: 20,
-        paddingBottom: 30,
-        backgroundColor: C.surface,
-        borderBottomLeftRadius: 30,
-        borderBottomRightRadius: 30,
-        marginBottom: 20,
-    },
-    heroContent: {
-        alignItems: 'center',
-        marginBottom: 30,
-    },
-    heroTitle: {
-        fontSize: 28,
-        color: C.text,
-        textAlign: 'center',
-        marginTop: 20,
-        marginBottom: 10,
-    },
-    heroSubtitle: {
         fontSize: 16,
-        color: C.textMuted,
-        textAlign: 'center',
+        color: COLORS.textPrimary,
     },
 
-    // Search
-    searchContainer: {
+    scrollContent: {
+        paddingHorizontal: 16,
+        paddingBottom: 120, // Sécurité universelle pour ne pas masquer sous la barre du bas
+        gap: 14,
+    },
+
+    /* Hero Section */
+    heroSection: {
+        backgroundColor: COLORS.cardBg,
+        borderRadius: 18,
+        padding: 16,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        marginTop: 6,
+    },
+    heroBadge: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: C.inputBg,
-        borderRadius: 16,
-        paddingHorizontal: 15,
-        borderWidth: 1,
-        borderColor: C.border,
+        gap: 6,
+        marginBottom: 6,
     },
-    searchIcon: {
-        marginRight: 10,
+    heroBadgeText: {
+        fontSize: 11,
+        color: COLORS.accentGold,
+        letterSpacing: 1,
+    },
+    heroTitle: {
+        fontSize: 16,
+        color: COLORS.textPrimary,
+        marginBottom: 12,
+    },
+
+    /* Search Box */
+    searchBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        borderRadius: 12,
+        paddingHorizontal: 12,
+        height: 42,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
     },
     searchInput: {
         flex: 1,
-        paddingVertical: 14,
-        color: C.text,
-        fontSize: 16,
+        marginLeft: 8,
+        fontSize: 13,
+        color: COLORS.textPrimary,
     },
 
-    // Categories
-    categoriesContainer: {
-        marginBottom: 20,
-    },
-    categoriesContent: {
-        paddingHorizontal: 20,
-        gap: 12,
+    /* Categories Chips */
+    categoriesRow: {
+        flexDirection: 'row',
     },
     categoryChip: {
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderRadius: 25,
-        backgroundColor: C.surface,
+        paddingHorizontal: 14,
+        paddingVertical: 7,
+        borderRadius: 20,
+        backgroundColor: 'rgba(255, 255, 255, 0.04)',
         borderWidth: 1,
-        borderColor: C.border,
+        borderColor: COLORS.borderLight,
     },
     categoryChipActive: {
-        backgroundColor: C.accent,
-        borderColor: C.accent,
+        backgroundColor: COLORS.accentGold,
+        borderColor: COLORS.accentGold,
     },
-    categoryChipText: {
-        color: C.textMuted,
-        fontSize: 14,
+    chipText: {
+        fontSize: 11,
+        color: COLORS.textMuted,
     },
-    categoryChipTextActive: {
-        color: '#fff',
+    chipTextActive: {
+        color: COLORS.textDark,
     },
 
-    // FAQ List
+    /* FAQ Accordion List */
     faqList: {
-        paddingHorizontal: 20,
-        gap: 15,
+        gap: 10,
     },
     faqCard: {
-        backgroundColor: C.surface,
-        borderRadius: 20,
+        backgroundColor: COLORS.cardBg,
+        borderRadius: 16,
         borderWidth: 1,
-        borderColor: C.border,
+        borderColor: COLORS.borderLight,
         overflow: 'hidden',
     },
     faqHeader: {
         flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 20,
+        padding: 14,
     },
-    faqHeaderLeft: {
+    faqTitleGroup: {
         flexDirection: 'row',
-        flex: 1,
-        alignItems: 'flex-start',
-        gap: 15,
-    },
-    faqIconContainer: {
-        width: 44,
-        height: 44,
-        borderRadius: 22,
-        backgroundColor: `${C.accent}20`,
         alignItems: 'center',
-        justifyContent: 'center',
-    },
-    faqInfo: {
+        gap: 10,
         flex: 1,
-        gap: 6,
-    },
-    faqCategoryBadge: {
-        alignSelf: 'flex-start',
-        paddingHorizontal: 10,
-        paddingVertical: 4,
-        backgroundColor: `${C.accent}15`,
-        borderRadius: 12,
-    },
-    faqCategoryText: {
-        color: C.accent,
-        fontSize: 11,
+        marginRight: 8,
     },
     faqQuestion: {
-        fontSize: 16,
-        color: C.text,
-        lineHeight: 22,
+        fontSize: 13,
+        color: COLORS.textPrimary,
         flex: 1,
     },
-    faqAnswerContainer: {
-        paddingHorizontal: 20,
-        paddingBottom: 20,
+
+    faqBody: {
+        paddingHorizontal: 14,
+        paddingBottom: 14,
         borderTopWidth: 1,
-        borderTopColor: C.border,
+        borderTopColor: 'rgba(255, 255, 255, 0.05)',
+        paddingTop: 10,
     },
     faqAnswer: {
-        fontSize: 14,
-        color: C.textMuted,
-        lineHeight: 22,
-        marginVertical: 15,
+        fontSize: 12,
+        color: COLORS.textMuted,
+        lineHeight: 18,
+        marginBottom: 12,
     },
-    faqActions: {
+
+    faqFooter: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingTop: 10,
     },
     faqStats: {
         flexDirection: 'row',
-        gap: 15,
-    },
-    statItem: {
-        flexDirection: 'row',
         alignItems: 'center',
-        gap: 5,
+        gap: 4,
     },
     statText: {
-        color: C.textMuted,
-        fontSize: 12,
+        fontSize: 10,
+        color: COLORS.textMuted,
     },
+
     actionButtons: {
         flexDirection: 'row',
-        gap: 15,
+        gap: 8,
     },
-    actionButton: {
-        padding: 5,
+    actionBtn: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 
-    // Contact Section
-    contactSection: {
-        marginTop: 17,
-        marginHorizontal: 20,
-        padding: 30,
-        backgroundColor: C.surfaceAlt,
-        borderRadius: 30,
-        alignItems: 'center',
+    /* Contact Support Card */
+    contactCard: {
+        backgroundColor: 'rgba(255, 179, 0, 0.04)',
+        borderRadius: 18,
+        padding: 20,
         borderWidth: 1,
-        borderColor: C.border,
-        marginBottom: 20,
+        borderColor: 'rgba(255, 179, 0, 0.2)',
+        alignItems: 'center',
+        marginTop: 8,
     },
     contactTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: C.text,
+        fontSize: 14,
+        color: COLORS.textPrimary,
+        marginTop: 8,
         textAlign: 'center',
-        marginBottom: 10,
     },
     contactSubtitle: {
-        fontSize: 14,
-        color: C.textMuted,
+        fontSize: 11,
+        color: COLORS.textMuted,
+        marginTop: 4,
         textAlign: 'center',
-        marginBottom: 20,
+        marginBottom: 14,
     },
     contactButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: C.accent,
-        paddingHorizontal: 25,
-        paddingVertical: 14,
-        borderRadius: 25,
-        gap: 10,
+        backgroundColor: COLORS.accentGold,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 12,
     },
     contactButtonText: {
-        color: '#fff',
-        fontSize: 16,
+        fontSize: 13,
+        color: COLORS.textDark,
     },
 
-    // Empty State
-    emptyState: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 60,
-        gap: 15,
-    },
-    emptyStateTitle: {
-        fontSize: 18,
-        color: C.text,
-    },
-    emptyStateSubtitle: {
-        fontSize: 14,
-        color: C.textMuted,
-        textAlign: 'center',
-    },
-
-    // Modal
+    /* Opaque Modal */
     modalOverlay: {
         flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.8)',
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
         justifyContent: 'flex-end',
     },
-    modalContainer: {
-        backgroundColor: C.surface,
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        padding: 25,
-        maxHeight: height * 0.8,
+    modalContent: {
+        backgroundColor: '#001529',
+        borderTopLeftRadius: 24,
+        borderTopRightRadius: 24,
+        padding: 20,
+        maxHeight: '80%',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
     },
     modalHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 25,
+        marginBottom: 16,
     },
     modalTitle: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        color: C.text,
+        fontSize: 15,
+        color: COLORS.textPrimary,
     },
     modalLabel: {
-        fontSize: 16,
-        color: C.text,
-        marginBottom: 12,
-        marginTop: 15,
+        fontSize: 12,
+        color: COLORS.accentGold,
+        marginTop: 10,
+        marginBottom: 8,
     },
-    ratingContainer: {
+    ratingRow: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginBottom: 15,
-    },
-    ratingStar: {
-        padding: 10,
-    },
-    ratingStarActive: {
-        transform: [{ scale: 1.1 }],
+        gap: 12,
+        marginBottom: 10,
     },
     modalInput: {
-        backgroundColor: C.inputBg,
-        borderRadius: 16,
-        padding: 15,
-        color: C.text,
-        fontSize: 14,
-        minHeight: 120,
-        textAlignVertical: 'top',
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+        borderRadius: 12,
+        padding: 12,
+        fontSize: 13,
+        color: COLORS.textPrimary,
         borderWidth: 1,
-        borderColor: C.border,
+        borderColor: COLORS.borderLight,
+        height: 90,
+        textAlignVertical: 'top',
     },
-    modalSubmitButton: {
-        backgroundColor: C.accent,
-        borderRadius: 25,
-        paddingVertical: 14,
+    modalSubmitBtn: {
+        height: 46,
+        backgroundColor: COLORS.accentGold,
+        borderRadius: 12,
+        justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 25,
-        marginBottom: 20,
+        marginTop: 16,
     },
     modalSubmitText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: '600',
+        fontSize: 13,
+        color: COLORS.textDark,
     },
 
-    // Floating Button
-    floatingButton: {
-        position: 'absolute',
-        bottom: 30,
-        right: 20,
-        zIndex: 200,
-    },
-    floatingButtonTouch: {
-        width: 40,
-        height: 40,
-        borderRadius: 30,
-        backgroundColor: C.accent,
+    /* Empty State */
+    emptyState: {
         alignItems: 'center',
         justifyContent: 'center',
-        elevation: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        bottom: 50
+        paddingVertical: 40,
+    },
+    emptyTitle: {
+        fontSize: 14,
+        color: COLORS.textPrimary,
+        marginTop: 10,
+    },
+    emptySubtitle: {
+        fontSize: 11,
+        color: COLORS.textMuted,
+        marginTop: 4,
     },
 
-    // Toast
+    /* Toast notification */
     toast: {
         position: 'absolute',
-        bottom: 100,
+        bottom: 30,
         alignSelf: 'center',
-        backgroundColor: C.surfaceAlt,
+        backgroundColor: '#001529',
+        borderRadius: 20,
+        paddingHorizontal: 16,
+        paddingVertical: 10,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 20,
-        paddingVertical: 12,
-        borderRadius: 25,
-        gap: 10,
+        gap: 8,
         borderWidth: 1,
-        borderColor: C.border,
-        zIndex: 300,
+        borderColor: COLORS.accentGold,
+        elevation: 6,
     },
     toastText: {
-        color: C.text,
-        fontSize: 14,
-    },
-
-    footer: {
-        height: 30,
+        fontSize: 12,
+        color: COLORS.textPrimary,
     },
 });

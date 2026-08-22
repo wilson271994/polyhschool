@@ -1,19 +1,35 @@
 import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { ScrollView, Text, TouchableOpacity, View, Image, ImageBackground, Modal, TextInput, Alert } from 'react-native';
+import {
+    SafeAreaView,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View,
+    Modal,
+    TextInput,
+    Alert,
+    StatusBar,
+} from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+
 import { styles } from '../../assets/styles';
 import { supportstyle } from '../../assets/styles/support';
+import { COLORS } from '../../assets/styles/theme';
 import CreateTicket from './Forms/CreateTicket';
-import { switchHomePageAction, switchSupportChatAction } from '../../navigations/rootNavigation';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+    switchHomePageAction,
+    switchSupportChatAction,
+    switchProfilPageAction,
+} from '../../navigations/rootNavigation';
 
 class Support extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            isScroll: false,
             isVisibleTckCrModal: false,
             showNewTicketModal: false,
             selectedService: null,
@@ -26,95 +42,79 @@ class Support extends PureComponent {
                 { id: '4', name: 'Comptes', label: 'Gestion des Comptes', icon: 'account' },
                 { id: '5', name: 'Pédagogique', label: 'Support Pédagogique', icon: 'school' },
                 { id: '6', name: 'Administratif', label: 'Service Administratif', icon: 'office-building' },
-                { id: '7', name: 'Réclamation', label: 'Service Réclamation', icon: 'alert-circle' }
+                { id: '7', name: 'Réclamation', label: 'Service Réclamation', icon: 'alert-circle' },
             ],
             conversations: [
                 {
                     id: '1',
-                    sender: 'FR: Bonjour, nous n\'avons p...',
-                    time: 'Awa . il y a 3j',
+                    sender: 'Support Commercial',
+                    time: 'Il y a 3j',
                     unread: true,
                     service: 'Commercial',
-                    title: 'Question sur les tarifs',
-                    description: 'Bonjour, je souhaiterais avoir plus d\'informations sur les tarifs...'
+                    title: 'Question sur les tarifs scolaires',
+                    description: "Bonjour, je souhaiterais avoir plus d'informations sur les modalités...",
                 },
                 {
                     id: '2',
-                    sender: 'Support Technique: Votre problème...',
-                    time: 'Jean . il y a 5j',
+                    sender: 'Support Technique',
+                    time: 'Il y a 5j',
                     unread: false,
                     service: 'Technique',
-                    title: 'Problème de connexion',
-                    description: 'Je n\'arrive pas à me connecter à mon compte...'
-                }
-            ]
-        }
-    };
+                    title: 'Problème d’accès aux bulletins',
+                    description: "Je n'arrive pas à charger les documents PDF sur mon profil...",
+                },
+            ],
+        };
+    }
 
     _navigateToSupportChat = () => {
         switchSupportChatAction(true);
-    }
+    };
 
-    _toggleScrollView = (data) => {
-        if (data) {
-            console.log(data)
-        }
-    }
-
-    _openModalTicketCreation = () => {
-        this.setState({ isVisibleTckCrModal: true });
-    }
-
-    _closeModalTicketCreation = () => {
-        this.setState({ isVisibleTckCrModal: false });
-    }
-
-    _backToHome = () => {
-        switchHomePageAction(true);
-    }
+    _navigateToProfil = () => {
+        switchProfilPageAction(true);
+    };
 
     _openNewTicketModal = () => {
         this.setState({
             showNewTicketModal: true,
             selectedService: null,
             ticketTitle: '',
-            ticketDescription: ''
+            ticketDescription: '',
         });
-    }
+    };
 
     _closeNewTicketModal = () => {
         this.setState({ showNewTicketModal: false });
-    }
+    };
 
     _handleCreateTicket = () => {
         const { selectedService, ticketTitle, ticketDescription, conversations, services } = this.state;
 
-        // Validation des champs
         if (!selectedService) {
-            Alert.alert('Erreur', 'Veuillez sélectionner un service');
+            Alert.alert('Attention', 'Veuillez sélectionner le service concerné.');
             return;
         }
         if (!ticketTitle.trim()) {
-            Alert.alert('Erreur', 'Veuillez saisir le titre de votre requête');
+            Alert.alert('Attention', 'Veuillez saisir le sujet de votre requête.');
             return;
         }
         if (!ticketDescription.trim()) {
-            Alert.alert('Erreur', 'Veuillez saisir une description de votre requête');
+            Alert.alert('Attention', 'Veuillez détailler votre message.');
             return;
         }
 
-        const selectedServiceObj = services.find(s => s.name === selectedService.name);
+        const selectedServiceObj = services.find((s) => s.name === selectedService.name);
         const serviceLabel = selectedServiceObj ? selectedServiceObj.label : selectedService.label;
 
         const newTicket = {
             id: Date.now().toString(),
-            sender: `${serviceLabel}: ${ticketTitle.substring(0, 30)}${ticketTitle.length > 30 ? '...' : ''}`,
-            time: `Vous . à l'instant`,
+            sender: serviceLabel,
+            time: "À l'instant",
             unread: true,
             service: selectedService.name,
             title: ticketTitle,
             description: ticketDescription,
-            createdAt: new Date()
         };
 
         this.setState({
@@ -122,74 +122,92 @@ class Support extends PureComponent {
             showNewTicketModal: false,
             selectedService: null,
             ticketTitle: '',
-            ticketDescription: ''
+            ticketDescription: '',
         });
 
-        Alert.alert(
-            'Succès',
-            'Votre requête a été envoyée avec succès. Un conseiller vous répondra dans les plus brefs délais.',
-            [{ text: 'OK' }]
-        );
-    }
+        Alert.alert('Ticket envoyé', 'Votre demande a été transmise à nos conseillers.');
+    };
 
     render() {
-        const { is_loading } = this.props;
         const { isVisibleTckCrModal, showNewTicketModal, conversations, selectedService, ticketTitle, ticketDescription, services } = this.state;
 
         return (
-            <View style={supportstyle.container}>
-                <ImageBackground
-                    source={require('../../assets/images/background.jpg')}
-                    style={styles.backgroundapp}
-                    resizeMode="cover"
-                >
-                    <View style={styles.section}>
-                        <View style={styles.back}>
-                            <TouchableOpacity onPress={this._backToHome}>
-                                <Image style={styles.backstyle} source={require('../../assets/images/back.png')} />
-                            </TouchableOpacity>
-                        </View>
-                        <Text style={[styles.sectionTitle, styles.textBold]}>Support client</Text>
-                    </View>
+            <SafeAreaView style={supportstyle.container}>
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} />
 
-                    <ScrollView style={supportstyle.conversationsList}>
-                        {conversations.map((conversation) => (
-                            <TouchableOpacity
-                                key={conversation.id}
-                                onPress={this._navigateToSupportChat}
-                                style={supportstyle.conversationItem}>
-                                <Image
-                                    source={require('../../assets/images/lion.jpg')}
-                                    style={supportstyle.profileImage}
-                                />
-                                <View style={supportstyle.conversationDetails}>
-                                    <Text style={[supportstyle.conversationSender, styles.textBold]}>
-                                        {conversation.sender}
-                                    </Text>
-                                    <Text style={[supportstyle.conversationTime, styles.text]}>
-                                        {conversation.time}
-                                    </Text>
-                                </View>
-                                {conversation.unread && <View style={supportstyle.unreadIndicator} />}
-                            </TouchableOpacity>
-                        ))}
-                    </ScrollView>
+                {/* Halo lumineux de fond */}
+                <View style={supportstyle.topGlow} pointerEvents="none" />
+                <View style={supportstyle.bottomGlow} pointerEvents="none" />
 
+                {/* Barre de navigation */}
+                <View style={supportstyle.headerNav}>
                     <TouchableOpacity
-                        onPress={this._openNewTicketModal}
-                        style={supportstyle.fab}>
-                        <Image
-                            source={require('../../assets/images/new-message.png')}
-                            style={supportstyle.fabIcon}
-                        />
+                        style={supportstyle.backButton}
+                        onPress={this._navigateToProfil}
+                        activeOpacity={0.7}
+                    >
+                        <Entypo name="chevron-left" size={24} color={COLORS.textPrimary} />
                     </TouchableOpacity>
-                </ImageBackground>
+
+                    <View style={supportstyle.headerTitleWrapper}>
+                        <Text style={[styles.textBold, supportstyle.headerTitle]}>Support & Assistance</Text>
+                    </View>
+                </View>
+
+                {/* Liste des conversations */}
+                <ScrollView
+                    style={supportstyle.conversationsList}
+                    contentContainerStyle={supportstyle.scrollContent}
+                    showsVerticalScrollIndicator={false}
+                >
+                    {conversations.map((item) => (
+                        <TouchableOpacity
+                            key={item.id}
+                            onPress={this._navigateToSupportChat}
+                            style={supportstyle.conversationItem}
+                            activeOpacity={0.85}
+                        >
+                            <View style={supportstyle.avatarBox}>
+                                <Icon name="headset" size={22} color={COLORS.accentGold} />
+                            </View>
+
+                            <View style={supportstyle.conversationDetails}>
+                                <View style={supportstyle.senderRow}>
+                                    <Text style={[styles.textBold, supportstyle.conversationSender]}>
+                                        {item.sender}
+                                    </Text>
+                                    <Text style={[styles.text, supportstyle.conversationTime]}>{item.time}</Text>
+                                </View>
+
+                                <Text style={[styles.textBold, supportstyle.ticketTitle]}>{item.title}</Text>
+                                <Text
+                                    style={[styles.text, supportstyle.conversationDesc]}
+                                    numberOfLines={1}
+                                >
+                                    {item.description}
+                                </Text>
+                            </View>
+
+                            {item.unread && <View style={supportstyle.unreadIndicator} />}
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
+
+                {/* Bouton d'action flottant (+ Nouveau ticket) */}
+                <TouchableOpacity
+                    onPress={this._openNewTicketModal}
+                    style={supportstyle.fab}
+                    activeOpacity={0.85}
+                >
+                    <Icon name="plus" size={26} color={COLORS.textDark} />
+                </TouchableOpacity>
 
                 <CreateTicket
-                    _closeModalTicketCreation={this._closeModalTicketCreation}
+                    _closeModalTicketCreation={() => this.setState({ isVisibleTckCrModal: false })}
                     isVisibleTckCrModal={isVisibleTckCrModal}
                 />
 
+                {/* Fenêtre modale de création de ticket */}
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -199,69 +217,59 @@ class Support extends PureComponent {
                     <View style={supportstyle.modalOverlay}>
                         <View style={supportstyle.modalContainer}>
                             <View style={supportstyle.modalHeader}>
-                                <Text style={[supportstyle.modalTitle, styles.textBold]}>Nouvelle requête</Text>
+                                <Text style={[styles.textBold, supportstyle.modalTitle]}>✉️ Nouvelle requête</Text>
                                 <TouchableOpacity onPress={this._closeNewTicketModal}>
-                                    <Text style={supportstyle.modalCloseButton}>✕</Text>
+                                    <Icon name="close" size={24} color={COLORS.textPrimary} />
                                 </TouchableOpacity>
                             </View>
 
                             <ScrollView showsVerticalScrollIndicator={false}>
-                                <Text style={[supportstyle.modalLabel, styles.textBold]}>Service concerné *</Text>
+                                <Text style={[styles.textBold, supportstyle.modalLabel]}>Service concerné *</Text>
 
-                                {/* Dropdown pour les services */}
                                 <Dropdown
                                     style={supportstyle.dropdown}
                                     placeholderStyle={supportstyle.placeholderStyle}
                                     selectedTextStyle={supportstyle.selectedTextStyle}
-                                    inputSearchStyle={supportstyle.inputSearchStyle}
-                                    iconStyle={supportstyle.iconStyle}
                                     containerStyle={supportstyle.dropdownContainer}
                                     itemContainerStyle={supportstyle.itemContainerStyle}
-                                    itemTextStyle={[supportstyle.itemTextStyle, styles.text]}
+                                    itemTextStyle={supportstyle.itemTextStyle}
                                     data={services}
-                                    search
-                                    maxHeight={300}
+                                    maxHeight={260}
                                     labelField="label"
                                     valueField="name"
-                                    placeholder="Sélectionnez un service"
-                                    searchPlaceholder="Rechercher un service..."
+                                    placeholder="Sélectionner le service"
                                     value={selectedService?.name}
-                                    onChange={item => {
-                                        this.setState({ selectedService: item });
-                                    }}
+                                    onChange={(item) => this.setState({ selectedService: item })}
                                     renderLeftIcon={() => (
-                                        <Icon name="tag-outline" size={20} color="#666" style={{ marginRight: 8 }} />
+                                        <Icon name="tag-outline" size={18} color={COLORS.accentGold} style={{ marginRight: 8 }} />
                                     )}
                                     renderItem={(item) => (
                                         <View style={supportstyle.dropdownItem}>
-                                            <Icon name={item.icon} size={20} color="#1e3a5e" />
-                                            <Text style={[supportstyle.dropdownItemText, styles.text]}>
-                                                {item.label}
-                                            </Text>
+                                            <Icon name={item.icon} size={18} color={COLORS.accentGold} style={{ marginRight: 10 }} />
+                                            <Text style={[styles.text, supportstyle.dropdownItemText]}>{item.label}</Text>
                                         </View>
                                     )}
                                 />
 
-                                <Text style={[supportstyle.modalLabel, styles.textBold]}>Objet de la requête *</Text>
+                                <Text style={[styles.textBold, supportstyle.modalLabel]}>Sujet de la demande *</Text>
                                 <TextInput
-                                    style={[supportstyle.modalInput, styles.text]}
-                                    placeholder="Ex: Problème de connexion"
-                                    placeholderTextColor="#999"
+                                    style={[styles.text, supportstyle.modalInput]}
+                                    placeholder="Ex: Demande de relevé de notes"
+                                    placeholderTextColor={COLORS.textMuted}
                                     value={ticketTitle}
                                     onChangeText={(text) => this.setState({ ticketTitle: text })}
                                     maxLength={100}
                                 />
 
-                                <Text style={[supportstyle.modalLabel, styles.textBold]}>Description *</Text>
+                                <Text style={[styles.textBold, supportstyle.modalLabel]}>Description *</Text>
                                 <TextInput
-                                    style={[supportstyle.modalInput, supportstyle.modalTextArea, styles.text]}
-                                    placeholder="Décrivez votre problème ou votre demande en détail..."
-                                    placeholderTextColor="#999"
+                                    style={[styles.text, supportstyle.modalInput, supportstyle.modalTextArea]}
+                                    placeholder="Expliquez en détail votre besoin..."
+                                    placeholderTextColor={COLORS.textMuted}
                                     value={ticketDescription}
                                     onChangeText={(text) => this.setState({ ticketDescription: text })}
                                     multiline={true}
-                                    numberOfLines={5}
-                                    textAlignVertical="top"
+                                    numberOfLines={4}
                                 />
 
                                 <View style={supportstyle.modalButtonsContainer}>
@@ -269,39 +277,38 @@ class Support extends PureComponent {
                                         style={[supportstyle.modalButton, supportstyle.modalCancelButton]}
                                         onPress={this._closeNewTicketModal}
                                     >
-                                        <Text style={[supportstyle.modalCancelButtonText, styles.textBold]}>Annuler</Text>
+                                        <Text style={[styles.textBold, supportstyle.modalCancelText]}>Annuler</Text>
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
                                         style={[supportstyle.modalButton, supportstyle.modalValidateButton]}
                                         onPress={this._handleCreateTicket}
                                     >
-                                        <Text style={[supportstyle.modalValidateButtonText, styles.textBold]}>Valider</Text>
+                                        <Text style={[styles.textBold, supportstyle.modalValidateText]}>Envoyer</Text>
                                     </TouchableOpacity>
                                 </View>
                             </ScrollView>
                         </View>
                     </View>
                 </Modal>
-            </View>
-        )
+            </SafeAreaView>
+        );
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        ...bindActionCreators({
+const mapDispatchToProps = (dispatch) => ({
+    ...bindActionCreators(
+        {
             switchHomePageAction,
-            switchSupportChatAction
-        }, dispatch),
-    }
-};
+            switchSupportChatAction,
+            switchProfilPageAction,
+        },
+        dispatch
+    ),
+});
 
-const mapStateToProps = (state) => {
-    return {
-        root_navigation: state.navigation.root_navigation
-    }
-}
+const mapStateToProps = (state) => ({
+    root_navigation: state.navigation.root_navigation,
+});
 
-export default connect(mapStateToProps, mapDispatchToProps, null)(Support);
-
+export default connect(mapStateToProps, mapDispatchToProps)(Support);

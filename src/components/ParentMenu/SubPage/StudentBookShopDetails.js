@@ -77,7 +77,7 @@ class BookShopDetail extends PureComponent {
         const { showPaymentModal, selectedPayment, paymentSuccess } = this.state;
         return (
             <View style={bookdetailstyle.container}>
-                <ImageBackground source={require('../../../assets/images/background.jpg')} style={styles.backgroundapp} resizeMode="cover">
+                <ImageBackground source={require('../../../assets/images/background.png')} style={styles.backgroundapp} resizeMode="cover">
                     <Animated.ScrollView style={bookdetailstyle.scrollArea} onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }], { useNativeDriver: false })} scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
                         <View style={styles.back}>
                             <TouchableOpacity onPress={this._navigateBack}>

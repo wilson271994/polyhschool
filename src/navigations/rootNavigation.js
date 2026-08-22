@@ -266,8 +266,6 @@ export const switchHomePageAction = (data) => {
         store.dispatch({ type: SET_PARENT_UPLOAD_DOCUMENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
 
-
-
         //Sub Sub student parent menu page
         store.dispatch({ type: SET_SCHOOL_DETAILS_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
@@ -286,8 +284,6 @@ export const switchHomePageAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
 
         //Sub_Sub_Sub student Parent menu page
-
-
         store.dispatch({ type: SET_TEACHER_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_PARENT_STUDENT_BOOK_DETAIL_PAGE, value: false });
         store.dispatch({ type: SET_PARENT_STUDENT_BOOK_SHOP_DETAIL_DETAILS, value: false });
@@ -1578,15 +1574,34 @@ export const switchUpdatePasswordPageAction = (data) => {
         store.dispatch({ type: SET_UPDATE_AUTHENTIFICATION_PAGE, value: false });
     }
 }
+export const switchSupportPageFromProfilAction = (data) => {
+    if (data) {
+        store.dispatch({ type: SET_SUPPORT_HOME, value: data });
+        store.dispatch({ type: SET_HOME_PAGE, value: data });
+        store.dispatch({ type: SET_SUPPORT_CHAT, value: false });
+        store.dispatch({ type: SET_PROFIL_UPDATE_INFO, value: false });
+        store.dispatch({ type: SET_PROFIL_HOME, value: false });
+        store.dispatch({ type: SET_FAQS_PAGE, value: false });
+        store.dispatch({ type: SET_KYC_PAGE, value: false });
+        store.dispatch({ type: SET_TRANSACTION_HISTORY_PAGE, value: false });
+        store.dispatch({ type: SET_UPDATE_NOTIFICATION_PAGE, value: false });
+        store.dispatch({ type: SET_UPDATE_LANGUAGE_PAGE, value: false });
+        store.dispatch({ type: SET_ADD_DESCRIPTION_PAGE, value: false });
+        store.dispatch({ type: SET_UPDATE_PASSWORD_PAGE, value: false });
+        store.dispatch({ type: SET_UPDATE_AUTHENTIFICATION_PAGE, value: false });
+    }
+}
+
+
 /**
  * Support 
  */
 export const switchSupportHomeAction = (data) => {
     switchHomePageAction(true);
-    switchHomeParentAction(true)
+    //switchHomeParentAction(true)
     if (data) {
-        store.dispatch({ type: SET_SYS_HOME, value: false });
         store.dispatch({ type: SET_SUPPORT_HOME, value: data });
+        store.dispatch({ type: SET_SYS_HOME, value: false });
         store.dispatch({ type: SET_SUPPORT_CHAT, value: false });
         store.dispatch({ type: SET_NOTIF_HOME, value: false });
     }
@@ -1594,7 +1609,7 @@ export const switchSupportHomeAction = (data) => {
 
 export const switchSupportChatAction = (data) => {
     switchHomePageAction(true);
-    switchHomeParentAction(true)
+    //switchHomeParentAction(true)
     if (data) {
         store.dispatch({ type: SET_SYS_HOME, value: false });
         store.dispatch({ type: SET_SUPPORT_CHAT, value: data });
@@ -2466,7 +2481,7 @@ export const switchParentStudentCvAction = (data) => {
  */
 export const switchNotifHomeAction = (data) => {
     switchHomePageAction(true);
-    switchHomeParentAction(true)
+    //switchHomeParentAction(true)
     if (data) {
         store.dispatch({ type: SET_SYS_HOME, value: false });
         store.dispatch({ type: SET_NOTIF_HOME, value: data });

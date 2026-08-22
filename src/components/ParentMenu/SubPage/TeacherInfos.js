@@ -213,7 +213,7 @@ class TeacherInfos extends PureComponent {
         return (
             <View style={teacherinfostyle.container}>
                 <ImageBackground
-                    source={require('../../../assets/images/background.jpg')}
+                    source={require('../../../assets/images/background.png')}
                     style={styles.backgroundapp}
                     resizeMode="cover"
                 >

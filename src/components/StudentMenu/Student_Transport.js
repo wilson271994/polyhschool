@@ -137,7 +137,7 @@ class Student_Transport extends Component {
         return (
             <SafeAreaView style={transportstyle.container}>
                 <ImageBackground
-                    source={require('../../assets/images/background.jpg')}
+                    source={require('../../assets/images/background.png')}
                     style={styles.backgroundapp}
                     resizeMode="cover"
                 >

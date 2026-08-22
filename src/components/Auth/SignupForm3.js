@@ -21,6 +21,7 @@ import { styles } from '../../assets/styles/index.js';
 import { sigupstyle } from '../../assets/styles/signup.js';
 import { switchSignupForm2Action } from '../../navigations/rootNavigation.js';
 import { SignupAction } from '../../reducers/actions/index.js';
+import { COLORS } from '../../assets/styles/theme.js';
 
 const ACCEPTED_TYPES = [
     DocumentPicker.types.pdf,
@@ -260,7 +261,7 @@ class signupForm3 extends PureComponent {
 
         return (
             <View style={sigupstyle.container}>
-                <StatusBar barStyle="light-content" backgroundColor="#011638" />
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary}  />
 
                 {/* Ambient Glowing Orbs */}
                 <View style={sigupstyle.topGlow} />

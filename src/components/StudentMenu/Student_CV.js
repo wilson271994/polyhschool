@@ -194,7 +194,7 @@ class StudentCV extends PureComponent {
         return (
             <SafeAreaView style={cvstyle.container}>
                 <ImageBackground
-                    source={require('../../assets/images/background.jpg')}
+                    source={require('../../assets/images/background.png')}
                     style={styles.backgroundapp}
                     resizeMode="cover"
                 >

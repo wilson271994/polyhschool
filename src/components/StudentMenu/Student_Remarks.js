@@ -151,7 +151,7 @@ class Student_Remarks extends PureComponent {
         return (
             <SafeAreaView style={remarkstyle.container}>
                 <ImageBackground
-                    source={require('../../assets/images/background.jpg')}
+                    source={require('../../assets/images/background.png')}
                     style={styles.backgroundapp}
                     resizeMode="cover"
                 >

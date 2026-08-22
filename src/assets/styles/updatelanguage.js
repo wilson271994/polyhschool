@@ -1,289 +1,255 @@
-import { StyleSheet, Dimensions } from 'react-native';
-const { width, height } = Dimensions.get('window');
+import { StyleSheet } from 'react-native';
+import { COLORS } from './theme';
 
-export const C = {
-    text: "#e8edf5",
-    headerBg: "#0d1520",
-};
 export const languagestyle = StyleSheet.create({
     container: {
-        flex: 1
-    },
-    background: {
-        flex: 1
+        flex: 1,
+        backgroundColor: COLORS.bgPrimary,
     },
 
-    Header: {
-        marginBottom: 20,
-        marginTop: 5,
-    },
-
-    header: {
+    /* Glows */
+    topGlow: {
         position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        padding: 10,
-        backgroundColor: `${C.headerBg}CC`,
-        backdropFilter: 'blur(10px)',
-        zIndex: 100,
+        top: -100,
+        right: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(255, 179, 0, 0.12)',
     },
-    headerSection: {
+    bottomGlow: {
+        position: 'absolute',
+        bottom: -100,
+        left: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(54, 209, 220, 0.10)',
+    },
+
+    /* Header Bar */
+    headerNav: {
         flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingTop: 10,
+        paddingBottom: 14,
+    },
+    backButton: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        marginRight: 12,
+    },
+    headerTitleWrapper: {
+        flex: 1,
+    },
+    headerBadge: {
+        fontSize: 11,
+        fontWeight: 'bold',
+        color: COLORS.accentGold,
+        letterSpacing: 1.2,
     },
     headerTitle: {
-        fontSize: 20,
-        color: C.text,
-    },
-    headerbuttonContainer: {
-    },
-    headerButton: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        bottom: 7,
-        paddingRight: 8,
-        right: 10
+        fontSize: 16,
+        color: COLORS.textPrimary,
     },
 
-    section: {
-        marginHorizontal: 20,
-        marginBottom: 20,
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        padding: 20,
-        elevation: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 12,
+    scrollContent: {
+        paddingHorizontal: 16,
+        paddingBottom: 120, // Sécurité de défilement pour le menu bas
+        gap: 14,
+        marginTop: 8,
     },
 
-    sectionHeader: {
+    /* Cards Design */
+    sectionCard: {
+        backgroundColor: COLORS.cardBg,
+        borderRadius: 16,
+        padding: 16,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+    },
+    cardHeader: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 20,
+        gap: 8,
+        marginBottom: 12,
+    },
+    cardTitle: {
+        fontSize: 13,
+        color: COLORS.textPrimary,
+    },
+
+    selectionTrigger: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.04)',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        borderRadius: 12,
+        padding: 12,
+    },
+    flagText: {
+        fontSize: 24,
+        marginRight: 12,
+    },
+    triggerTextWrapper: {
+        flex: 1,
+    },
+    triggerTitle: {
+        fontSize: 13,
+        color: COLORS.textPrimary,
+    },
+    triggerSubtitle: {
+        fontSize: 11,
+        color: COLORS.textMuted,
+        marginTop: 1,
+    },
+
+    /* Preview Card */
+    previewCard: {
+        backgroundColor: 'rgba(255, 179, 0, 0.04)',
+        borderRadius: 16,
+        padding: 16,
+        borderWidth: 1,
+        borderColor: 'rgba(255, 179, 0, 0.2)',
         gap: 10,
     },
-
-    sectionTitle: {
+    previewTitle: {
+        fontSize: 13,
+        color: COLORS.accentGold,
+        marginBottom: 2,
+    },
+    previewRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
+    previewText: {
         fontSize: 12,
-        color: '#1B497D',
+        color: COLORS.textPrimary,
     },
 
-    selectionCard: {
+    /* Save CTA */
+    saveButton: {
+        height: 48,
+        backgroundColor: COLORS.accentGold,
+        borderRadius: 14,
         flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: 16,
-        backgroundColor: '#f8f9fa',
-        borderRadius: 16,
-        borderWidth: 1,
-        borderColor: '#e0e0e0',
+        marginTop: 6,
     },
-
-    selectionLeft: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 15,
-    },
-
-    selectionFlag: {
-        fontSize: 16,
-    },
-
-    selectionTitle: {
+    saveButtonText: {
         fontSize: 14,
-        color: '#222',
+        color: COLORS.textDark,
     },
 
-    selectionSubtitle: {
-        fontSize: 12,
-        color: '#666',
-        marginTop: 2,
-    },
-
-    // Modals
+    /* Modals */
     modalOverlay: {
         flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
         justifyContent: 'flex-end',
     },
-
     modalContainer: {
-        backgroundColor: '#fff',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        maxHeight: height * 0.9,
-        paddingBottom: 20,
+        backgroundColor: '#001529',
+        borderTopLeftRadius: 24,
+        borderTopRightRadius: 24,
+        padding: 20,
+        maxHeight: '80%',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
     },
-
     modalHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 20,
+        marginBottom: 14,
     },
-
     modalTitle: {
-        fontSize: 16,
-        color: '#1B497D',
+        fontSize: 15,
+        color: COLORS.textPrimary,
     },
 
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginHorizontal: 20,
-        marginBottom: 15,
-        paddingHorizontal: 15,
-        backgroundColor: '#f8f9fa',
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
         borderRadius: 12,
+        paddingHorizontal: 12,
+        height: 44,
+        marginBottom: 14,
         borderWidth: 1,
-        borderColor: '#e0e0e0',
+        borderColor: COLORS.borderLight,
     },
-
-    searchIcon: {
-        marginRight: 10,
-    },
-
     searchInput: {
         flex: 1,
-        paddingVertical: 12,
-        fontSize: 14,
-        color: '#333',
+        marginLeft: 8,
+        fontSize: 13,
+        color: COLORS.textPrimary,
     },
 
     filterChips: {
         flexDirection: 'row',
-        flexWrap: 'wrap',
-        paddingHorizontal: 20,
-        marginBottom: 15,
-        gap: 10,
+        gap: 8,
+        marginBottom: 12,
     },
-
     chip: {
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-        backgroundColor: '#f8f9fa',
+        paddingHorizontal: 12,
+        paddingVertical: 6,
         borderRadius: 20,
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
         borderWidth: 1,
-        borderColor: '#e0e0e0',
+        borderColor: COLORS.borderLight,
     },
-
     chipActive: {
-        backgroundColor: '#1B497D',
-        borderColor: '#1B497D',
+        backgroundColor: COLORS.accentCyan,
+        borderColor: COLORS.accentCyan,
     },
-
     chipText: {
-        fontSize: 12,
-        color: '#666',
+        fontSize: 11,
+        color: COLORS.textMuted,
     },
-
     chipTextActive: {
-        color: '#fff',
+        color: COLORS.textDark,
+        fontWeight: 'bold',
     },
 
     modalList: {
-        maxHeight: height * 0.6,
+        marginBottom: 10,
     },
-
     modalItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 20,
-        paddingVertical: 15,
-        gap: 15,
+        paddingVertical: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(255, 255, 255, 0.05)',
     },
-
     modalItemSelected: {
-        backgroundColor: '#EFF6FF',
+        backgroundColor: 'rgba(255, 179, 0, 0.1)',
+        borderRadius: 10,
+        paddingHorizontal: 8,
     },
-
     modalFlag: {
-        fontSize: 30,
+        fontSize: 22,
+        marginRight: 12,
     },
-
     modalItemInfo: {
         flex: 1,
     },
-
     modalItemName: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: '#222',
+        fontSize: 13,
+        color: COLORS.textPrimary,
     },
-
     modalItemNative: {
-        fontSize: 12,
-        color: '#666',
+        fontSize: 11,
+        color: COLORS.textMuted,
         marginTop: 2,
-    },
-
-    modalItemRegion: {
-        fontSize: 10,
-        color: '#999',
-        marginTop: 2,
-    },
-
-    noResults: {
-        alignItems: 'center',
-        padding: 40,
-        gap: 15,
-    },
-
-    noResultsText: {
-        fontSize: 14,
-        color: '#999',
-    },
-
-    previewCard: {
-        marginHorizontal: 20,
-        marginBottom: 20,
-        padding: 20,
-        backgroundColor: '#EFF6FF',
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: '#1B497D',
-    },
-
-    previewTitle: {
-        fontSize: 16,
-        color: '#1B497D',
-        marginBottom: 15,
-    },
-
-    previewRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 10,
-        marginBottom: 10,
-    },
-
-    previewText: {
-        fontSize: 14,
-        color: '#555',
-        flex: 1,
-    },
-
-    saveButton: {
-        flexDirection: 'row',
-        backgroundColor: '#1B497D',
-        marginHorizontal: 20,
-        marginTop: 10,
-        marginBottom: 20,
-        paddingVertical: 16,
-        borderRadius: 16,
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 10,
-        elevation: 5,
-    },
-
-    saveButtonAnimate: {
-        transform: [{ scale: 0.98 }],
-    },
-    saveButtonText: {
-        color: '#fff',
-        fontSize: 16,
     },
 });

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
+    SafeAreaView,
     View,
     Text,
     Image,
@@ -11,8 +12,7 @@ import {
     Alert,
     ActivityIndicator,
     StatusBar,
-    Animated,
-    Dimensions
+    Animated
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { schoolstyle } from '../../../assets/styles/school.js';
 import { styles } from '../../../assets/styles/index.js';
+import { COLORS } from '../../../assets/styles/theme.js';
 import {
     switchChooseFormAction,
     switchSchoolDetailsAction,
@@ -30,9 +31,7 @@ import { BASE_URL } from '../../../api/config.js';
 import { store } from '../../../reducers/store.js';
 import { SET_SELECTED_SCHOOL } from '../../../reducers/actions/types.js';
 
-const { width } = Dimensions.get('window');
-
-// Animated Item Wrapper for lively list entrance
+// Animated Item Wrapper pour l'entrée dynamique des éléments de la liste
 class AnimatedSchoolCard extends React.Component {
     state = {
         fadeAnim: new Animated.Value(0),
@@ -42,7 +41,6 @@ class AnimatedSchoolCard extends React.Component {
 
     componentDidMount() {
         const { index } = this.props;
-        // Staggered entrance animation
         Animated.parallel([
             Animated.timing(this.state.fadeAnim, {
                 toValue: 1,
@@ -103,19 +101,15 @@ class School_Selection extends PureComponent {
         };
     }
 
-    // Navigate back to the role selection page
     _NavigateToChoose = () => {
-        console.log('Navigating back to role selection...');
         switchChooseFormAction(true);
     };
 
-    // Open detailed school profile modal/screen
     _NavigateToSchoolsDetails = (school) => {
         setSelectedSchoolAction(school);
         switchSchoolDetailsAction(true);
     };
 
-    // Persist selected school and proceed to step 1 of registration
     _NavigateToForm1 = async (item) => {
         this.setState({ selectedSchoolId: item.id });
         try {
@@ -136,7 +130,6 @@ class School_Selection extends PureComponent {
         }
     };
 
-    // Update star rating locally for interactive feedback
     updateEtoiles = (schoolId, nouveauNombreEtoiles) => {
         const { school_infos } = this.props;
         const schools = school_infos?.schools || [];
@@ -159,7 +152,6 @@ class School_Selection extends PureComponent {
         }
     };
 
-    // Render star rating bar for a school item
     renderEtoiles = (school) => {
         const etoiles = [];
         const maxEtoiles = school.maxEtoiles || 5;
@@ -175,7 +167,7 @@ class School_Selection extends PureComponent {
                     <Icon
                         name={i <= currentEtoiles ? 'star' : 'star-outline'}
                         size={15}
-                        color={i <= currentEtoiles ? '#ECB818' : '#475569'}
+                        color={i <= currentEtoiles ? COLORS.accentGold : COLORS.textMuted}
                         style={schoolstyle.etoileIcon}
                     />
                 </TouchableOpacity>
@@ -192,12 +184,10 @@ class School_Selection extends PureComponent {
         );
     };
 
-    // Sort schools descending by rating
     sortSchoolsByStars = (schools) => {
         return [...schools].sort((a, b) => (b.etoiles || 0) - (a.etoiles || 0));
     };
 
-    // Filter schools by search term and sort by rating
     filterAndSortSchools = () => {
         const { school_infos } = this.props;
         const { search } = this.state;
@@ -217,7 +207,6 @@ class School_Selection extends PureComponent {
         return this.sortSchoolsByStars(filteredSchools);
     };
 
-    // Render individual school card item with touch animations
     renderSchoolItem = (item, index) => {
         const logoUrl = item.logo ? `${BASE_URL}${item.logo}` : null;
 
@@ -225,11 +214,8 @@ class School_Selection extends PureComponent {
             <AnimatedSchoolCard key={item.id || index} index={index}>
                 {({ onPressIn, onPressOut }) => (
                     <View style={schoolstyle.cardContainer}>
-
-                        {/* Top Accent Line */}
                         <View style={schoolstyle.topHighlightLine} />
 
-                        {/* Card Header: School Logo & Basic Info */}
                         <View style={schoolstyle.cardHeader}>
                             <View style={schoolstyle.logoWrapper}>
                                 {logoUrl ? (
@@ -239,7 +225,7 @@ class School_Selection extends PureComponent {
                                         resizeMode="cover"
                                     />
                                 ) : (
-                                    <Icon name="school" size={28} color="#ECB818" />
+                                    <Icon name="school" size={26} color={COLORS.accentGold} />
                                 )}
                             </View>
 
@@ -249,12 +235,12 @@ class School_Selection extends PureComponent {
                                         {item.name}
                                     </Text>
                                     <View style={schoolstyle.verifiedBadge}>
-                                        <Icon name="check-decagram" size={14} color="#ECB818" />
+                                        <Icon name="check-decagram" size={14} color={COLORS.accentGold} />
                                     </View>
                                 </View>
 
                                 <Text style={[styles.text, schoolstyle.schoolAddress]} numberOfLines={1}>
-                                    <Icon name="map-marker-outline" size={12} color="#94A3B8" />
+                                    <Icon name="map-marker-outline" size={12} color={COLORS.textMuted} />
                                     {' '}{item.address || 'Adresse non renseignée'}
                                 </Text>
                                 {this.renderEtoiles(item)}
@@ -263,7 +249,6 @@ class School_Selection extends PureComponent {
 
                         <View style={schoolstyle.cardDivider} />
 
-                        {/* Card Body: Success Rates & Academic Stats */}
                         <View style={schoolstyle.cardBody}>
                             <Text style={[styles.textBold, schoolstyle.sectionSubtitle]}>
                                 Taux de réussite aux examens
@@ -272,7 +257,7 @@ class School_Selection extends PureComponent {
                             <View style={schoolstyle.statsRow}>
                                 <View style={schoolstyle.statBadge}>
                                     <View style={schoolstyle.statIconBg}>
-                                        <Icon name="file-certificate-outline" size={14} color="#ECB818" />
+                                        <Icon name="file-certificate-outline" size={14} color={COLORS.accentGold} />
                                     </View>
                                     <View style={{ marginLeft: 6 }}>
                                         <Text style={[styles.text, schoolstyle.statLabel]}>Examens</Text>
@@ -282,7 +267,7 @@ class School_Selection extends PureComponent {
 
                                 <View style={schoolstyle.statBadge}>
                                     <View style={schoolstyle.statIconBg}>
-                                        <Icon name="pencil-outline" size={14} color="#38BDF8" />
+                                        <Icon name="pencil-outline" size={14} color={COLORS.accentCyan} />
                                     </View>
                                     <View style={{ marginLeft: 6 }}>
                                         <Text style={[styles.text, schoolstyle.statLabel]}>Intermédiaires</Text>
@@ -292,7 +277,6 @@ class School_Selection extends PureComponent {
                             </View>
                         </View>
 
-                        {/* Card Footer: Action Buttons */}
                         <View style={schoolstyle.cardFooter}>
                             <TouchableOpacity
                                 style={schoolstyle.seeMoreButton}
@@ -312,7 +296,7 @@ class School_Selection extends PureComponent {
                                 activeOpacity={0.85}
                             >
                                 <Text style={[styles.textBold, schoolstyle.selectText]}>Sélectionner</Text>
-                                <Entypo name="chevron-right" size={16} color="#0B1320" style={{ marginLeft: 4 }} />
+                                <Entypo name="chevron-right" size={16} color={COLORS.textDark} style={{ marginLeft: 4 }} />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -321,13 +305,12 @@ class School_Selection extends PureComponent {
         );
     };
 
-    // Render activity indicator at the bottom of the list during loading
     renderFooter = () => {
         const { is_loading } = this.props;
         if (!is_loading) return null;
         return (
             <View style={schoolstyle.loadingContainer}>
-                <ActivityIndicator size="small" color="#ECB818" />
+                <ActivityIndicator size="small" color={COLORS.accentGold} />
                 <Text style={[styles.text, schoolstyle.loadingText]}>
                     Mise à jour des établissements...
                 </Text>
@@ -335,7 +318,6 @@ class School_Selection extends PureComponent {
         );
     };
 
-    // Render placeholder when search query returns no school
     renderEmptyList = () => {
         const { is_loading } = this.props;
         if (is_loading) return null;
@@ -343,7 +325,7 @@ class School_Selection extends PureComponent {
         return (
             <View style={schoolstyle.emptyContainer}>
                 <View style={schoolstyle.emptyIconBg}>
-                    <Icon name="school-outline" size={48} color="#ECB818" />
+                    <Icon name="school-outline" size={44} color={COLORS.accentGold} />
                 </View>
                 <Text style={[styles.textBold, schoolstyle.emptyTitle]}>
                     Aucun établissement trouvé
@@ -362,13 +344,13 @@ class School_Selection extends PureComponent {
         const { is_loading } = this.props;
 
         return (
-            <View style={schoolstyle.container}>
-                <StatusBar barStyle="light-content" backgroundColor="#0B1320" />
+            <SafeAreaView style={schoolstyle.container}>
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} />
 
-                {/* Dynamic Background Glows */}
-                <View style={schoolstyle.topGlow} />
-                <View style={schoolstyle.centerGlow} />
-                <View style={schoolstyle.bottomGlow} />
+                {/* Dynamic Glows (Poly-H Theme) */}
+                <View style={schoolstyle.topGlow} pointerEvents="none" />
+                <View style={schoolstyle.centerGlow} pointerEvents="none" />
+                <View style={schoolstyle.bottomGlow} pointerEvents="none" />
 
                 {/* Top Header Section */}
                 <View style={schoolstyle.headerContainer}>
@@ -377,7 +359,7 @@ class School_Selection extends PureComponent {
                         onPress={this._NavigateToChoose}
                         activeOpacity={0.7}
                     >
-                        <Entypo name="chevron-left" size={24} color="#FFFFFF" />
+                        <Entypo name="chevron-left" size={24} color={COLORS.textPrimary} />
                     </TouchableOpacity>
 
                     <View style={schoolstyle.headerTitleWrapper}>
@@ -395,11 +377,11 @@ class School_Selection extends PureComponent {
                         isSearchFocused && schoolstyle.searchWrapperFocused,
                     ]}
                 >
-                    <Icon name="magnify" size={22} color={isSearchFocused ? '#ECB818' : '#64748B'} />
+                    <Icon name="magnify" size={20} color={isSearchFocused ? COLORS.accentGold : COLORS.textMuted} />
                     <TextInput
                         style={[styles.text, schoolstyle.searchInput]}
                         placeholder="Rechercher par nom, ville ou description..."
-                        placeholderTextColor="#64748B"
+                        placeholderTextColor={COLORS.textMuted}
                         value={search}
                         onChangeText={(text) => this.setState({ search: text })}
                         onFocus={() => this.setState({ isSearchFocused: true })}
@@ -407,7 +389,7 @@ class School_Selection extends PureComponent {
                     />
                     {search !== '' && (
                         <TouchableOpacity onPress={() => this.setState({ search: '' })}>
-                            <Icon name="close-circle" size={18} color="#64748B" />
+                            <Icon name="close-circle" size={18} color={COLORS.textMuted} />
                         </TouchableOpacity>
                     )}
                 </View>
@@ -441,7 +423,7 @@ class School_Selection extends PureComponent {
                     windowSize={5}
                     removeClippedSubviews={true}
                 />
-            </View>
+            </SafeAreaView>
         );
     }
 }

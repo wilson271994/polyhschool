@@ -196,7 +196,7 @@ class Book_Shop extends PureComponent {
 
         return (
             <SafeAreaView style={bookshopstyle.container}>
-                <ImageBackground source={require('../../assets/images/background.jpg')} style={styles.backgroundapp} resizeMode="cover">
+                <ImageBackground source={require('../../assets/images/background.png')} style={styles.backgroundapp} resizeMode="cover">
 
                     {showSearch ? (
                         <View style={bookshopstyle.header}>

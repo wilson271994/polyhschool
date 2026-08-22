@@ -8,7 +8,7 @@ class Courses extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            showCoursesIndex    : false,
+            showCoursesIndex    : true,
             selectedChild       : null,
         };
     }
@@ -30,7 +30,7 @@ class Courses extends PureComponent {
     render() {
         const { is_parent } = this.props;
         const { showCoursesIndex } = this.state;
-
+        console.log(showCoursesIndex, 'dddd')
         if (showCoursesIndex) {
             return (
                 <CoursesIndex
@@ -42,13 +42,11 @@ class Courses extends PureComponent {
 
         if (is_parent) {
             return (
-                <CoursesIndex onBack={null} />
+                <Course_Parent_Page 
+                    onNavigateToCourses={this._navigateToCoursesIndex} 
+                />
             );
         }
-
-        return <Course_Parent_Page
-            onNavigateToCourses={this._navigateToCoursesIndex}
-        />
     }
 }
 

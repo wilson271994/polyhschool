@@ -308,7 +308,7 @@ class Student_Library extends PureComponent {
 
         return (
             <SafeAreaView style={librarystyle.container}>
-                <ImageBackground source={require('../../assets/images/background.jpg')} style={styles.backgroundapp} resizeMode="cover">
+                <ImageBackground source={require('../../assets/images/background.png')} style={styles.backgroundapp} resizeMode="cover">
 
                     {showSearch ? (
                         <View style={librarystyle.header}>

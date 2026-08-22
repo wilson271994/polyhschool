@@ -83,24 +83,30 @@ class Student_Menu extends PureComponent {
             icon: 'account-group-outline',
             action: () => switchStudentActivitiesAction(true),
         },
+        {
+            key: 'fees',
+            label: 'Frais Scolaires',
+            icon: 'cash-multiple',
+            action: () => switchStudentActivitiesAction(true),
+        },
     ];
 
     // 2. SERVICES SCOLAIRES (En cartes sous l'orbite)
     getServicesItems = () => [
         {
-            key: 'fees',
-            title: 'Frais Scolaires',
-            sub: 'Paiements & Reçus',
-            icon: 'cash-multiple',
-            color: COLORS.accentGold,
-            action: () => switchFeesSchoolPageAction(true),
-        },
-        {
             key: 'library',
             title: 'Bibliothèque',
-            sub: 'E-Books & Manuels',
+            sub: 'Bibliothèque Scolaire',
             icon: 'library-shelves',
             color: COLORS.accentCyan,
+            action: () => switchStudentLibraryPageAction(true),
+        },
+        {
+            key: 'bookshop',
+            title: 'Librairie',
+            sub: 'E-Books & Manuels',
+            icon: 'book',
+            color: COLORS.accentGold,
             action: () => switchStudentLibraryPageAction(true),
         },
         {
@@ -120,18 +126,18 @@ class Student_Menu extends PureComponent {
             action: () => switchStudentHostingPageAction(true),
         },
         {
-            key: 'cv',
-            title: 'CV Étudiant',
-            sub: 'Parcours & Talents',
-            icon: 'file-certificate-outline',
+            key: 'canteen',
+            title: 'Cantine Scolaire',
+            sub: 'Nourriture & Boisson',
+            icon: 'food',
             color: '#8B5CF6',
             action: () => switchStudentCVPageAction(true),
         },
         {
-            key: 'remarks',
-            title: 'Remarques',
-            sub: 'Notes discipline',
-            icon: 'comment-alert-outline',
+            key: 'infirmary',
+            title: 'Infirmerie',
+            sub: 'Santé & Infirmerie',
+            icon: 'hospital',
             color: '#F59E0B',
             action: () => switchRemarkStudentPageAction(true),
         },

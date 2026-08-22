@@ -1,173 +1,154 @@
-import { StyleSheet, Dimensions } from 'react-native';
-const { width } = Dimensions.get('window');
+import { StyleSheet } from 'react-native';
+import { COLORS } from './theme';
 
 export const schoolstyle = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#011638', // Deep background derived from #023b8a
+        backgroundColor: COLORS.bgPrimary,
     },
 
-    // Ambient Glowing Orbs
+    /* Glows / Orbes d'ambiance Poly-H */
     topGlow: {
         position: 'absolute',
-        top: -70,
-        right: -70,
-        width: 300,
-        height: 300,
-        borderRadius: 150,
-        backgroundColor: 'rgba(2, 59, 138, 0.55)', // Primary #023b8a glow
+        top: -100,
+        right: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(255, 179, 0, 0.12)',
     },
     centerGlow: {
         position: 'absolute',
         top: '40%',
-        left: -80,
-        width: 240,
-        height: 240,
-        borderRadius: 120,
-        backgroundColor: 'rgba(2, 59, 138, 0.3)',
+        left: -100,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(54, 209, 220, 0.10)',
     },
     bottomGlow: {
         position: 'absolute',
-        bottom: -70,
-        right: -40,
-        width: 270,
-        height: 270,
-        borderRadius: 135,
-        backgroundColor: 'rgba(246, 161, 0, 0.25)', // Accent #f6a100 glow
+        bottom: -100,
+        right: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(255, 179, 0, 0.08)',
     },
 
-    // Header & Navigation
+    /* En-tête */
     headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 20,
-        paddingTop: 50,
-        paddingBottom: 16,
+        paddingHorizontal: 16,
+        paddingTop: 10,
+        paddingBottom: 14,
     },
     backButton: {
-        width: 44,
-        height: 44,
-        borderRadius: 14,
-        backgroundColor: 'rgba(2, 59, 138, 0.4)', // #023b8a translucent
-        borderWidth: 1.5,
-        borderColor: 'rgba(255, 255, 255, 0.15)',
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        backgroundColor: 'rgba(255, 255, 255, 0.08)',
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: 16,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        marginRight: 12,
     },
     headerTitleWrapper: {
         flex: 1,
     },
     headerBadge: {
-        color: '#f6a100', // Brand Accent #f6a100
-        fontSize: 10,
-        letterSpacing: 2.5,
-        textTransform: 'uppercase',
+        fontSize: 11,
+        fontWeight: 'bold',
+        color: COLORS.accentGold,
+        letterSpacing: 1.2,
     },
     headerTitle: {
-        color: '#FFFFFF',
-        fontSize: 22,
-        letterSpacing: 0.3,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: COLORS.textPrimary,
     },
 
-    // Search Bar
+    /* Barre de Recherche */
     searchWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'rgba(2, 59, 138, 0.35)', // #023b8a base
-        borderRadius: 16,
-        borderWidth: 1.5,
-        borderColor: 'rgba(255, 255, 255, 0.15)',
-        height: 54,
-        paddingHorizontal: 16,
-        marginHorizontal: 20,
-        marginBottom: 14,
-        shadowColor: '#023b8a',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 5,
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+        borderRadius: 14,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        paddingHorizontal: 12,
+        height: 44,
+        marginHorizontal: 16,
+        marginBottom: 10,
     },
     searchWrapperFocused: {
-        borderColor: '#f6a100', // Highlight with Accent #f6a100
-        backgroundColor: 'rgba(2, 59, 138, 0.65)',
+        borderColor: COLORS.accentGold,
+        backgroundColor: 'rgba(255, 179, 0, 0.05)',
     },
     searchInput: {
         flex: 1,
-        color: '#FFFFFF',
-        fontSize: 14,
-        marginLeft: 10,
+        fontSize: 12,
+        color: COLORS.textPrimary,
+        marginLeft: 8,
     },
 
-    // Result Counter
+    /* Indicateur de Résultats */
     resultRow: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginHorizontal: 22,
-        marginBottom: 14,
+        paddingHorizontal: 16,
+        marginBottom: 10,
     },
     resultCount: {
-        color: '#CBD5E1',
-        fontSize: 13,
+        fontSize: 11,
+        color: COLORS.textMuted,
     },
     pulseDot: {
-        width: 10,
-        height: 10,
-        borderRadius: 5,
-        backgroundColor: '#f6a100', // Accent #f6a100
-        shadowColor: '#f6a100',
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.8,
-        shadowRadius: 6,
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+        backgroundColor: COLORS.accentCyan,
     },
 
+    /* Liste */
     list: {
-        paddingHorizontal: 20,
+        paddingHorizontal: 16,
     },
 
-    // School Card Container
+    /* Cartes d'Établissement */
     cardContainer: {
-        backgroundColor: 'rgba(2, 59, 138, 0.45)', // Primary #023b8a translucent card
-        borderRadius: 22,
-        borderWidth: 1.5,
-        borderColor: 'rgba(246, 161, 0, 0.25)', // Accent #f6a100 subtle border
-        padding: 18,
-        marginBottom: 18,
+        backgroundColor: COLORS.cardBg,
+        borderRadius: 18,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        marginBottom: 14,
         overflow: 'hidden',
-        position: 'relative',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 12,
-        elevation: 6,
     },
     topHighlightLine: {
-        position: 'absolute',
-        top: 0,
-        left: '5%',
-        right: '5%',
-        height: 3,
-        backgroundColor: '#f6a100', // Accent #f6a100 highlight bar
-        borderBottomLeftRadius: 3,
-        borderBottomRightRadius: 3,
+        height: 2,
+        backgroundColor: COLORS.accentGold,
+        width: '100%',
     },
+
+    /* Carte Header */
     cardHeader: {
         flexDirection: 'row',
+        padding: 12,
         alignItems: 'center',
-        marginTop: 4,
     },
     logoWrapper: {
-        width: 60,
-        height: 60,
-        borderRadius: 16,
-        backgroundColor: '#011638',
-        borderWidth: 2,
-        borderColor: '#f6a100', // Accent #f6a100 ring
+        width: 48,
+        height: 48,
+        borderRadius: 12,
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
         justifyContent: 'center',
         alignItems: 'center',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
         overflow: 'hidden',
-        marginRight: 14,
     },
     schoolLogo: {
         width: '100%',
@@ -175,25 +156,31 @@ export const schoolstyle = StyleSheet.create({
     },
     headerInfo: {
         flex: 1,
+        marginLeft: 10,
     },
     titleRow: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
     },
     schoolName: {
-        color: '#FFFFFF',
-        fontSize: 17,
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: COLORS.textPrimary,
         flex: 1,
-        marginBottom: 2,
+        marginRight: 6,
     },
     verifiedBadge: {
-        marginLeft: 6,
+        marginLeft: 2,
     },
     schoolAddress: {
-        color: '#93C5FD',
-        fontSize: 12,
-        marginBottom: 6,
+        fontSize: 11,
+        color: COLORS.textMuted,
+        marginTop: 2,
+        marginBottom: 4,
     },
+
+    /* Étoiles */
     etoilesContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -202,132 +189,132 @@ export const schoolstyle = StyleSheet.create({
         marginRight: 2,
     },
     noteTexte: {
-        color: '#CBD5E1',
-        fontSize: 11,
-        marginLeft: 6,
-    },
-    cardDivider: {
-        height: 1,
-        backgroundColor: 'rgba(255, 255, 255, 0.12)',
-        marginVertical: 14,
+        fontSize: 10,
+        color: COLORS.textMuted,
+        marginLeft: 4,
     },
 
-    // Card Body & Statistics
+    cardDivider: {
+        height: 1,
+        backgroundColor: COLORS.borderLight,
+        marginHorizontal: 12,
+    },
+
+    /* Carte Body & Stats */
     cardBody: {
-        marginBottom: 16,
+        padding: 12,
     },
     sectionSubtitle: {
-        color: '#E2E8F0',
-        fontSize: 12,
-        marginBottom: 10,
-        letterSpacing: 0.2,
+        fontSize: 11,
+        color: COLORS.textMuted,
+        marginBottom: 8,
     },
     statsRow: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        gap: 10,
     },
     statBadge: {
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'rgba(1, 22, 56, 0.75)',
-        borderRadius: 12,
-        paddingHorizontal: 12,
-        paddingVertical: 8,
+        backgroundColor: 'rgba(255, 255, 255, 0.04)',
+        padding: 8,
+        borderRadius: 10,
         borderWidth: 1,
-        borderColor: 'rgba(246, 161, 0, 0.2)',
-        flex: 0.48,
+        borderColor: COLORS.borderLight,
     },
     statIconBg: {
-        width: 28,
-        height: 28,
-        borderRadius: 8,
-        backgroundColor: 'rgba(246, 161, 0, 0.15)',
+        width: 26,
+        height: 26,
+        borderRadius: 6,
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
         justifyContent: 'center',
         alignItems: 'center',
     },
     statLabel: {
-        color: '#94A3B8',
         fontSize: 10,
+        color: COLORS.textMuted,
     },
     statValue: {
-        color: '#f6a100', // Accent #f6a100
-        fontSize: 13,
+        fontSize: 12,
+        color: COLORS.accentGold,
     },
     statValueBlue: {
-        color: '#60A5FA',
-        fontSize: 13,
+        fontSize: 12,
+        color: COLORS.accentCyan,
     },
 
-    // Action Buttons
+    /* Carte Footer */
     cardFooter: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        paddingHorizontal: 12,
+        paddingBottom: 12,
+        gap: 8,
     },
     seeMoreButton: {
-        paddingVertical: 12,
-        paddingHorizontal: 20,
-        borderRadius: 14,
-        backgroundColor: 'rgba(2, 59, 138, 0.5)', // Primary #023b8a button
-        borderWidth: 1.5,
-        borderColor: 'rgba(255, 255, 255, 0.2)',
+        flex: 1,
+        height: 38,
+        borderRadius: 10,
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     seeMoreText: {
-        color: '#FFFFFF',
-        fontSize: 13,
+        fontSize: 12,
+        color: COLORS.textPrimary,
     },
     selectButton: {
+        flex: 1.5,
+        height: 38,
+        borderRadius: 10,
+        backgroundColor: COLORS.accentGold,
         flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 24,
-        borderRadius: 14,
-        backgroundColor: '#f6a100', // Master CTA Accent #f6a100
-        shadowColor: '#f6a100',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.4,
-        shadowRadius: 8,
-        elevation: 6,
     },
     selectText: {
-        color: '#011638', // Dark background text for high contrast
-        fontSize: 13,
-        letterSpacing: 0.4,
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: COLORS.textDark,
     },
 
-    // Placeholders & Loader
+    /* États Chargement & Liste Vide */
     loadingContainer: {
+        paddingVertical: 16,
         alignItems: 'center',
-        paddingVertical: 20,
+        gap: 6,
     },
     loadingText: {
-        color: '#94A3B8',
-        fontSize: 12,
-        marginTop: 8,
+        fontSize: 11,
+        color: COLORS.textMuted,
     },
+
     emptyContainer: {
         alignItems: 'center',
-        paddingHorizontal: 30,
-        paddingVertical: 60,
+        paddingHorizontal: 20,
     },
     emptyIconBg: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        backgroundColor: 'rgba(246, 161, 0, 0.15)',
+        width: 70,
+        height: 70,
+        borderRadius: 35,
+        backgroundColor: 'rgba(255, 179, 0, 0.1)',
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 12,
+        borderWidth: 1,
+        borderColor: 'rgba(255, 179, 0, 0.2)',
     },
     emptyTitle: {
-        color: '#FFFFFF',
-        fontSize: 17,
+        fontSize: 14,
+        color: COLORS.textPrimary,
         marginBottom: 6,
     },
     emptySubtitle: {
-        color: '#94A3B8',
-        fontSize: 13,
+        fontSize: 11,
+        color: COLORS.textMuted,
         textAlign: 'center',
-        lineHeight: 18,
+        lineHeight: 16,
     },
 });

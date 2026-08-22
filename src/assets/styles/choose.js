@@ -1,195 +1,180 @@
-import { StyleSheet, Dimensions } from 'react-native';
-const { width } = Dimensions.get('window');
+import { StyleSheet } from 'react-native';
+import { COLORS } from './theme';
 
 export const choosestyle = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#011638', // Deep background derived from #023b8a
+        backgroundColor: COLORS.bgPrimary,
     },
 
-    // Ambient Glowing Orbs
+    /* Glows / Orbes d'ambiance Poly-H */
     topGlow: {
         position: 'absolute',
         top: -100,
-        right: -100,
-        width: 320,
-        height: 320,
-        borderRadius: 160,
-        backgroundColor: 'rgba(2, 59, 138, 0.55)', // Primary #023b8a glow
+        right: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(255, 179, 0, 0.12)',
     },
     centerGlow: {
         position: 'absolute',
         top: '40%',
-        left: -90,
-        width: 250,
-        height: 250,
-        borderRadius: 125,
-        backgroundColor: 'rgba(2, 59, 138, 0.3)',
-    },
-    bottomGlow: {
-        position: 'absolute',
-        bottom: -80,
-        right: -50,
+        left: -100,
         width: 280,
         height: 280,
         borderRadius: 140,
-        backgroundColor: 'rgba(246, 161, 0, 0.25)', // Accent #f6a100 glow
+        backgroundColor: 'rgba(54, 209, 220, 0.10)',
+    },
+    bottomGlow: {
+        position: 'absolute',
+        bottom: -100,
+        right: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(255, 179, 0, 0.08)',
     },
 
     scrollContainer: {
         flexGrow: 1,
         paddingHorizontal: 20,
-        paddingVertical: 40,
-        alignItems: 'center',
+        paddingVertical: 20,
     },
 
-    // Top Header Navigation Bar
+    /* Header - Bouton Retour */
     headerRow: {
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        marginBottom: 16,
+        marginBottom: 10,
     },
     backButton: {
-        width: 44,
-        height: 44,
-        borderRadius: 14,
-        backgroundColor: 'rgba(2, 59, 138, 0.4)', // #023b8a translucent
-        borderWidth: 1.5,
-        borderColor: 'rgba(255, 255, 255, 0.15)',
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        backgroundColor: 'rgba(255, 255, 255, 0.08)',
         justifyContent: 'center',
         alignItems: 'center',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
     },
 
-    // Branding Section
+    /* Branding Header */
     logoContainer: {
         alignItems: 'center',
-        marginBottom: 28,
-    },
-    logo: {
-        width: 100,  // Exact dimensions 100x100 px
-        height: 100,
-        marginBottom: 10,
-        resizeMode: 'contain',
-    },
-    brandBadge: {
-        color: '#f6a100', // Brand Accent #f6a100
-        fontSize: 10,
-        letterSpacing: 2.5,
-        marginBottom: 6,
-        textTransform: 'uppercase',
-    },
-    title: {
-        fontSize: 24,
-        color: '#FFFFFF',
-        marginBottom: 8,
-    },
-    subtitle: {
-        fontSize: 13,
-        color: '#94A3B8',
-        textAlign: 'center',
-        maxWidth: '90%',
-        lineHeight: 18,
-    },
-
-    // Role Card Container
-    cardsContainer: {
-        width: '100%',
         marginBottom: 24,
     },
+    logo: {
+        width: 75,
+        height: 75,
+        marginBottom: 8,
+    },
+    brandBadge: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: COLORS.accentGold,
+        letterSpacing: 1.5,
+        marginBottom: 4,
+    },
+    title: {
+        fontSize: 16,
+        color: COLORS.textPrimary,
+        marginBottom: 4,
+    },
+    subtitle: {
+        fontSize: 12,
+        color: COLORS.textMuted,
+        textAlign: 'center',
+        paddingHorizontal: 15,
+    },
+
+    /* Liste des Cartes */
+    cardsContainer: {
+        gap: 14,
+        marginBottom: 20,
+    },
     roleCard: {
-        backgroundColor: 'rgba(2, 59, 138, 0.45)', // Primary #023b8a translucent card
-        borderRadius: 22,
-        borderWidth: 1.5,
-        borderColor: 'rgba(255, 255, 255, 0.12)',
-        padding: 20,
-        marginBottom: 16,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 12,
-        elevation: 6,
+        backgroundColor: COLORS.cardBg,
+        borderRadius: 18,
+        padding: 16,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
     },
     roleCardSelected: {
-        borderColor: '#f6a100', // Highlight with Accent #f6a100
-        backgroundColor: 'rgba(246, 161, 0, 0.12)',
+        borderColor: COLORS.accentGold,
+        backgroundColor: 'rgba(255, 179, 0, 0.08)',
     },
     roleHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 14,
+        marginBottom: 12,
     },
     iconContainer: {
-        width: 50,
-        height: 50,
-        borderRadius: 14,
-        backgroundColor: 'rgba(246, 161, 0, 0.15)',
+        width: 44,
+        height: 44,
+        borderRadius: 12,
+        backgroundColor: 'rgba(255, 179, 0, 0.12)',
         justifyContent: 'center',
         alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'rgba(255, 179, 0, 0.25)',
     },
     iconContainerSelected: {
-        backgroundColor: '#f6a100', // Accent #f6a100
+        backgroundColor: COLORS.accentGold,
+        borderColor: COLORS.accentGold,
     },
     radioButton: {
         width: 22,
         height: 22,
         borderRadius: 11,
         borderWidth: 1.5,
-        borderColor: 'rgba(255, 255, 255, 0.3)',
+        borderColor: COLORS.borderLight,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.04)',
     },
     radioButtonSelected: {
-        backgroundColor: '#f6a100', // Accent #f6a100
-        borderColor: '#f6a100',
+        borderColor: COLORS.accentGold,
+        backgroundColor: COLORS.accentGold,
     },
     roleTitle: {
-        fontSize: 18,
-        color: '#FFFFFF',
-        marginBottom: 6,
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: COLORS.textPrimary,
+        marginBottom: 4,
     },
     roleTitleSelected: {
-        color: '#f6a100', // Accent #f6a100
+        color: COLORS.accentGold,
     },
     roleDescription: {
         fontSize: 12,
-        color: '#CBD5E1',
-        lineHeight: 18,
+        color: COLORS.textMuted,
+        lineHeight: 17,
     },
 
-    // Action Button
+    /* Master CTA Button */
     button: {
-        backgroundColor: '#f6a100', // Master CTA Accent #f6a100
+        backgroundColor: COLORS.accentGold,
         borderRadius: 14,
-        height: 54,
-        width: '100%',
+        height: 48,
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: '#f6a100',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.4,
-        shadowRadius: 10,
-        elevation: 6,
     },
     buttonDisabled: {
-        backgroundColor: 'rgba(255, 255, 255, 0.15)',
-        shadowOpacity: 0,
-        elevation: 0,
+        opacity: 0.4,
     },
     buttonText: {
-        color: '#011638', // Dark text for high contrast
-        fontSize: 15,
-        letterSpacing: 0.5,
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: COLORS.textDark,
     },
 
-    // Login Navigation Link
+    /* Liens Bas de Page */
     loginLinkText: {
-        color: '#94A3B8',
-        fontSize: 13,
+        fontSize: 12,
+        color: COLORS.textMuted,
     },
     loginLinkBold: {
-        color: '#FFFFFF',
-        textDecorationLine: 'underline',
+        fontSize: 12,
+        color: COLORS.accentGold,
     },
 });

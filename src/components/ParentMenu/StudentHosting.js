@@ -127,7 +127,7 @@ class StudentHosting extends Component {
 
         return (
             <SafeAreaView style={hostingstyle.container}>
-                <ImageBackground source={require('../../assets/images/background.jpg')} style={styles.backgroundapp} resizeMode="cover">
+                <ImageBackground source={require('../../assets/images/background.png')} style={styles.backgroundapp} resizeMode="cover">
                     <View style={styles.section}>
                         <View style={styles.back}>
                             <TouchableOpacity onPress={this._navigateToMenu}>

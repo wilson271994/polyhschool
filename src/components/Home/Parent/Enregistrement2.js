@@ -296,7 +296,7 @@ class signUpForm2 extends Component {
 
         return (
             <View style={registerstyle.container}>
-                <ImageBackground source={require('../../../assets/images/background.jpg')} style={styles.backgroundapp} resizeMode="cover">
+                <ImageBackground source={require('../../../assets/images/background.png')} style={styles.backgroundapp} resizeMode="cover">
                     <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
 
                         <View style={registerstyle.back}>

@@ -10,8 +10,6 @@ import LoginPage from "../components/Auth/LoginPage";
 import ConfirmationIndex from "../components/Auth/ConfirmationIndex";
 import SchoolSelection from "../components/Auth/Pages/SchoolSelection";
 import SchoolDetail from "../components/Auth/Pages/SchoolDetail";
-import ChooseAdmission from "../components/Auth/ChooseAdmission";
-import UploadAdmissionDocument from "../components/Auth/SignupForm3";
 import SignupForm3 from "../components/Auth/SignupForm3";
 
 class AuthNavigation extends Component {
@@ -31,19 +29,7 @@ class AuthNavigation extends Component {
             is_activation_form,
             is_school_selection_page,
             is_school_details_page,
-            is_school_admission_page
         } = this.props;
-        console.log(
-            is_login_form,
-            is_choose_form,
-            is_signup1_form,
-            is_signup2_form,
-            is_signup3_form,
-            is_activation_form,
-            is_school_selection_page,
-            is_school_details_page,
-            is_school_admission_page,
-        )
         return (
             <View style={{ flex:1 }}>
                 {
@@ -109,7 +95,6 @@ const mapStateToProps = (state) => {
         is_activation_form                  : state.navigation.is_activation_form,
         is_school_selection_page            : state.navigation.is_school_selection_page,
         is_school_details_page              : state.navigation.is_school_details_page,
-        is_school_admission_page            : state.navigation.is_school_admission_page,
         is_upload_admission_document_page   : state.navigation.is_upload_admission_document_page,
     }
 }

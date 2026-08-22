@@ -859,7 +859,7 @@ class ChatIndex extends PureComponent {
                 )}
 
                 <ImageBackground
-                    source={wallpaperImage ? { uri: wallpaperImage } : require('../../assets/images/background.jpg')}
+                    source={wallpaperImage ? { uri: wallpaperImage } : require('../../assets/images/background.png')}
                     style={styles.backgroundapp}
                     resizeMode="cover"
                 >

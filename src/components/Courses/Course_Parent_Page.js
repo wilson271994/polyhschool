@@ -205,7 +205,7 @@ class Course_Parent_Page extends PureComponent {
         return (
             <View style={courseparentstyle.container}>
                 <ImageBackground
-                    source={require('../../assets/images/background.jpg')}
+                    source={require('../../assets/images/background.png')}
                     style={styles.backgroundapp}
                     resizeMode="cover"
                 >

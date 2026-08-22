@@ -6,7 +6,8 @@ import { store } from "../reducers/store";
 //export const BASE_URL="http://192.168.1.105:8000" 
 
 //export const BASE_URL="http://192.168.1.123:8000" 
-export const BASE_URL="http://192.168.113.238:8000"
+
+export const BASE_URL="http://10.0.2.2:8000"
 
 const onUploadProgress = (progressEvent) => {
     const { loaded, total } = progressEvent;

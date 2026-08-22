@@ -1,307 +1,248 @@
-import { StyleSheet, Dimensions } from 'react-native';
-import { color } from 'react-native-elements/dist/helpers';
-const { width, height } = Dimensions.get('window');
+import { StyleSheet } from 'react-native';
+import { COLORS } from './theme';
 
 export const C = {
-    bg: "#0a0e14",
-    surface: "#111722",
-    surfaceAlt: "#181f2d",
-    bubble_out: "#eee",
-    bubble_in: "#1e3a5e",
-    accent: "#25d366",
-    accent1: "#ECB818",
-    accent2: '#1B497D',
-    Accent: "#1e3a5e",
-    accentDim: "#1a9e4a",
-    accentGlow: "rgba(37,211,102,0.18)",
-    text1: "#000",
-    text: "#FFF",
-    textMuted: "#7a8ba0",
-    textTime: "#5a6b7d",
-    border: "rgba(255,255,255,0.06)",
-    headerBg: "#0d1520",
-    header: '#1B497D',
-    footer: '#0d1d30',
-    inputBg: "#151d2b",
-    red: "#e05c5c",
-    blue: "#4a9eff",
-    shadow: "0 8px 32px rgba(0,0,0,0.55)",
+    accent: COLORS.accentGold,
+    text: COLORS.textPrimary,
+    textMuted: COLORS.textMuted,
 };
 
 export const supportchatstyle = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: COLORS.bgPrimary,
     },
-    chatContainer: {
-        paddingBottom: 20,
-        marginTop: 15,
+
+    /* Glows */
+    topGlow: {
+        position: 'absolute',
+        top: -100,
+        right: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(255, 179, 0, 0.12)',
     },
-    messageContainer: {
-        marginBottom: 16,
-        maxWidth: '100%',
+    bottomGlow: {
+        position: 'absolute',
+        bottom: -100,
+        left: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(54, 209, 220, 0.10)',
     },
-    userMessageContainer: {
-        alignSelf: 'flex-end',
-    },
-    supportMessageContainer: {
-        alignSelf: 'flex-start',
+
+    /* Navigation Header Bar */
+    headerNav: {
         flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingTop: 10,
+        paddingBottom: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(255, 255, 255, 0.05)',
     },
-    bubble: {
-        borderRadius: 16,
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        marginLeft: 10,
-        width: '80%',
+    backButton: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        marginRight: 12,
     },
-    bubbleLeft: {
-        backgroundColor: '#FFFFFF',
-        borderBottomLeftRadius: 4,
-        alignSelf: 'flex-start',
+    headerTitleWrapper: {
+        flex: 1,
     },
-    bubbleRight: {
-        backgroundColor: '#DCF8C6',
-        borderBottomRightRadius: 4,
+    headerBadge: {
+        fontSize: 10,
+        color: COLORS.accentGold,
+        letterSpacing: 1,
     },
-    bubbleText: {
+    headerTitle: {
         fontSize: 14,
-        lineHeight: 20,
+        color: COLORS.textPrimary,
+    },
+
+    onlineStatusBadge: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+    },
+    onlineDot: {
+        width: 7,
+        height: 7,
+        borderRadius: 3.5,
+    },
+    onlineText: {
+        fontSize: 10,
+        color: COLORS.textMuted,
+    },
+
+    /* Chat Scroll Area */
+    chatScroll: {
+        flex: 1,
+    },
+    scrollContent: {
+        paddingHorizontal: 16,
+        paddingVertical: 16,
+        gap: 12,
+    },
+
+    /* Message Rows & Bubbles */
+    messageRow: {
+        flexDirection: 'row',
+        marginBottom: 4,
+    },
+    userRow: {
+        justifyContent: 'flex-end',
+    },
+    supportRow: {
+        justifyContent: 'flex-start',
+    },
+
+    bubble: {
+        maxWidth: '80%',
+        borderRadius: 16,
+        padding: 12,
+        borderWidth: 1,
+    },
+    userBubble: {
+        backgroundColor: COLORS.accentGold,
+        borderColor: COLORS.accentGold,
+        borderBottomRightRadius: 2,
+    },
+    supportBubble: {
+        backgroundColor: COLORS.cardBg,
+        borderColor: COLORS.borderLight,
+        borderBottomLeftRadius: 2,
+    },
+
+    bubbleText: {
+        fontSize: 13,
+        lineHeight: 18,
     },
     userBubbleText: {
-        color: '#333',
+        color: COLORS.textDark,
     },
     supportBubbleText: {
-        color: '#333',
-        fontSize: 12,
+        color: COLORS.textPrimary,
     },
-    messageFooter: {
+
+    messageMeta: {
         flexDirection: 'row',
-        justifyContent: 'flex-end',
         alignItems: 'center',
-        marginTop: 4,
+        justifyContent: 'flex-end',
         gap: 4,
+        marginTop: 4,
     },
     timestamp: {
-        fontSize: 10,
-        color: '#999',
+        fontSize: 9,
+        color: COLORS.textMuted,
     },
-    statusContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    statusBox: {
+        justifyContent: 'center',
     },
-    quickRepliesContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginTop: 8,
-        gap: 8,
-    },
-    quickReplyButton: {
-        backgroundColor: '#E8F5E9',
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#4CAF50',
-    },
-    quickReplyText: {
-        color: '#4CAF50',
-        fontSize: 12,
-    },
+
+    /* Typing Indicator */
     typingIndicator: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 12,
-        marginBottom: 16,
-    },
-    typingDots: {
-        flexDirection: 'row',
-        backgroundColor: '#F0F0F0',
-        padding: 8,
-        borderRadius: 16,
-        marginRight: 8,
-    },
-    typingDot: {
-        width: 8,
-        height: 8,
-        borderRadius: 4,
-        backgroundColor: '#999',
-        marginHorizontal: 2,
+        gap: 6,
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        backgroundColor: COLORS.cardBg,
+        alignSelf: 'flex-start',
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
     },
     typingText: {
-        fontSize: 12,
-        color: '#999',
-        fontStyle: 'italic',
+        fontSize: 11,
+        color: COLORS.textMuted,
     },
-    loadingContainer: {
+
+    /* Loading Container */
+    loadingBox: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
     loadingText: {
-        marginTop: 12,
-        fontSize: 14,
-        color: '#666',
-    },
-    errorContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#FFEBEE',
-        padding: 12,
-        margin: 16,
-        borderRadius: 8,
-        gap: 8,
-    },
-    errorText: {
-        flex: 1,
-        color: '#F44336',
         fontSize: 12,
-    },
-    inputContainer: {
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        padding: 12,
-        backgroundColor: '#FFFFFF',
-        borderTopWidth: 1,
-        borderTopColor: '#E0E0E0',
-        gap: 8,
-        bottom: 50
-    },
-    textInput: {
-        flex: 1,
-        backgroundColor: '#F5F5F5',
-        borderRadius: 20,
-        paddingHorizontal: 16,
-        paddingVertical: 10,
-        maxHeight: 100,
-        fontSize: 14,
-        color: '#333',
-    },
-    iconButton: {
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 20,
-    },
-    icon: {
-        width: 24,
-        height: 24,
-        tintColor: '#666',
-    },
-    sendButton: {
-        width: 44,
-        height: 44,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 22,
-        backgroundColor: '#E8F5E9',
-    },
-    sendButtonDisabled: {
-        backgroundColor: '#F5F5F5',
+        color: COLORS.textMuted,
+        marginTop: 10,
     },
 
-
-    //Input container
-
+    /* Input Bar */
     inputBar: {
-        backgroundColor: C.footer,
-        borderTopWidth: 1,
-        borderTopColor: C.border,
-        paddingVertical: 10,
-        paddingHorizontal: 12,
-    },
-    inputContainer: {
-        flexDirection: "row",
-        alignItems: "flex-end",
-        gap: 8,
-    },
-    inputIcons: {
-        flexDirection: "row",
-        gap: 2,
-        paddingBottom: 4,
-    },
-    iconButton: {
-        padding: 6,
-    },
-    textInputWrapper: {
-        backgroundColor: "#1e3a5e",
-        borderRadius: 24,
-        borderWidth: 1,
-        borderColor: "#1e3a5e",
-        paddingHorizontal: 14,
-        paddingVertical: 4,
-        flexDirection: "row",
-        alignItems: "flex-end",
-        gap: 6,
-        width: '85%',
-        right: 25,
-        bottom: 2
-    },
-    textInputActive: {
-        borderColor: "#ECB818",
-    },
-    textInput: {
-        flex: 1,
-        color: "#FFF",
-        fontSize: 15,
-        paddingVertical: 6,
-        maxHeight: 120,
-    },
-    attachButton: {
-        padding: 4,
-        paddingBottom: 6,
-    },
-    micButton: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        alignItems: "center",
-        justifyContent: "center",
-        right: 25,
-        bottom: 2
-    },
-
-    // Styles compacts pour l'en-tête
-    headerCompact: {
-        paddingHorizontal: 15,
-        paddingBottom: 8,
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-        height: '12%'
-    },
-    infoCompactContainer: {
-        top: 10,
-        right: 15,
-    },
-    infoCompactText: {
-        fontSize: 15,
-        color: '#000',
-        lineHeight: 16,
-    },
-    infoCompacttext: {
-        fontSize: 13,
-        color: '#000',
-        lineHeight: 16,
-    },
-    back: {
-        right: 15,
-        bottom: 15
-    },
-    statusIndicatorCompact: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 4,
+        paddingHorizontal: 12,
+        paddingVertical: 10,
+        backgroundColor: '#001529',
+        borderTopWidth: 1,
+        borderTopColor: COLORS.borderLight,
+        gap: 8,
     },
-    onlineDotCompact: {
-        width: 6,
-        height: 6,
-        borderRadius: 3,
-        marginRight: 4,
+    attachBtn: {
+        width: 38,
+        height: 38,
+        borderRadius: 19,
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
     },
-    statusTextCompact: {
-        fontSize: 10,
-        color: '#000',
+    input: {
+        flex: 1,
+        maxHeight: 100,
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        borderRadius: 18,
+        paddingHorizontal: 14,
+        paddingVertical: 8,
+        fontSize: 13,
+        color: COLORS.textPrimary,
+    },
+    sendBtn: {
+        width: 38,
+        height: 38,
+        borderRadius: 19,
+        backgroundColor: COLORS.accentGold,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    sendBtnDisabled: {
+        opacity: 0.4,
+    },
+
+    /* Toast Notification */
+    toast: {
+        position: 'absolute',
+        top: 60,
+        alignSelf: 'center',
+        backgroundColor: '#001529',
+        borderWidth: 1,
+        borderColor: COLORS.accentGold,
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        borderRadius: 20,
+        elevation: 4,
+    },
+    toastText: {
+        fontSize: 11,
+        color: COLORS.textPrimary,
     },
 });

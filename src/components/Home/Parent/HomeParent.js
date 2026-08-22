@@ -289,7 +289,7 @@ class HomeParentIndex extends PureComponent {
             return (
                 <View style={parentstyle.container}>
                     <ImageBackground
-                        source={require('../../../assets/images/background.jpg')}
+                        source={require('../../../assets/images/background.png')}
                         style={styles.backgroundapp}
                         resizeMode="cover"
                     >
@@ -303,7 +303,7 @@ class HomeParentIndex extends PureComponent {
             return (
                 <View style={parentstyle.container}>
                     <ImageBackground
-                        source={require('../../../assets/images/background.jpg')}
+                        source={require('../../../assets/images/background.png')}
                         style={styles.backgroundapp}
                         resizeMode="cover"
                     >
@@ -321,7 +321,7 @@ class HomeParentIndex extends PureComponent {
         return (
             <View style={parentstyle.container}>
                 <ImageBackground
-                    source={require('../../../assets/images/background.jpg')}
+                    source={require('../../../assets/images/background.png')}
                     style={styles.backgroundapp}
                     resizeMode="cover"
                 >

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
+    SafeAreaView,
     View,
     Text,
     Image,
@@ -16,6 +17,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 
 import { styles } from '../../assets/styles/index.js';
 import { loginstyle } from '../../assets/styles/login.js';
+import { COLORS } from '../../assets/styles/theme.js';
 import { store } from '../../reducers/store.js';
 import { AUTH_ERROR_MESSAGE, IS_AUTH_ERROR, IS_LOADING } from '../../reducers/actions/types.js';
 import { LoginAction, checkAuthDataAction } from '../../reducers/actions/index.js';
@@ -28,7 +30,7 @@ class LoginPage extends PureComponent {
             username: '',
             password: '',
             passwordVisible: false,
-            focusedInput: null, // 'username' | 'password'
+            focusedInput: null,
             copyrightDate: new Date(),
         };
     }
@@ -38,35 +40,29 @@ class LoginPage extends PureComponent {
         store.dispatch({ type: IS_LOADING, value: false });
     }
 
-    // Toggle password visibility state
     _togglePassVisible = () => {
         this.setState((prevState) => ({
             passwordVisible: !prevState.passwordVisible,
         }));
     };
 
-    // Trigger forgot password flow
     onForgotPasswordPress = () => {
-        // Navigate to forgot password screen
+        // Navigation mot de passe oublié
     };
 
-    // Helper for opening external privacy policy or terms URLs
     _redirectPolicy = (url) => {
         if (url) Linking.openURL(url);
     };
 
-    // Close inline error message banner
     _closeAlert = () => {
         store.dispatch({ type: IS_AUTH_ERROR, value: false });
         store.dispatch({ type: IS_LOADING, value: false });
     };
 
-    // Redirect user to sign up flow
     _authSignup = () => {
         switchChooseFormAction(true);
     };
 
-    // Validate form fields and dispatch login action
     _loginSubmit = () => {
         const { username, password } = this.state;
         if (username.trim() === '') {
@@ -88,20 +84,20 @@ class LoginPage extends PureComponent {
         const { username, password, passwordVisible, focusedInput, copyrightDate } = this.state;
 
         return (
-            <View style={loginstyle.container}>
-                <StatusBar barStyle="light-content" backgroundColor="#011638" />
+            <SafeAreaView style={loginstyle.container}>
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} />
 
-                {/* Ambient Glowing Orbs */}
-                <View style={loginstyle.topGlow} />
-                <View style={loginstyle.centerGlow} />
-                <View style={loginstyle.bottomGlow} />
+                {/* Dynamic Glows (Poly-H Theme) */}
+                <View style={loginstyle.topGlow} pointerEvents="none" />
+                <View style={loginstyle.centerGlow} pointerEvents="none" />
+                <View style={loginstyle.bottomGlow} pointerEvents="none" />
 
                 <ScrollView
                     contentContainerStyle={loginstyle.scrollContainer}
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps="handled"
                 >
-                    {/* Logo & Institution Branding */}
+                    {/* Logo & Branding */}
                     <View style={loginstyle.logoContainer}>
                         <Image
                             source={require('../../assets/images/logo.png')}
@@ -117,23 +113,21 @@ class LoginPage extends PureComponent {
                         </Text>
                     </View>
 
-                    {/* Glassmorphic Login Card */}
+                    {/* Glassmorphic Card */}
                     <View style={loginstyle.glassCard}>
-
-                        {/* Inline Error Banner */}
                         {is_auth_error && (
                             <View style={loginstyle.errorBanner}>
-                                <Entypo name="warning" size={16} color="#F87171" style={{ marginRight: 8 }} />
+                                <Entypo name="warning" size={16} color="#F43F5E" style={{ marginRight: 8 }} />
                                 <Text style={[styles.text, loginstyle.errorBannerText]}>
                                     {auth_error_message}
                                 </Text>
                                 <TouchableOpacity onPress={this._closeAlert} style={{ marginLeft: 'auto' }}>
-                                    <Entypo name="cross" size={18} color="#F87171" />
+                                    <Entypo name="cross" size={18} color="#F43F5E" />
                                 </TouchableOpacity>
                             </View>
                         )}
 
-                        {/* Username Input Field */}
+                        {/* Username Input */}
                         <View
                             style={[
                                 loginstyle.inputWrapper,
@@ -144,14 +138,14 @@ class LoginPage extends PureComponent {
                                 source={require('../../assets/images/person.png')}
                                 style={[
                                     loginstyle.inputIcon,
-                                    focusedInput === 'username' && { tintColor: '#f6a100' },
+                                    focusedInput === 'username' && { tintColor: COLORS.accentGold },
                                 ]}
                                 resizeMode="contain"
                             />
                             <TextInput
                                 style={[styles.textBold, loginstyle.inputText]}
                                 placeholder="Nom d'utilisateur"
-                                placeholderTextColor="#64748B"
+                                placeholderTextColor={COLORS.textMuted}
                                 value={username}
                                 onChangeText={(text) => this.setState({ username: text })}
                                 onFocus={() => this.setState({ focusedInput: 'username' })}
@@ -161,7 +155,7 @@ class LoginPage extends PureComponent {
                             />
                         </View>
 
-                        {/* Password Input Field */}
+                        {/* Password Input */}
                         <View
                             style={[
                                 loginstyle.inputWrapper,
@@ -172,14 +166,14 @@ class LoginPage extends PureComponent {
                                 source={require('../../assets/images/lock.png')}
                                 style={[
                                     loginstyle.inputIcon,
-                                    focusedInput === 'password' && { tintColor: '#f6a100' },
+                                    focusedInput === 'password' && { tintColor: COLORS.accentGold },
                                 ]}
                                 resizeMode="contain"
                             />
                             <TextInput
                                 style={[styles.textBold, loginstyle.inputText]}
                                 placeholder="Mot de passe"
-                                placeholderTextColor="#64748B"
+                                placeholderTextColor={COLORS.textMuted}
                                 secureTextEntry={!passwordVisible}
                                 value={password}
                                 onChangeText={(val) => this.setState({ password: val })}
@@ -195,23 +189,23 @@ class LoginPage extends PureComponent {
                                 <Entypo
                                     name={passwordVisible ? 'eye-with-line' : 'eye'}
                                     size={18}
-                                    color={passwordVisible ? '#f6a100' : '#64748B'}
+                                    color={passwordVisible ? COLORS.accentGold : COLORS.textMuted}
                                 />
                             </TouchableOpacity>
                         </View>
 
-                        {/* Forgot Password Link */}
+                        {/* Forgot Password */}
                         <TouchableOpacity
                             disabled={is_loading}
                             onPress={this.onForgotPasswordPress}
-                            style={{ alignSelf: 'flex-end', marginBottom: 24 }}
+                            style={{ alignSelf: 'flex-end', marginBottom: 20 }}
                         >
                             <Text style={[styles.textBold, loginstyle.forgotPasswordText]}>
                                 Mot de passe oublié ?
                             </Text>
                         </TouchableOpacity>
 
-                        {/* Master CTA Login Button */}
+                        {/* Master CTA Button */}
                         <TouchableOpacity
                             disabled={is_loading}
                             activeOpacity={0.85}
@@ -219,7 +213,7 @@ class LoginPage extends PureComponent {
                             onPress={this._loginSubmit}
                         >
                             {is_loading ? (
-                                <ActivityIndicator size="small" color="#011638" />
+                                <ActivityIndicator size="small" color={COLORS.textDark} />
                             ) : (
                                 <Text style={[styles.textBold, loginstyle.loginButtonText]}>
                                     Se Connecter
@@ -227,7 +221,7 @@ class LoginPage extends PureComponent {
                             )}
                         </TouchableOpacity>
 
-                        {/* Account Creation Link */}
+                        {/* Link to Signup */}
                         <View style={loginstyle.createAccountContainer}>
                             <Text style={[styles.text, loginstyle.noAccountText]}>
                                 Vous n'avez pas de compte ?{' '}
@@ -240,7 +234,7 @@ class LoginPage extends PureComponent {
                         </View>
                     </View>
 
-                    {/* Footer & Policy Links */}
+                    {/* Footer */}
                     <View style={loginstyle.footerContainer}>
                         <View style={loginstyle.footerLinksRow}>
                             <TouchableOpacity onPress={() => this._redirectPolicy('https://poly-h.com/about')}>
@@ -254,21 +248,14 @@ class LoginPage extends PureComponent {
                             <TouchableOpacity onPress={() => this._redirectPolicy('https://poly-h.com/terms')}>
                                 <Text style={[styles.text, loginstyle.footerLink]}>Conditions</Text>
                             </TouchableOpacity>
-                            <Text style={loginstyle.footerDot}>•</Text>
-                            <TouchableOpacity onPress={() => this._redirectPolicy('https://poly-h.com/privacy')}>
-                                <Text style={[styles.text, loginstyle.footerLink]}>Confidentialité</Text>
-                            </TouchableOpacity>
                         </View>
 
                         <Text style={[styles.text, loginstyle.copyrightText]}>
                             © {copyrightDate.getFullYear()} Polyvalent House International. All rights reserved.
                         </Text>
-                        <Text style={[styles.textBold, loginstyle.developerTag]}>
-                            Designed by Poly-H Technologies
-                        </Text>
                     </View>
                 </ScrollView>
-            </View>
+            </SafeAreaView>
         );
     }
 }

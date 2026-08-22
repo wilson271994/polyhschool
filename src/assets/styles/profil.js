@@ -1,318 +1,452 @@
-import { StyleSheet, Dimensions } from 'react-native';
-import { color } from 'react-native-elements/dist/helpers';
-const { width, height } = Dimensions.get('window');
-
-export const C = {
-    text: "#e8edf5",
-    headerBg: "#0d1520",
-};
+import { StyleSheet } from 'react-native';
+import { COLORS } from './theme';
 
 export const profilstyle = StyleSheet.create({
-    container: {
-        flex: 1
+    /* ==========================================================================
+       1. CONTENEURS ET GLOWS D'AMBIANCE
+       ========================================================================== */
+    containerform: {
+        flex: 1,
+        backgroundColor: COLORS.bgPrimary,
     },
-    scrollContainer: {
-        padding: 20,
-        paddingBottom: 60
+    container: {
+        flex: 1,
+    },
+    topGlow: {
+        position: 'absolute',
+        top: -100,
+        right: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(255, 179, 0, 0.12)',
+    },
+    bottomGlow: {
+        position: 'absolute',
+        bottom: -100,
+        left: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(54, 209, 220, 0.10)',
     },
 
+    /* ==========================================================================
+       2. ENTÊTES ET BARRE DE NAVIGATION (HEADER)
+       ========================================================================== */
+    headerNav: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingTop: 10,
+        paddingBottom: 14,
+    },
     header: {
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
-        padding: 10,
-        backgroundColor: `${C.headerBg}CC`,
-        backdropFilter: 'blur(10px)',
-        zIndex: 100,
+        zIndex: 10,
+        backgroundColor: COLORS.bgPrimary,
     },
     headerSection: {
         flexDirection: 'row',
-    },
-    headerTitle: {
-        fontSize: 20,
-        color: C.text,
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingVertical: 12,
     },
     headerbuttonContainer: {
+        marginRight: 12,
     },
     headerButton: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+        justifyContent: 'center',
         alignItems: 'center',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+    },
+    backButton: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        backgroundColor: 'rgba(255, 255, 255, 0.08)',
         justifyContent: 'center',
-        bottom: 7,
-        paddingRight: 8,
-        right: 10
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        marginRight: 12,
     },
-
-
-
-    bloccontainer: {
-        marginTop: 5,
-        marginBottom: 5,
-        padding: 10
-    },
-    paramitem: {
-        marginBottom: 10,
-        borderBottomColor: '#eee',
-        borderBottomWidth: 1,
-        padding: 10
-    },
-    flexrowitem: {
-        flexDirection: 'row'
-    },
-    containericonimg: {
-        backgroundColor: '#eee',
-        borderRadius: 100,
-        width: '13%',
-        padding: 8
-    },
-    iconimage: {
-        height: 25,
-        width: 25
-    },
-    labelmenucont: {
-        marginLeft: 20
-    },
-    itemlisttext: {
-        fontSize: 15,
-        color: '#666'
-    },
-    itemlisthelptext: {
-        marginTop: 5
-    },
-    sectionTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#6d6d6d',
-    },
-    logoutContainer: {
-        justifyContent: 'center',
-        textAlign: 'center',
-    },
-    textlogout: {
-        textAlign: 'center',
-        fontSize: 15,
-        color: '#666'
-    },
-
-    // Profil form
-    containerform: {
+    headerTitleWrapper: {
         flex: 1,
     },
-    scroolviecontainer: {
+    headertext: {
+        flex: 1,
     },
-    headerpageform: {
-        marginTop: 10,
-        padding: 15,
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        marginRight: 10,
-        marginLeft: 10,
-        marginBottom: 10
+    headerBadge: {
+        fontSize: 11,
+        fontWeight: 'bold',
+        color: COLORS.accentGold,
+        letterSpacing: 1.2,
     },
-    section: {
-        top: 5,
-        right: 10
-    },
-    titlepageform: {
+    headerTitle: {
         fontSize: 16,
-        color: '#000',
-        marginBottom: 20
+        color: COLORS.textPrimary,
+    },
+
+    /* ==========================================================================
+       3. DEFILEMENT ET FORMULAIRES GENERAUX
+       ========================================================================== */
+    scrollContent: {
+        paddingHorizontal: 16,
+        paddingBottom: 120, // Sécurité universelle pour le menu bas
     },
     formcontainer: {
-        backgroundColor: "rgba(27, 73, 125, 0.6)",
-        borderRadius: 15,
-        marginTop: 20,
-        padding: 15,
-        width: '95%',
-        marginLeft: 10,
-        marginRight: 10
+        gap: 12,
+        marginTop: 8,
+    },
+    formContainer: {
+        gap: 12,
+        marginTop: 8,
     },
     formitem: {
-        marginBottom: 10
+        marginBottom: 4,
+    },
+    cardItem: {
+        backgroundColor: COLORS.cardBg,
+        borderRadius: 16,
+        padding: 14,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+    },
+    fieldHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        marginBottom: 8,
     },
     label: {
-        fontSize: 15,
-        color: '#FFF',
-        marginBottom: 10,
-        marginTop: 10
-    },
-    inputContainer: {
-        width: '100%',
-        borderWidth: 1,
-        borderColor: '#eee',
-        borderRadius: 5,
-        padding: 10,
-        height: 45,
-    },
-    inputext: {
-        color: '#FFF'
-    },
-    placeholderStyle: {
-        color: '#FFF',
-        marginLeft: 10
-    },
-    selectedTextStyle: {
-        color: '#FFF'
-    },
-    itemTextStyle: {
-        color: '#999'
-    },
-    submitButton: {
-        backgroundColor: '#1B497D',
-        padding: 10,
-        borderRadius: 5,
-        marginTop: 20
-    },
-    submitBtnText: {
-        color: '#fff',
-        textAlign: 'center',
-        fontSize: 15
-    },
-
-    //Notification Style
-    formcheckitem: {
-        flexDirection: 'row',
-        borderBottomColor: '#eee',
-        borderBottomWidth: 0.2,
-        paddingBottom: 20,
-    },
-    labelcheckitem: {
-        width: '85%'
-    },
-    checkbtncont: {
-        width: '10%',
-        alignContent: 'center',
-        alignSelf: 'center',
-        alignItems: 'center'
+        fontSize: 12,
+        color: COLORS.textMuted,
     },
     sublabel: {
-        color: '#FFF'
+        fontSize: 11,
+        color: COLORS.textMuted,
+        marginTop: 2,
+        lineHeight: 15,
     },
-    checkbtn: {
+    textInput: {
+        height: 46,
+        backgroundColor: 'rgba(255, 255, 255, 0.04)',
         borderWidth: 1,
-        borderColor: '#999',
-        borderRadius: 5,
-        height: 25,
-        width: 25,
-        padding: 5
+        borderColor: COLORS.borderLight,
+        borderRadius: 12,
+        paddingHorizontal: 14,
+        fontSize: 13,
+        color: COLORS.textPrimary,
     },
-    ischeckbtn: {
+    inputContainer: {
+        height: 46,
+        backgroundColor: 'rgba(255, 255, 255, 0.04)',
         borderWidth: 1,
-        borderColor: '#ECB818',
+        borderColor: COLORS.borderLight,
+        borderRadius: 12,
+        paddingHorizontal: 14,
+        fontSize: 13,
+        color: COLORS.textPrimary,
     },
-    ischeckicon: {
-        color: '#ECB818',
+    inputext: {
+        color: COLORS.textPrimary,
     },
 
-    //KYC
-    containerimagekyc: {
-        borderColor: '#eee',
-        borderWidth: 1,
-        borderRadius: 10,
-        marginTop: 10,
-        alignItems: 'center',
-        height: 200,
-    },
-    iconcontaineridcard: {
-        padding: 100,
-    },
-    idcardimage: {
-        height: 70,
-        width: 70,
-    },
-    approvedimage: {
-        position: 'absolute',
-        right: -50,
-        top: 20
-    },
-    verifiedcontainer: {
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 5,
-            height: 5
-        },
-        shadowOpacity: 0.6,
-        backgroundColor: "#fff",
-        elevation: 2,
-        borderRadius: 5,
-        padding: 20,
-        margin: 20
-    },
-    messagetext: {
-        color: '#000',
-        textAlign: 'center'
-    },
-    btnbackpending: {
-        alignSelf: 'center',
-        marginTop: 20,
-        backgroundColor: '#6DCABB',
-        padding: 10,
-        borderRadius: 8
-    },
-    btnbackpendingtext: {
-        color: '#fff'
-    },
-    verifypendingicon: {
-        alignSelf: 'center',
-        fontSize: 30,
-        marginBottom: 20,
-        color: '#137a71'
-    },
-
-    //Update profil
+    /* ==========================================================================
+       4. CHAMPS MOT DE PASSE (Update_password.js)
+       ========================================================================== */
     passwordInputRow: {
         flexDirection: 'row',
         alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.04)',
         borderWidth: 1,
-        borderColor: '#eee',
-        borderRadius: 5,
-        height: 45,
-        paddingRight: 10,
-        backgroundColor: 'transparent',
+        borderColor: COLORS.borderLight,
+        borderRadius: 12,
+        paddingHorizontal: 12,
+        height: 46,
     },
-
-
-
-    filterContainer: {
-        marginHorizontal: 16,
-        marginTop: 12,
-        marginBottom: 4,
-    },
-    tabContainer: {
-        flexDirection: 'row',
-        backgroundColor: '#FFFFFF',
-        borderRadius: 14,
-        padding: 4,
-        marginBottom: 10,
-        shadowColor: '#1A3C6E',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.08,
-        shadowRadius: 6,
-        elevation: 3,
-    },
-    tabButton: {
+    passwordTextInput: {
         flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 10,
-        borderRadius: 11,
-        gap: 6,
-    },
-    tabButtonActive: {
-        backgroundColor: '#1A3C6E', 
-        shadowColor: '#1A3C6E',
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.3,
-        shadowRadius: 6,
-        elevation: 4,
-    },
-    tabButtonText: {
         fontSize: 13,
-        color: '#7B93B0',
+        color: COLORS.textPrimary,
+        paddingVertical: 0,
+    },
+    eyeButton: {
+        padding: 6,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    /* ==========================================================================
+       5. DROPDOWNS DYNAMIQUES ET UNIFIÉS (OPAQUES & LISIBLES)
+       ========================================================================== */
+    dropdown: {
+        height: 46,
+        backgroundColor: '#001529',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        borderRadius: 12,
+        paddingHorizontal: 14,
+    },
+    dropdownFocus: {
+        borderColor: COLORS.accentGold,
+    },
+    dropdownPlaceholder: {
+        fontSize: 13,
+        color: COLORS.textMuted,
+    },
+    dropdownSelectedText: {
+        fontSize: 13,
+        color: '#FFFFFF',
         fontWeight: '600',
     },
-    tabButtonTextActive: {
+    dropdownMenu: {
+        backgroundColor: '#001529',
+        borderRadius: 14,
+        borderColor: COLORS.accentGold,
+        borderWidth: 1,
+        overflow: 'hidden',
+        marginTop: 4,
+        elevation: 8,
+    },
+    dropdownItemContainer: {
+        backgroundColor: '#001529',
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(255, 255, 255, 0.05)',
+    },
+    dropdownItemText: {
+        fontSize: 13,
         color: '#FFFFFF',
+        fontWeight: '500',
+    },
+    containeritemdrop: {
+        backgroundColor: '#001529',
+        borderRadius: 14,
+        borderColor: COLORS.accentGold,
+        borderWidth: 1,
+        overflow: 'hidden',
+    },
+    placeholderStyle: {
+        fontSize: 13,
+        color: COLORS.textMuted,
+    },
+    selectedTextStyle: {
+        fontSize: 13,
+        color: '#FFFFFF',
+    },
+    itemTextStyle: {
+        fontSize: 13,
+        color: '#FFFFFF',
+    },
+    iconStyle: {
+        width: 20,
+        height: 20,
+    },
+
+    /* ==========================================================================
+       6. ONGLETS ET NOTIFICATIONS (UpdateNotify.js)
+       ========================================================================== */
+    tabRow: {
+        flexDirection: 'row',
+        gap: 10,
+        marginTop: 8,
+        marginBottom: 16,
+    },
+    tabBtn: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 6,
+        paddingVertical: 10,
+        borderRadius: 14,
+        backgroundColor: 'rgba(255, 255, 255, 0.04)',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+    },
+    tabBtnActive: {
+        backgroundColor: COLORS.accentGold,
+        borderColor: COLORS.accentGold,
+    },
+    tabText: {
+        fontSize: 11,
+        color: COLORS.textMuted,
+    },
+    tabTextActive: {
+        color: COLORS.textDark,
+    },
+    notifCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: COLORS.cardBg,
+        borderRadius: 16,
+        padding: 16,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+    },
+    notifInfo: {
+        flex: 1,
+        marginRight: 12,
+    },
+    notifTitle: {
+        fontSize: 13,
+        color: COLORS.textPrimary,
+    },
+    notifDesc: {
+        fontSize: 11,
+        color: COLORS.textMuted,
+        marginTop: 3,
+        lineHeight: 16,
+    },
+    switchWrapper: {
+        width: 48,
+        alignItems: 'flex-end',
+    },
+    formcheckitem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: COLORS.cardBg,
+        borderRadius: 16,
+        padding: 16,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        marginBottom: 10,
+    },
+    labelcheckitem: {
+        flex: 1,
+        marginRight: 12,
+    },
+    checkbtncont: {
+        justifyContent: 'center',
+    },
+    checkbtn: {
+        width: 24,
+        height: 24,
+        borderRadius: 6,
+        borderWidth: 1.5,
+        borderColor: COLORS.borderLight,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    ischeckbtn: {
+        backgroundColor: COLORS.accentGold,
+        borderColor: COLORS.accentGold,
+    },
+    ischeckicon: {
+        color: COLORS.textDark,
+        fontSize: 12,
+    },
+
+    /* ==========================================================================
+       7. SÉCURITÉ 2FA (UpdateAuthentification.js)
+       ========================================================================== */
+    infoBox2FA: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255, 179, 0, 0.05)',
+        borderRadius: 16,
+        padding: 14,
+        borderWidth: 1,
+        borderColor: 'rgba(255, 179, 0, 0.2)',
+        gap: 12,
+        marginTop: 8,
+        marginBottom: 16,
+    },
+    infoBox2FAText: {
+        flex: 1,
+        fontSize: 11,
+        color: COLORS.textMuted,
+        lineHeight: 16,
+    },
+    authItemContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    authIconContainer: {
+        width: 40,
+        height: 40,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
+    },
+    authTextWrapper: {
+        flex: 1,
+        marginRight: 10,
+    },
+    authTitle: {
+        fontSize: 13,
+        color: COLORS.textPrimary,
+    },
+    authSubtitle: {
+        fontSize: 11,
+        color: COLORS.textMuted,
+        marginTop: 2,
+        lineHeight: 15,
+    },
+
+    /* ==========================================================================
+       8. BOUTONS D'ACTION UNIFIÉS (CTA)
+       ========================================================================== */
+    submitButton: {
+        height: 48,
+        backgroundColor: COLORS.accentGold,
+        borderRadius: 14,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 8,
+    },
+    submitBtnText: {
+        fontSize: 14,
+        color: COLORS.textDark,
+    },
+
+    /* ==========================================================================
+       9. ETAT VIDE ET INFORMATIONS
+       ========================================================================== */
+    childInfoBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(54, 209, 220, 0.08)',
+        borderRadius: 14,
+        padding: 14,
+        borderWidth: 1,
+        borderColor: 'rgba(54, 209, 220, 0.2)',
+        gap: 10,
+        marginTop: 4,
+    },
+    childInfoText: {
+        flex: 1,
+        fontSize: 11,
+        color: COLORS.textMuted,
+        lineHeight: 16,
+    },
+    emptyContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 40,
+    },
+    emptyTitle: {
+        fontSize: 14,
+        color: COLORS.textPrimary,
+        marginTop: 12,
+    },
+    emptyText: {
+        fontSize: 11,
+        color: COLORS.textMuted,
+        marginTop: 4,
+        textAlign: 'center',
     },
 });

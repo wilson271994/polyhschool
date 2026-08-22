@@ -163,7 +163,7 @@ class StudentMenu extends PureComponent {
             <View style={studentmenustyle.container}>
 
                 <ImageBackground
-                    source={require('../../assets/images/background.jpg')}
+                    source={require('../../assets/images/background.png')}
                     style={styles.backgroundapp}
                     resizeMode="cover"
                 >

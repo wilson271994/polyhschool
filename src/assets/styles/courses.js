@@ -1,198 +1,223 @@
-import { StyleSheet, Dimensions } from 'react-native';
-import { color } from 'react-native-elements/dist/helpers';
-const { width, height } = Dimensions.get('window');
+import { StyleSheet } from 'react-native';
+import { COLORS } from './theme';
 
 export const coursestyle = StyleSheet.create({
-
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.bgPrimary,
     },
-    header: {
-        backgroundColor: '#1B497D',
-        padding: 12,
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        elevation: 5,
+
+    /* Halo d'ambiance */
+    topGlow: {
+        position: 'absolute',
+        top: -100,
+        right: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(255, 179, 0, 0.12)',
+    },
+    bottomGlow: {
+        position: 'absolute',
+        bottom: -100,
+        left: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(54, 209, 220, 0.10)',
+    },
+
+    /* Navigation Header */
+    headerNav: {
         flexDirection: 'row',
         alignItems: 'center',
-        height: 60,
+        paddingHorizontal: 16,
+        paddingTop: 10,
+        paddingBottom: 14,
     },
-    searchContainer: {
-        marginLeft: "auto",
-        marginRight: 10
+    backButton: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        marginRight: 12,
     },
-    searchIcon: {
-        width: 20,
-        height: 20,
-        tintColor: '#FFF',
+    headerTitleWrapper: {
+        flex: 1,
+    },
+    headerBadge: {
+        fontSize: 11,
+        color: COLORS.accentGold,
+        letterSpacing: 1.2,
     },
     headerTitle: {
-        fontSize: 24,
-        color: '#fff',
+        fontSize: 16,
+        color: COLORS.textPrimary,
     },
-    view: {
-        marginTop: 20,
+    searchButton: {
+        width: 38,
+        height: 38,
+        borderRadius: 12,
+        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+    },
+
+    /* Liste des cours */
+    listContent: {
+        paddingHorizontal: 16,
+        paddingBottom: 120, // Sécurité pour ne pas être masqué par la barre bas
+        gap: 10,
+    },
+    subjectHeaderContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        marginTop: 14,
+        marginBottom: 8,
     },
     subjectTitle: {
-        fontSize: 18,
-        color: '#FFF',
-        marginBottom: 15,
+        fontSize: 14,
+        color: COLORS.accentGold,
     },
+
     courseCard: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#F0F0F0',
-        borderRadius: 10,
-        padding: 15,
-        marginBottom: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        elevation: 2,
+        backgroundColor: COLORS.cardBg,
+        borderRadius: 16,
+        padding: 14,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        marginBottom: 8,
     },
-    courseIcon: {
-        width: 60,
-        height: 60,
-        borderRadius: 0,
-        backgroundColor: '#fff',
-        marginRight: 15,
+    courseIconContainer: {
+        width: 44,
+        height: 44,
+        borderRadius: 12,
+        backgroundColor: 'rgba(255, 179, 0, 0.12)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
+        borderWidth: 1,
+        borderColor: 'rgba(255, 179, 0, 0.2)',
     },
     courseDetails: {
         flex: 1,
+        marginRight: 8,
     },
     courseTitle: {
-        fontSize: 16,
-        color: '#333',
+        fontSize: 13,
+        color: COLORS.textPrimary,
+        marginBottom: 3,
     },
     courseTeacher: {
-        fontSize: 14,
-        color: '#666',
-        marginTop: 2,
+        fontSize: 11,
+        color: COLORS.textMuted,
     },
 
-
-    backButton: {
-        marginRight: 20
-    },
-    // ========== FLATLIST ==========
-    listContent: {
-        paddingHorizontal: 20,
-        paddingBottom: 80,
-    },
-
-    waitingContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 40,
-        paddingBottom: 60,
-    },
-    waitingVideoContainer: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        overflow: 'hidden',
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 20,
-        shadowColor: '#1B497D',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.15,
-        shadowRadius: 12,
-        elevation: 8,
-    },
-    waitingVideo: {
-        width: '90%',
-        height: '90%',
-    },
-    waitingTitle: {
-        fontSize: 20,
-        color: '#FFF',
-        textAlign: 'center',
-        marginBottom: 10,
-    },
-    waitingMessage: {
-        fontSize: 14,
-        color: '#E2E8F0',
-        textAlign: 'center',
-        lineHeight: 22,
-    },
-
-
-
+    /* Écran d'accueil / Bienvenue */
     welcomeContainer: {
         flex: 1,
-        justifyContent: 'center',
+        paddingHorizontal: 20,
         alignItems: 'center',
-        paddingHorizontal: 30,
-        paddingBottom: 60,
+        justifyContent: 'center',
     },
     welcomeVideoContainer: {
-        width: 90,
-        height: 90,
+        width: 140,
+        height: 140,
         borderRadius: 70,
         overflow: 'hidden',
-        backgroundColor: 'rgba(255, 255, 255, 1)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 28,
-        shadowColor: '#1B497D',
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.2,
-        shadowRadius: 16,
-        elevation: 10,
+        borderWidth: 2,
+        borderColor: COLORS.accentGold,
+        marginBottom: 20,
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
     },
     welcomeVideo: {
-        width: '85%',
-        height: '85%',
+        width: '100%',
+        height: '100%',
     },
     welcomeTitle: {
-        fontSize: 24,
-        color: '#FFF',
+        fontSize: 16,
+        color: COLORS.textPrimary,
         textAlign: 'center',
-        marginBottom: 12,
-        letterSpacing: 1,
+        marginBottom: 8,
     },
     welcomeMessage: {
-        fontSize: 15,
-        color: '#E2E8F0',
+        fontSize: 12,
+        color: COLORS.textMuted,
         textAlign: 'center',
-        lineHeight: 22,
+        lineHeight: 18,
         marginBottom: 20,
     },
     welcomeIconRow: {
         flexDirection: 'row',
-        gap: 20,
+        gap: 16,
         marginBottom: 30,
     },
-
+    iconBadge: {
+        width: 44,
+        height: 44,
+        borderRadius: 22,
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     subscribeButton: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#1B497D',
-        paddingHorizontal: 28,
-        paddingVertical: 16,
-        borderRadius: 30,
-        gap: 10,
+        gap: 8,
+        backgroundColor: COLORS.accentGold,
+        height: 48,
+        paddingHorizontal: 20,
+        borderRadius: 14,
         width: '100%',
-        elevation: 6,
-        shadowColor: '#1B497D',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.35,
-        shadowRadius: 8,
     },
     subscribeButtonText: {
+        fontSize: 13,
+        color: COLORS.textDark,
+    },
+
+    /* Écran d'attente d'admission */
+    waitingContainer: {
         flex: 1,
-        color: '#FFF',
-        fontSize: 17,
+        paddingHorizontal: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    waitingVideoContainer: {
+        width: 140,
+        height: 140,
+        borderRadius: 70,
+        overflow: 'hidden',
+        borderWidth: 2,
+        borderColor: COLORS.accentCyan,
+        marginBottom: 20,
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    },
+    waitingVideo: {
+        width: '100%',
+        height: '100%',
+    },
+    waitingTitle: {
+        fontSize: 16,
+        color: COLORS.textPrimary,
         textAlign: 'center',
+        marginBottom: 8,
+    },
+    waitingMessage: {
+        fontSize: 12,
+        color: COLORS.textMuted,
+        textAlign: 'center',
+        lineHeight: 18,
     },
 });

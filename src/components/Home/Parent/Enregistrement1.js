@@ -163,7 +163,7 @@ class signupForm1 extends PureComponent {
 
         return (
             <View style={registerstyle.container}>
-                <ImageBackground source={require('../../../assets/images/background.jpg')} style={styles.backgroundapp} resizeMode="cover">
+                <ImageBackground source={require('../../../assets/images/background.png')} style={styles.backgroundapp} resizeMode="cover">
                     <ScrollView showsVerticalScrollIndicator={false}>
 
                         <View style={registerstyle.back}>

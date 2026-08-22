@@ -10,7 +10,7 @@ import {
     SafeAreaView,
     ScrollView,
     ImageBackground,
-    Modal,
+    Easing,
     StatusBar
 } from 'react-native';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
@@ -25,63 +25,8 @@ import { FetchShoolUserInfos, switchHeaderAction } from '../../reducers/actions/
 import Student_Menu from '../StudentMenu/Student_Menu.js';
 import { switchStudentChooseAccountPageAction } from '../../navigations/rootNavigation.js';
 import { BASE_URL } from '../../api/config.js';
+import { ImagePickerModal } from './Modal/ImagePickerModal.js';
 
-// ── Modal de Sélection d'Image (Style Bottom Sheet Poly-H) ────────────
-const ImagePickerModal = ({ visible, target, onAction, onClose }) => {
-    if (!visible) return null;
-    const isProfile = target === 'profile';
-
-    return (
-        <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-            <View style={homestyle.pickerOverlay}>
-                <TouchableOpacity style={homestyle.pickerBackdrop} activeOpacity={1} onPress={onClose} />
-                <View style={homestyle.pickerSheet}>
-                    <View style={homestyle.pickerHandle} />
-
-                    <View style={homestyle.pickerHeader}>
-                        <View style={[homestyle.pickerIconCircle, { backgroundColor: 'rgba(255, 179, 0, 0.15)' }]}>
-                            <Icon name={isProfile ? 'account-circle-outline' : 'image-filter-hdr'} size={24} color={COLORS.accentGold} />
-                        </View>
-                        <Text style={homestyle.pickerTitle}>{isProfile ? 'Photo de profil' : 'Photo de couverture'}</Text>
-                        <Text style={homestyle.pickerSubtitle}>Choisissez une option pour mettre à jour la photo</Text>
-                    </View>
-
-                    <View style={homestyle.pickerOptionsContainer}>
-                        <TouchableOpacity style={homestyle.pickerOption} onPress={() => onAction('camera')} activeOpacity={0.7}>
-                            <View style={[homestyle.pickerOptionIcon, { backgroundColor: 'rgba(54, 209, 220, 0.15)' }]}>
-                                <Icon name="camera-outline" size={20} color={COLORS.accentCyan} />
-                            </View>
-                            <View style={homestyle.pickerOptionText}>
-                                <Text style={homestyle.pickerOptionTitle}>Appareil photo</Text>
-                                <Text style={homestyle.pickerOptionDesc}>Prendre une nouvelle photo</Text>
-                            </View>
-                            <Icon name="chevron-right" size={18} color={COLORS.textMuted} />
-                        </TouchableOpacity>
-
-                        <View style={homestyle.pickerSeparator} />
-
-                        <TouchableOpacity style={homestyle.pickerOption} onPress={() => onAction('gallery')} activeOpacity={0.7}>
-                            <View style={[homestyle.pickerOptionIcon, { backgroundColor: 'rgba(255, 179, 0, 0.15)' }]}>
-                                <Icon name="image-multiple-outline" size={20} color={COLORS.accentGold} />
-                            </View>
-                            <View style={homestyle.pickerOptionText}>
-                                <Text style={homestyle.pickerOptionTitle}>Galerie de photos</Text>
-                                <Text style={homestyle.pickerOptionDesc}>Choisir une image existante</Text>
-                            </View>
-                            <Icon name="chevron-right" size={18} color={COLORS.textMuted} />
-                        </TouchableOpacity>
-                    </View>
-
-                    <TouchableOpacity style={homestyle.pickerCancelButton} onPress={onClose} activeOpacity={0.7}>
-                        <Text style={homestyle.pickerCancelText}>Annuler</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </Modal>
-    );
-};
-
-// ── Composant Principal HomeIndex ──────────────────────────────────────
 class HomeIndex extends PureComponent {
     constructor(props) {
         super(props);
@@ -91,6 +36,9 @@ class HomeIndex extends PureComponent {
             imagePickerVisible: false,
             imagePickerTarget: null,
             isRefreshing: false,
+            fadeAnim: new Animated.Value(0),
+            slideAnim: new Animated.Value(30),
+            pulseAnim: new Animated.Value(1),
         };
 
         this.spinValue = new Animated.Value(0);
@@ -98,6 +46,7 @@ class HomeIndex extends PureComponent {
 
     componentDidMount() {
         this._handleRefresh();
+        this.startWelcomeAnimation(); // <-- AJOUTÉ : Lancement de l'animation
     }
 
     _startSpin = () => {
@@ -212,46 +161,100 @@ class HomeIndex extends PureComponent {
         launchImageLibrary(options, (response) => this._handleImageResult(response, target));
     };
 
-    renderWelcomeScreen = () => (
-        <View style={homestyle.welcomeContainer}>
-            <View style={homestyle.welcomeVideoContainer}>
-                <Video
-                    source={require('../../assets/videos/welcome.mp4')}
-                    style={homestyle.welcomeVideo}
-                    repeat={true}
-                    muted={true}
-                    resizeMode="contain"
-                    paused={false}
-                />
+    startWelcomeAnimation = () => {
+        Animated.parallel([
+            Animated.timing(this.state.fadeAnim, {
+                toValue: 1,
+                duration: 800,
+                useNativeDriver: true,
+            }),
+            Animated.timing(this.state.slideAnim, {
+                toValue: 0,
+                duration: 800,
+                easing: Easing.out(Easing.back(1.5)),
+                useNativeDriver: true,
+            }),
+        ]).start();
+
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(this.state.pulseAnim, {
+                    toValue: 1.08,
+                    duration: 1200,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(this.state.pulseAnim, {
+                    toValue: 1,
+                    duration: 1200,
+                    useNativeDriver: true,
+                }),
+            ])
+        ).start();
+    };
+
+    renderWelcomeScreen = () => {
+        const { fadeAnim, slideAnim, pulseAnim } = this.state;
+
+        return (
+            <View style={homestyle.welcomeContainer}>
+                <Animated.View
+                    style={[
+                        homestyle.welcomeCard,
+                        {
+                            opacity: fadeAnim,
+                            transform: [{ translateY: slideAnim }],
+                        },
+                    ]}
+                >
+                    <Animated.View
+                        style={[
+                            homestyle.heroBadgeContainer,
+                            { transform: [{ scale: pulseAnim }] },
+                        ]}
+                    >
+                        <View style={homestyle.heroBadgeGlow} />
+                        <Icon name="school" size={42} color={COLORS.accentGold} />
+                    </Animated.View>
+
+                    <Text style={[styles.textBold, homestyle.welcomeTitle]}>
+                        BIENVENUE SUR{'\n'}
+                        <Text style={homestyle.brandHighlight}>POLY-H SCHOOL</Text>
+                    </Text>
+
+                    <Text style={[styles.text, homestyle.welcomeMessage]}>
+                        Pour profiter de l'ensemble des services académiques et suivre votre parcours, veuillez souscrire à un établissement.
+                    </Text>
+
+                    <View style={homestyle.welcomeIconRow}>
+                        <View style={homestyle.iconBadge}>
+                            <Icon name="school-outline" size={20} color={COLORS.accentGold} />
+                            <Text style={[styles.text, homestyle.badgeLabel]}>Écoles</Text>
+                        </View>
+                        <View style={homestyle.iconBadge}>
+                            <Icon name="book-open-page-variant-outline" size={20} color={COLORS.accentCyan} />
+                            <Text style={[styles.text, homestyle.badgeLabel]}>Cours</Text>
+                        </View>
+                        <View style={homestyle.iconBadge}>
+                            <Icon name="account-group-outline" size={20} color={COLORS.accentGold} />
+                            <Text style={[styles.text, homestyle.badgeLabel]}>Suivi</Text>
+                        </View>
+                    </View>
+
+                    <TouchableOpacity
+                        style={homestyle.subscribeButton}
+                        onPress={this._navigateToChooseAccount}
+                        activeOpacity={0.85}
+                    >
+                        <Icon name="school" size={20} color={COLORS.textDark} />
+                        <Text style={[styles.textBold, homestyle.subscribeButtonText]}>
+                            Souscrire à une école
+                        </Text>
+                        <Icon name="chevron-right" size={20} color={COLORS.textDark} />
+                    </TouchableOpacity>
+                </Animated.View>
             </View>
-
-            <Text style={[homestyle.welcomeTitle, styles.textBold]}>
-                BIENVENUE SUR POLY-H SCHOOL
-            </Text>
-
-            <Text style={[homestyle.welcomeMessage, styles.text]}>
-                Pour profiter des services rattachés à cette application, vous devez souscrire à un établissement.
-            </Text>
-
-            <View style={homestyle.welcomeIconRow}>
-                <Icon name="school" size={26} color={COLORS.accentGold} />
-                <Icon name="book-open-page-variant" size={26} color={COLORS.accentGold} />
-                <Icon name="account-group" size={26} color={COLORS.accentGold} />
-            </View>
-
-            <TouchableOpacity
-                style={homestyle.subscribeButton}
-                onPress={this._navigateToChooseAccount}
-                activeOpacity={0.85}
-            >
-                <Icon name="school-outline" size={22} color={COLORS.textDark} />
-                <Text style={[homestyle.subscribeButtonText, styles.textBold]}>
-                    Souscrire à une école
-                </Text>
-                <Icon name="chevron-right" size={22} color={COLORS.textDark} />
-            </TouchableOpacity>
-        </View>
-    );
+        );
+    };
 
     renderWaitingAdmission = () => {
         const spin = this.spinValue.interpolate({
@@ -315,7 +318,7 @@ class HomeIndex extends PureComponent {
             ? { uri: coverImage }
             : userCover
                 ? { uri: userCover }
-                : require('../../assets/images/background.jpg');
+                : require('../../assets/images/background.png');
 
         const studentClassName = student_infos?.classe?.name || student_infos?.class?.name || 'Classe non assignée';
 
@@ -366,7 +369,7 @@ class HomeIndex extends PureComponent {
         const { is_school_user, is_admission_approved } = this.props;
         const { imagePickerVisible, imagePickerTarget } = this.state;
 
-        var content;
+        let content;
 
         if (!is_school_user) {
             content = this.renderWelcomeScreen();
@@ -392,7 +395,6 @@ class HomeIndex extends PureComponent {
             <SafeAreaView style={homestyle.container}>
                 <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} />
 
-                {/* Ambient Glows */}
                 <View style={homestyle.topGlow} pointerEvents="none" />
                 <View style={homestyle.bottomGlow} pointerEvents="none" />
 

@@ -1,21 +1,35 @@
 import React, { PureComponent } from 'react';
-import { View, Text, TouchableOpacity, Animated, Alert, ImageBackground, TextInput, Modal, Image, ScrollView } from 'react-native';
+import {
+    SafeAreaView,
+    View,
+    Text,
+    TouchableOpacity,
+    Animated,
+    Alert,
+    TextInput,
+    Modal,
+    ScrollView,
+    StatusBar,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { languagestyle } from '../../../assets/styles/updatelanguage';
-import { styles } from '../../../assets/styles';
-import { switchProfilPageAction } from '../../../navigations/rootNavigation';
+
+import { styles } from '../../../assets/styles/index.js';
+import { languagestyle } from '../../../assets/styles/updatelanguage.js';
+import { COLORS } from '../../../assets/styles/theme.js';
+import { switchProfilPageAction } from '../../../navigations/rootNavigation.js';
 
 const languages = [
-    { code: 'fr', name: 'Français', flag: '🇫🇷', native: 'Français', region: 'Europe' },
-    { code: 'en', name: 'English', flag: '🇬🇧', native: 'English', region: 'Amérique du Nord' },
+    { code: 'fr', name: 'Français', flag: '🇫🇷', native: 'Français', region: 'Europe / Afrique' },
+    { code: 'en', name: 'English', flag: '🇬🇧', native: 'English', region: 'International' },
 ];
 
 const currencies = [
-    { code: 'XOF', name: 'Franc CFA', symbol: 'CFA', flag: '🌍', rate: 1 },
-    { code: 'EUR', name: 'Euro', symbol: '€', flag: '🇪🇺', rate: 655.96 },
-    { code: 'USD', name: 'US Dollar', symbol: '$', flag: '🇺🇸', rate: 600 },
+    { code: 'XOF', name: 'Franc CFA', symbol: 'FCFA', flag: '🌍', region: 'africa' },
+    { code: 'EUR', name: 'Euro', symbol: '€', flag: '🇪🇺', region: 'europe' },
+    { code: 'USD', name: 'US Dollar', symbol: '$', flag: '🇺🇸', region: 'america' },
 ];
 
 class UpdateLanguage extends PureComponent {
@@ -29,7 +43,6 @@ class UpdateLanguage extends PureComponent {
             languageSearchText: '',
             currencySearchText: '',
             currencyFilter: 'all',
-            animateButton: false,
             scrollY: new Animated.Value(0),
         };
 
@@ -41,42 +54,35 @@ class UpdateLanguage extends PureComponent {
 
     _navigateToProfil = () => {
         switchProfilPageAction(true);
-    }
+    };
 
     selectLanguage = (code) => {
         this.setState({ selectedLanguage: code, languageModalVisible: false, languageSearchText: '' });
-        this.animateSelection();
     };
 
     selectCurrency = (code) => {
         this.setState({ selectedCurrency: code, currencyModalVisible: false, currencySearchText: '' });
-        this.animateSelection();
-    };
-
-    animateSelection = () => {
-        this.setState({ animateButton: true });
-        setTimeout(() => this.setState({ animateButton: false }), 300);
     };
 
     savePreferences = () => {
         const { selectedLanguage, selectedCurrency } = this.state;
-        const selectedLang = languages.find(l => l.code === selectedLanguage);
-        const selectedCurr = currencies.find(c => c.code === selectedCurrency);
+        const selectedLang = languages.find((l) => l.code === selectedLanguage);
+        const selectedCurr = currencies.find((c) => c.code === selectedCurrency);
 
         Alert.alert(
-            "✨ Préférences sauvegardées ✨",
-            `🌐 Langue : ${selectedLang.name}\n💰 Devise : ${selectedCurr.name} (${selectedCurr.symbol})\n\nVos préférences seront appliquées dans toute l'application.`,
-            [{ text: "Super !", style: "default" }]
+            "✨ Préférences sauvegardées",
+            `🌐 Langue : ${selectedLang.name}\n💰 Devise : ${selectedCurr.name} (${selectedCurr.symbol})\n\nVos paramètres régionaux ont été mis à jour.`,
+            [{ text: "Compris", onPress: this._navigateToProfil }]
         );
     };
 
     getFilteredLanguages = () => {
         const { languageSearchText } = this.state;
-        return languages.filter(lang =>
-            lang.name.toLowerCase().includes(languageSearchText.toLowerCase()) ||
-            lang.native.toLowerCase().includes(languageSearchText.toLowerCase()) ||
-            lang.code.toLowerCase().includes(languageSearchText.toLowerCase()) ||
-            lang.region.toLowerCase().includes(languageSearchText.toLowerCase())
+        return languages.filter(
+            (lang) =>
+                lang.name.toLowerCase().includes(languageSearchText.toLowerCase()) ||
+                lang.native.toLowerCase().includes(languageSearchText.toLowerCase()) ||
+                lang.code.toLowerCase().includes(languageSearchText.toLowerCase())
         );
     };
 
@@ -85,23 +91,19 @@ class UpdateLanguage extends PureComponent {
         let filtered = currencies;
 
         if (currencyFilter !== 'all') {
-            filtered = currencies.filter(curr =>
-                currencyFilter === 'africa' ? ['XOF', 'MAD'].includes(curr.code) :
-                    currencyFilter === 'europe' ? ['EUR', 'GBP', 'CHF'].includes(curr.code) :
-                        currencyFilter === 'america' ? ['USD', 'CAD'].includes(curr.code) :
-                            currencyFilter === 'asia' ? ['CNY', 'JPY'].includes(curr.code) : true
-            );
+            filtered = currencies.filter((curr) => curr.region === currencyFilter);
         }
 
-        return filtered.filter(currency =>
-            currency.name.toLowerCase().includes(currencySearchText.toLowerCase()) ||
-            currency.code.toLowerCase().includes(currencySearchText.toLowerCase()) ||
-            currency.symbol.toLowerCase().includes(currencySearchText.toLowerCase())
+        return filtered.filter(
+            (currency) =>
+                currency.name.toLowerCase().includes(currencySearchText.toLowerCase()) ||
+                currency.code.toLowerCase().includes(currencySearchText.toLowerCase()) ||
+                currency.symbol.toLowerCase().includes(currencySearchText.toLowerCase())
         );
     };
 
     renderLanguageModal = () => {
-        const { languageModalVisible, languageSearchText } = this.state;
+        const { languageModalVisible, languageSearchText, selectedLanguage } = this.state;
         const filteredLanguages = this.getFilteredLanguages();
 
         return (
@@ -114,26 +116,21 @@ class UpdateLanguage extends PureComponent {
                 <View style={languagestyle.modalOverlay}>
                     <View style={languagestyle.modalContainer}>
                         <View style={languagestyle.modalHeader}>
-                            <Text style={[languagestyle.modalTitle, styles.textBold]}>🌐 Choisir une langue</Text>
+                            <Text style={[styles.textBold, languagestyle.modalTitle]}>🌐 Choisir une langue</Text>
                             <TouchableOpacity onPress={() => this.setState({ languageModalVisible: false })}>
-                                <Icon name="close" size={28} color="#666" />
+                                <Icon name="close" size={24} color={COLORS.textPrimary} />
                             </TouchableOpacity>
                         </View>
 
                         <View style={languagestyle.searchContainer}>
-                            <Icon name="magnify" size={20} color="#999" style={languagestyle.searchIcon} />
+                            <Icon name="magnify" size={20} color={COLORS.textMuted} />
                             <TextInput
-                                style={[languagestyle.searchInput, styles.text]}
+                                style={[styles.text, languagestyle.searchInput]}
                                 placeholder="Rechercher une langue..."
-                                placeholderTextColor="#999"
+                                placeholderTextColor={COLORS.textMuted}
                                 value={languageSearchText}
                                 onChangeText={(text) => this.setState({ languageSearchText: text })}
                             />
-                            {languageSearchText !== '' && (
-                                <TouchableOpacity onPress={() => this.setState({ languageSearchText: '' })}>
-                                    <Icon name="close-circle" size={20} color="#999" />
-                                </TouchableOpacity>
-                            )}
                         </View>
 
                         <ScrollView style={languagestyle.modalList}>
@@ -142,27 +139,20 @@ class UpdateLanguage extends PureComponent {
                                     key={lang.code}
                                     style={[
                                         languagestyle.modalItem,
-                                        this.state.selectedLanguage === lang.code && languagestyle.modalItemSelected
+                                        selectedLanguage === lang.code && languagestyle.modalItemSelected,
                                     ]}
                                     onPress={() => this.selectLanguage(lang.code)}
                                 >
                                     <Text style={languagestyle.modalFlag}>{lang.flag}</Text>
                                     <View style={languagestyle.modalItemInfo}>
-                                        <Text style={[languagestyle.modalItemName, styles.text]}>{lang.name}</Text>
-                                        <Text style={[languagestyle.modalItemNative, styles.text]}>{lang.native}</Text>
-                                        <Text style={[languagestyle.modalItemRegion, styles.text]}>{lang.region}</Text>
+                                        <Text style={[styles.textBold, languagestyle.modalItemName]}>{lang.name}</Text>
+                                        <Text style={[styles.text, languagestyle.modalItemNative]}>{lang.native}</Text>
                                     </View>
-                                    {this.state.selectedLanguage === lang.code && (
-                                        <Icon name="check-circle" size={20} color="#1B497D" />
+                                    {selectedLanguage === lang.code && (
+                                        <Icon name="check-circle" size={20} color={COLORS.accentGold} />
                                     )}
                                 </TouchableOpacity>
                             ))}
-                            {filteredLanguages.length === 0 && (
-                                <View style={languagestyle.noResults}>
-                                    <Icon name="emoticon-sad" size={40} color="#ccc" />
-                                    <Text style={[languagestyle.noResultsText, styles.text]}>Aucune langue trouvée</Text>
-                                </View>
-                            )}
                         </ScrollView>
                     </View>
                 </View>
@@ -171,7 +161,7 @@ class UpdateLanguage extends PureComponent {
     };
 
     renderCurrencyModal = () => {
-        const { currencyModalVisible, currencySearchText, currencyFilter } = this.state;
+        const { currencyModalVisible, currencySearchText, currencyFilter, selectedCurrency } = this.state;
         const filteredCurrencies = this.getFilteredCurrencies();
 
         return (
@@ -184,69 +174,47 @@ class UpdateLanguage extends PureComponent {
                 <View style={languagestyle.modalOverlay}>
                     <View style={languagestyle.modalContainer}>
                         <View style={languagestyle.modalHeader}>
-                            <Text style={[languagestyle.modalTitle, styles.textBold]}>💰 Choisir une devise</Text>
+                            <Text style={[styles.textBold, languagestyle.modalTitle]}>💰 Choisir une devise</Text>
                             <TouchableOpacity onPress={() => this.setState({ currencyModalVisible: false })}>
-                                <Icon name="close" size={28} color="#666" />
+                                <Icon name="close" size={24} color={COLORS.textPrimary} />
                             </TouchableOpacity>
                         </View>
 
+                        {/* Chips de filtres */}
                         <View style={languagestyle.filterChips}>
-                            <TouchableOpacity
-                                style={[languagestyle.chip, currencyFilter === 'all' && languagestyle.chipActive]}
-                                onPress={() => this.setState({ currencyFilter: 'all' })}
-                            >
-                                <Text style={[languagestyle.chipText, styles.text, currencyFilter === 'all' && languagestyle.chipTextActive, styles.text,]}>
-                                    🌍 Toutes
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[languagestyle.chip, currencyFilter === 'africa' && languagestyle.chipActive]}
-                                onPress={() => this.setState({ currencyFilter: 'africa' })}
-                            >
-                                <Text style={[languagestyle.chipText, styles.text, currencyFilter === 'africa' && languagestyle.chipTextActive, styles.text,]}>
-                                    🌍 Afrique
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[languagestyle.chip, currencyFilter === 'europe' && languagestyle.chipActive]}
-                                onPress={() => this.setState({ currencyFilter: 'europe' })}
-                            >
-                                <Text style={[languagestyle.chipText, styles.text, currencyFilter === 'europe' && languagestyle.chipTextActive, styles.text,]}>
-                                    🇪🇺 Europe
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[languagestyle.chip, currencyFilter === 'america' && languagestyle.chipActive]}
-                                onPress={() => this.setState({ currencyFilter: 'america' })}
-                            >
-                                <Text style={[languagestyle.chipText, styles.text, currencyFilter === 'america' && languagestyle.chipTextActive, styles.text,]}>
-                                    🌎 Amériques
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[languagestyle.chip, currencyFilter === 'asia' && languagestyle.chipActive]}
-                                onPress={() => this.setState({ currencyFilter: 'asia' })}
-                            >
-                                <Text style={[languagestyle.chipText, styles.text, currencyFilter === 'asia' && languagestyle.chipTextActive, styles.text,]}>
-                                    🌏 Asie
-                                </Text>
-                            </TouchableOpacity>
+                            {[
+                                { id: 'all', label: 'Toutes' },
+                                { id: 'africa', label: 'Afrique' },
+                                { id: 'europe', label: 'Europe' },
+                                { id: 'america', label: 'Amériques' },
+                            ].map((chip) => (
+                                <TouchableOpacity
+                                    key={chip.id}
+                                    style={[languagestyle.chip, currencyFilter === chip.id && languagestyle.chipActive]}
+                                    onPress={() => this.setState({ currencyFilter: chip.id })}
+                                >
+                                    <Text
+                                        style={[
+                                            styles.text,
+                                            languagestyle.chipText,
+                                            currencyFilter === chip.id && languagestyle.chipTextActive,
+                                        ]}
+                                    >
+                                        {chip.label}
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
                         </View>
 
                         <View style={languagestyle.searchContainer}>
-                            <Icon name="magnify" size={20} color="#999" style={languagestyle.searchIcon} />
+                            <Icon name="magnify" size={20} color={COLORS.textMuted} />
                             <TextInput
-                                style={[languagestyle.searchInput, styles.text]}
+                                style={[styles.text, languagestyle.searchInput]}
                                 placeholder="Rechercher une devise..."
-                                placeholderTextColor="#999"
+                                placeholderTextColor={COLORS.textMuted}
                                 value={currencySearchText}
                                 onChangeText={(text) => this.setState({ currencySearchText: text })}
                             />
-                            {currencySearchText !== '' && (
-                                <TouchableOpacity onPress={() => this.setState({ currencySearchText: '' })}>
-                                    <Icon name="close-circle" size={20} color="#999" />
-                                </TouchableOpacity>
-                            )}
                         </View>
 
                         <ScrollView style={languagestyle.modalList}>
@@ -255,173 +223,146 @@ class UpdateLanguage extends PureComponent {
                                     key={currency.code}
                                     style={[
                                         languagestyle.modalItem,
-                                        this.state.selectedCurrency === currency.code && languagestyle.modalItemSelected
+                                        selectedCurrency === currency.code && languagestyle.modalItemSelected,
                                     ]}
                                     onPress={() => this.selectCurrency(currency.code)}
                                 >
                                     <Text style={languagestyle.modalFlag}>{currency.flag}</Text>
                                     <View style={languagestyle.modalItemInfo}>
-                                        <Text style={[languagestyle.modalItemName, styles.text]}>{currency.name}</Text>
-                                        <Text style={[languagestyle.modalItemNative, styles.text]}>{currency.code} - {currency.symbol}</Text>
+                                        <Text style={[styles.textBold, languagestyle.modalItemName]}>{currency.name}</Text>
+                                        <Text style={[styles.text, languagestyle.modalItemNative]}>
+                                            {currency.code} ({currency.symbol})
+                                        </Text>
                                     </View>
-                                    {this.state.selectedCurrency === currency.code && (
-                                        <Icon name="check-circle" size={20} color="#1B497D" />
+                                    {selectedCurrency === currency.code && (
+                                        <Icon name="check-circle" size={20} color={COLORS.accentCyan} />
                                     )}
                                 </TouchableOpacity>
                             ))}
-                            {filteredCurrencies.length === 0 && (
-                                <View style={languagestyle.noResults}>
-                                    <Icon name="emoticon-sad" size={40} color="#ccc" />
-                                    <Text style={[languagestyle.noResultsText, styles.text]}>Aucune devise trouvée</Text>
-                                </View>
-                            )}
                         </ScrollView>
                     </View>
                 </View>
             </Modal>
         );
     };
-    renderHeader = () => {
-        const headerOpacity = this.state.scrollY.interpolate({
-            inputRange: [0, 100],
-            outputRange: [0, 1],
-            extrapolate: 'clamp',
-        });
+
+    render() {
+        const { selectedLanguage, selectedCurrency } = this.state;
+        const selectedLang = languages.find((l) => l.code === selectedLanguage);
+        const selectedCurr = currencies.find((c) => c.code === selectedCurrency);
 
         return (
-            <Animated.View style={[languagestyle.header, { opacity: headerOpacity }]}>
-                <View style={styles.section}>
-                    <View style={languagestyle.headerSection}>
-                        <View style={languagestyle.headerbuttonContainer}>
-                            <TouchableOpacity
-                                style={languagestyle.headerButton}
-                                onPress={this._navigateToProfil}>
-                                <Image style={styles.backstyle} source={require('../../../assets/images/back.png')} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={languagestyle.headertext}>
-                            <Text style={[languagestyle.headerTitle, styles.textBold]}>Paramètres régionaux</Text>
-                        </View>
+            <SafeAreaView style={languagestyle.container}>
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} />
 
+                {/* Ambient Glows */}
+                <View style={languagestyle.topGlow} pointerEvents="none" />
+                <View style={languagestyle.bottomGlow} pointerEvents="none" />
+
+                {/* Navigation Bar */}
+                <View style={languagestyle.headerNav}>
+                    <TouchableOpacity
+                        style={languagestyle.backButton}
+                        onPress={this._navigateToProfil}
+                        activeOpacity={0.7}
+                    >
+                        <Entypo name="chevron-left" size={24} color={COLORS.textPrimary} />
+                    </TouchableOpacity>
+
+                    <View style={languagestyle.headerTitleWrapper}>
+                        <Text style={[styles.textBold, languagestyle.headerTitle]}>Paramètres Régionaux</Text>
                     </View>
                 </View>
-            </Animated.View>
-        );
-    };
-    render() {
-        const { selectedLanguage, selectedCurrency, animateButton } = this.state;
-        const selectedLang = languages.find(l => l.code === selectedLanguage);
-        const selectedCurr = currencies.find(c => c.code === selectedCurrency);
 
-        return (
-            <View style={languagestyle.container}>
-                <ImageBackground
-                    source={require('../../../assets/images/background.jpg')}
-                    style={styles.backgroundapp}
-                    resizeMode="cover"
+                <Animated.ScrollView
+                    contentContainerStyle={languagestyle.scrollContent}
+                    onScroll={this.handleScroll}
+                    scrollEventThrottle={16}
+                    showsVerticalScrollIndicator={false}
                 >
-                    <Animated.ScrollView
-                        style={languagestyle.container}
-                        onScroll={this.handleScroll}
-                        scrollEventThrottle={16}
-                        showsVerticalScrollIndicator={false}
-                    >
-
-                        <View style={languagestyle.Header}>
-                            <View style={styles.section}>
-                                <View style={styles.back}>
-                                    <TouchableOpacity onPress={this._navigateToProfil}>
-                                        <Image style={styles.backstyle} source={require('../../../assets/images/back.png')} />
-                                    </TouchableOpacity>
-                                </View>
-                                <Text style={[styles.sectionTitle, styles.textBold]}>Paramètres régionaux</Text>
-                            </View>
-                        </View>
-
-                        <View style={languagestyle.section}>
-                            <View style={languagestyle.sectionHeader}>
-                                <Icon name="translate" size={20} color="#1B497D" />
-                                <Text style={[languagestyle.sectionTitle, styles.textBold]}>Langue de l'application</Text>
-                            </View>
-
-                            <TouchableOpacity
-                                style={languagestyle.selectionCard}
-                                onPress={() => this.setState({ languageModalVisible: true })}
-                            >
-                                <View style={languagestyle.selectionLeft}>
-                                    <Text style={languagestyle.selectionFlag}>{selectedLang?.flag}</Text>
-                                    <View>
-                                        <Text style={[languagestyle.selectionTitle, styles.text]}>{selectedLang?.name}</Text>
-                                        <Text style={[languagestyle.selectionSubtitle, styles.text]}>{selectedLang?.native}</Text>
-                                    </View>
-                                </View>
-                                <Icon name="chevron-down" size={20} color="#1B497D" />
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={languagestyle.section}>
-                            <View style={languagestyle.sectionHeader}>
-                                <Icon name="currency-usd" size={20} color="#1B497D" />
-                                <Text style={[languagestyle.sectionTitle, styles.textBold]}>Devise principale</Text>
-                            </View>
-
-                            <TouchableOpacity
-                                style={languagestyle.selectionCard}
-                                onPress={() => this.setState({ currencyModalVisible: true })}
-                            >
-                                <View style={languagestyle.selectionLeft}>
-                                    <Text style={languagestyle.selectionFlag}>{selectedCurr?.flag}</Text>
-                                    <View>
-                                        <Text style={[languagestyle.selectionTitle, styles.text]}>{selectedCurr?.name}</Text>
-                                        <Text style={[languagestyle.selectionSubtitle, styles.text]}>{selectedCurr?.code} - {selectedCurr?.symbol}</Text>
-                                    </View>
-                                </View>
-                                <Icon name="chevron-down" size={20} color="#1B497D" />
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={languagestyle.previewCard}>
-                            <Text style={[languagestyle.previewTitle, styles.textBold]}>📋 Aperçu</Text>
-                            <View style={languagestyle.previewRow}>
-                                <Icon name="translate" size={20} color="#1B497D" />
-                                <Text style={[languagestyle.previewText, styles.text]}>
-                                    Langue: {selectedLang?.name} ({selectedLang?.native})
-                                </Text>
-                            </View>
-                            <View style={languagestyle.previewRow}>
-                                <Icon name="currency-usd" size={20} color="#1B497D" />
-                                <Text style={[languagestyle.previewText, styles.text]}>
-                                    Devise: {selectedCurr?.name} ({selectedCurr?.symbol})
-                                </Text>
-                            </View>
+                    {/* Section Langue */}
+                    <View style={languagestyle.sectionCard}>
+                        <View style={languagestyle.cardHeader}>
+                            <Icon name="translate" size={20} color={COLORS.accentGold} />
+                            <Text style={[styles.textBold, languagestyle.cardTitle]}>Langue d'affichage</Text>
                         </View>
 
                         <TouchableOpacity
-                            style={[
-                                languagestyle.saveButton,
-                                animateButton && languagestyle.saveButtonAnimate
-                            ]}
-                            onPress={this.savePreferences}
+                            style={languagestyle.selectionTrigger}
+                            onPress={() => this.setState({ languageModalVisible: true })}
+                            activeOpacity={0.8}
                         >
-                            <Text style={[languagestyle.saveButtonText, styles.textBold]}>Enregistrer mes préférences</Text>
+                            <Text style={languagestyle.flagText}>{selectedLang?.flag}</Text>
+                            <View style={languagestyle.triggerTextWrapper}>
+                                <Text style={[styles.textBold, languagestyle.triggerTitle]}>{selectedLang?.name}</Text>
+                                <Text style={[styles.text, languagestyle.triggerSubtitle]}>{selectedLang?.native}</Text>
+                            </View>
+                            <Icon name="chevron-down" size={20} color={COLORS.textMuted} />
                         </TouchableOpacity>
+                    </View>
 
-                        <View style={{ height: 50 }} />
-                    </Animated.ScrollView>
+                    {/* Section Devise */}
+                    <View style={languagestyle.sectionCard}>
+                        <View style={languagestyle.cardHeader}>
+                            <Icon name="currency-usd" size={20} color={COLORS.accentCyan} />
+                            <Text style={[styles.textBold, languagestyle.cardTitle]}>Devise principale</Text>
+                        </View>
 
-                    {this.renderLanguageModal()}
-                    {this.renderCurrencyModal()}
-                    {this.renderHeader()}
-                </ImageBackground>
-            </View>
+                        <TouchableOpacity
+                            style={languagestyle.selectionTrigger}
+                            onPress={() => this.setState({ currencyModalVisible: true })}
+                            activeOpacity={0.8}
+                        >
+                            <Text style={languagestyle.flagText}>{selectedCurr?.flag}</Text>
+                            <View style={languagestyle.triggerTextWrapper}>
+                                <Text style={[styles.textBold, languagestyle.triggerTitle]}>{selectedCurr?.name}</Text>
+                                <Text style={[styles.text, languagestyle.triggerSubtitle]}>
+                                    {selectedCurr?.code} - {selectedCurr?.symbol}
+                                </Text>
+                            </View>
+                            <Icon name="chevron-down" size={20} color={COLORS.textMuted} />
+                        </TouchableOpacity>
+                    </View>
+
+                    {/* Carte Aperçu */}
+                    <View style={languagestyle.previewCard}>
+                        <Text style={[styles.textBold, languagestyle.previewTitle]}>📋 Synthèse des préférences</Text>
+                        <View style={languagestyle.previewRow}>
+                            <Icon name="earth" size={18} color={COLORS.accentGold} />
+                            <Text style={[styles.text, languagestyle.previewText]}>
+                                Langue active : <Text style={styles.textBold}>{selectedLang?.name}</Text>
+                            </Text>
+                        </View>
+                        <View style={languagestyle.previewRow}>
+                            <Icon name="cash-multiple" size={18} color={COLORS.accentCyan} />
+                            <Text style={[styles.text, languagestyle.previewText]}>
+                                Affichage des prix : <Text style={styles.textBold}>{selectedCurr?.symbol}</Text> ({selectedCurr?.code})
+                            </Text>
+                        </View>
+                    </View>
+
+                    {/* Bouton de Sauvegarde */}
+                    <TouchableOpacity
+                        style={languagestyle.saveButton}
+                        onPress={this.savePreferences}
+                        activeOpacity={0.85}
+                    >
+                        <Icon name="check-circle-outline" size={20} color={COLORS.textDark} style={{ marginRight: 8 }} />
+                        <Text style={[styles.textBold, languagestyle.saveButtonText]}>
+                            Appliquer les préférences
+                        </Text>
+                    </TouchableOpacity>
+                </Animated.ScrollView>
+
+                {this.renderLanguageModal()}
+                {this.renderCurrencyModal()}
+            </SafeAreaView>
         );
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    ...bindActionCreators({
-        switchProfilPageAction
-    }, dispatch),
+    ...bindActionCreators({ switchProfilPageAction }, dispatch),
 });
 
 const mapStateToProps = (state) => ({

@@ -284,7 +284,7 @@ class UploadDocuments extends PureComponent {
         return (
             <View style={uploadstyle.containerform}>
                 <ImageBackground
-                    source={require('../../../assets/images/background.jpg')}
+                    source={require('../../../assets/images/background.png')}
                     style={styles.backgroundapp}
                     resizeMode="cover"
                 >

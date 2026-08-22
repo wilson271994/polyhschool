@@ -1,201 +1,199 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { COLORS } from './theme';
 
 export const sigupstyle = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#011638',
+        backgroundColor: COLORS.bgPrimary,
     },
 
-    // Ambient Glow Orbs
+    /* Lueurs / Orbes d'ambiance Poly-H */
     topGlow: {
         position: 'absolute',
-        top: -80,
+        top: -100,
         right: -80,
-        width: 260,
-        height: 260,
-        borderRadius: 130,
-        backgroundColor: 'rgba(2, 59, 138, 0.55)',
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(255, 179, 0, 0.12)',
     },
     bottomGlow: {
         position: 'absolute',
-        bottom: -80,
-        right: -50,
-        width: 260,
-        height: 260,
-        borderRadius: 130,
-        backgroundColor: 'rgba(246, 161, 0, 0.2)',
+        bottom: -100,
+        left: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(54, 209, 220, 0.10)',
     },
 
     scrollContent: {
-        paddingHorizontal: 16,
-        paddingTop: Platform.OS === 'ios' ? 10 : 5,
-        paddingBottom: 30,
+        flexGrow: 1,
+        paddingHorizontal: 20,
+        paddingVertical: 20,
     },
 
     headerRow: {
-        width: '100%',
-        flexDirection: 'row',
-        marginBottom: 4,
+        marginBottom: 10,
     },
     backButton: {
-        width: 40,
-        height: 40,
-        borderRadius: 12,
-        backgroundColor: 'rgba(2, 59, 138, 0.4)',
-        borderWidth: 1.5,
-        borderColor: 'rgba(255, 255, 255, 0.15)',
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        backgroundColor: 'rgba(255, 255, 255, 0.08)',
         justifyContent: 'center',
         alignItems: 'center',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
     },
 
-    // Logo & Branding
+    /* Branding */
     logoContainer: {
         alignItems: 'center',
-        marginBottom: 12,
+        marginBottom: 20,
     },
     logo: {
-        width: 95,
-        height: 95,
-        resizeMode: 'contain',
-        marginBottom: 2,
+        width: 75,
+        height: 75,
+        marginBottom: 8,
     },
     brandBadge: {
-        color: '#f6a100',
-        fontSize: 10, // Increased badge font size
-        letterSpacing: 2.5,
-        textTransform: 'uppercase',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: COLORS.accentGold,
+        letterSpacing: 1.5,
+        marginBottom: 4,
     },
     title: {
-        fontSize: 20, // Increased step title size
-        color: '#FFFFFF',
-        marginTop: 3,
+        fontSize: 15,
+        color: COLORS.textPrimary,
+        marginBottom: 4,
     },
     slogan: {
-        fontSize: 12, // Increased slogan font size
-        color: '#94A3B8',
+        fontSize: 11,
+        color: COLORS.accentCyan,
         textAlign: 'center',
     },
 
-    // Form Card
+    /* Carte Translucide du Formulaire */
     inputContainer: {
-        backgroundColor: 'rgba(2, 59, 138, 0.45)',
+        backgroundColor: COLORS.cardBg,
         borderRadius: 22,
-        borderWidth: 1.5,
-        borderColor: 'rgba(246, 161, 0, 0.25)',
-        padding: 16,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.35,
-        shadowRadius: 12,
-        elevation: 6,
+        padding: 18,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        marginBottom: 20,
+    },
+
+    label: {
+        fontSize: 12,
+        color: COLORS.textMuted,
+        marginBottom: 6,
+        marginTop: 6,
     },
 
     rowFields: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        gap: 12,
     },
     colField: {
-        flex: 0.48,
+        flex: 1,
     },
 
-    label: {
-        color: '#CBD5E1',
-        fontSize: 12.5, // Increased field label size
-        marginTop: 10,
-        marginBottom: 5,
-    },
-
-    // Inputs
+    /* Champs de texte */
     inputWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'rgba(1, 22, 56, 0.75)',
-        borderRadius: 12,
-        borderWidth: 1.5,
-        borderColor: 'rgba(255, 255, 255, 0.12)',
-        height: 48, // Comfortable input height
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+        borderRadius: 14,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
         paddingHorizontal: 12,
+        height: 48,
+        marginBottom: 10,
     },
     inputWrapperFocused: {
-        borderColor: '#f6a100',
-        backgroundColor: 'rgba(1, 22, 56, 0.95)',
+        borderColor: COLORS.accentGold,
+        backgroundColor: 'rgba(255, 179, 0, 0.05)',
     },
     inputIcon: {
         marginRight: 8,
     },
     input: {
         flex: 1,
-        color: '#FFFFFF',
-        fontSize: 14.5, // Increased input text size for better readability
-        paddingVertical: 0,
+        fontSize: 13,
+        color: COLORS.textPrimary,
     },
 
+    /* Erreur Date */
     errorBanner: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 6,
+        backgroundColor: 'rgba(244, 63, 94, 0.15)',
+        borderRadius: 10,
+        padding: 8,
+        gap: 6,
+        marginBottom: 10,
     },
     errorText: {
-        color: '#F87171',
         fontSize: 11,
-        marginLeft: 6,
+        color: '#F43F5E',
     },
 
-    // Dropdowns
+    /* Dropdowns */
     dropdown: {
         height: 48,
-        backgroundColor: 'rgba(1, 22, 56, 0.75)',
-        borderColor: 'rgba(255, 255, 255, 0.12)',
-        borderWidth: 1.5,
-        borderRadius: 12,
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+        borderRadius: 14,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
         paddingHorizontal: 12,
+        marginBottom: 12,
     },
     dropdownFocused: {
-        borderColor: '#f6a100',
+        borderColor: COLORS.accentGold,
+    },
+    dropdownContainer: {
+        backgroundColor: COLORS.bgSecondary,
+        borderRadius: 14,
+        borderColor: COLORS.borderLight,
     },
     placeholderStyle: {
-        fontSize: 13.5, // Increased placeholder size
-        color: '#64748B',
+        fontSize: 13,
+        color: COLORS.textMuted,
     },
     selectedTextStyle: {
-        fontSize: 14, // Increased selected item font size
-        color: '#FFFFFF',
+        fontSize: 13,
+        color: COLORS.textPrimary,
     },
     inputSearchStyle: {
         height: 40,
         fontSize: 13,
-        color: '#011638',
-    },
-    dropdownContainer: {
-        backgroundColor: '#FFFFFF',
-        borderRadius: 12,
-        overflow: 'hidden',
+        color: COLORS.textPrimary,
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+        borderRadius: 10,
     },
     itemTextStyle: {
-        fontSize: 13.5,
-        color: '#011638',
+        fontSize: 13,
+        color: COLORS.textPrimary,
     },
 
-    // Button
+    /* CTA Button */
     button: {
-        backgroundColor: '#f6a100',
-        borderRadius: 12,
-        height: 50,
+        backgroundColor: COLORS.accentGold,
+        borderRadius: 14,
+        height: 48,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20,
-        shadowColor: '#f6a100',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.35,
-        shadowRadius: 8,
-        elevation: 5,
+        marginTop: 14,
     },
     buttonText: {
-        color: '#011638',
-        fontSize: 15, // Increased button font size
-        letterSpacing: 0.5,
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: COLORS.textDark,
     },
 
+    
     // Terms Checkbox
     checkboxContainer: {
         flexDirection: 'row',

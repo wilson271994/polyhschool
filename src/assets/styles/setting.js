@@ -1,243 +1,199 @@
-import { StyleSheet, Dimensions } from 'react-native';
-import { color } from 'react-native-elements/dist/helpers';
-const { width, height } = Dimensions.get('window');
+import { StyleSheet } from 'react-native';
+import { COLORS } from './theme';
 
 export const settingstyle = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
-        marginBottom: 35,
-        flex: 1
+        flex: 1,
+        backgroundColor: COLORS.bgPrimary,
     },
-    
-    header: {
-        backgroundColor: '#1B497D',
-        padding: 12,
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        elevation: 5,
+
+    /* Glows / Orbes d'ambiance Poly-H */
+    topGlow: {
+        position: 'absolute',
+        top: -100,
+        right: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(255, 179, 0, 0.12)',
+    },
+    bottomGlow: {
+        position: 'absolute',
+        bottom: -100,
+        left: -80,
+        width: 280,
+        height: 280,
+        borderRadius: 140,
+        backgroundColor: 'rgba(54, 209, 220, 0.10)',
+    },
+
+    /* Header Navigation */
+    headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        height: 60,
+        paddingHorizontal: 16,
+        paddingTop: 10,
+        paddingBottom: 14,
+    },
+    backButton: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        marginRight: 12,
+    },
+    headerTitleWrapper: {
+        flex: 1,
+    },
+    headerBadge: {
+        fontSize: 11,
+        fontWeight: 'bold',
+        color: COLORS.accentGold,
+        letterSpacing: 1.2,
     },
     headerTitle: {
-        fontSize: 24,
-        color: '#fff',
-    },
-    scrollContainer: {
-        padding: 20,
-        paddingBottom: 60
-    },
-    sectionTitle: {
         fontSize: 16,
-        color: '#FFF',
-    },
-    bloccontainer: {
-        marginTop: 5,
-        marginBottom: 5,
-        padding: 10
-    },
-    paramitem: {
-        marginBottom: 10,
-        borderBottomColor: '#eee',
-        borderBottomWidth: 1,
-        padding: 10,
-        justifyContent: 'center',
-
-    },
-    flexrowitem: {
-        flexDirection: 'row'
-    },
-    containericonimg: {
-        backgroundColor: '#eee',
-        borderRadius: 100,
-        width: 40,
-        height: 40,
-        padding: 6,
-        justifyContent: 'center',
-        alignContent: 'center'
-    },
-    switchContainer: {
-        marginLeft: 100,
-    },
-    labelmenucont: {
-        marginLeft: 20,
-    },
-    itemlisttext: {
-        fontSize: 15,
-        color: '#FFF'
-    },
-    itemlisthelptext: {
-        marginTop: 5,
-        color: '#FFF'
-    },
-    textItalicBold: {
-        fontFamily: 'UbuntuBold-1YyB',
-        fontStyle: 'italic'
-    },
-    bloccontainer: {
-        marginTop: 5,
-        marginBottom: 5,
-        padding: 10
-    },
-    iconimage: {
-        height: 25,
-        width: 25,
-        tintColor: '#666',
-        alignSelf: 'center'
-    },
-    logoutimage: {
-        height: 25,
-        width: 25,
-        tintColor: 'red'
+        color: COLORS.textPrimary,
     },
 
-    //Style Modal Create Ticket
-    modalContainer: {
-        backgroundColor: '#eee',
-        flex: 1
-    },
-    loginbox: {
-        height: 'auto',
-        marginTop: 30,
-        width: '85%',
-        padding: 20,
-        left: 30,
-        backgroundColor: '#1B497D',
-        borderRadius: 20,
-        flex: 1
-    },
-    entetelogin: {
-        fontSize: 16,
-        color: '#000',
-        marginBottom: 2,
-        marginTop: 20,
-        lineHeight: 30
-    },
-    entetelogin1: {
-        fontSize: 20,
-        color: '#000',
-        marginTop: 10,
-        textAlign: 'center',
-        paddingTop: 10,
-        marginBottom: 2
-    },
-    inputtextlogin: {
-        textAlign: 'center',
-        backgroundColor: 'rgba(255, 250, 255, .99)',
-        fontSize: 14,
-        borderWidth: 1,
-        borderColor: '#1B497D',
-        color: '#000',
-        borderRadius: 30,
-        paddingBottom: 8,
-    },
-    image: {
-        borderRadius: 20,
-        marginTop: 20,
-    },
-    textbtnsubmit: {
-        fontSize: 20,
-        color: '#fff',
-        left: 30,
-        paddingTop: 5,
-    },
-    btn: {
-        borderRadius: 30,
-        backgroundColor: "#1B497D",
-        borderColor: '#fff',
-        borderWidth: 1,
-        paddRingTop: 10,
-        paddingBottom: 10,
-        paddingLeft: 20,
-        paddingight: 20,
-        width: 200,
-        left: 90
-    },
-    footerlogin: {
-        justifyContent: 'center',
-        marginTop: 20,
-        marginBottom: 20
-    },
-    icon: {
-        position: 'absolute',
-        left: 130,
-        top: 8,
-        zIndex: 999,
-    },
-
-    /**********SUPPORT CHAT**********/
-
-    container3: {
-        backgroundColor: '#fff',
-    },
-    container4: {
-        backgroundColor: '#fff',
-        borderRadius: 30,
-        height: 60,
-        width: '80%',
-    },
     scrollContainer: {
-        padding: 20,
+        paddingHorizontal: 16,
+        paddingBottom: 110,
     },
-    inputSearch: {
-        height: 40,
-        width: '80%',
-        borderColor: '#ECB817',
-        borderRadius: 30,
+
+    /* Carte Profil Utilisateur (Hero Card) */
+    userCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: COLORS.cardBg,
+        borderRadius: 18,
+        padding: 16,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        marginBottom: 20,
+    },
+    avatarContainer: {
+        width: 52,
+        height: 52,
+        borderRadius: 26,
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
         justifyContent: 'center',
         alignItems: 'center',
-        position: 'absolute',
-        backgroundColor: '#1B497D',
+        overflow: 'hidden',
+        marginRight: 14,
         borderWidth: 1,
-        marginTop: 558,
+        borderColor: COLORS.borderLight,
+    },
+    avatarImage: {
+        width: '100%',
+        height: '100%',
+    },
+    userInfo: {
+        flex: 1,
+    },
+    userName: {
+        fontSize: 15,
+        color: COLORS.textPrimary,
+        marginBottom: 2,
+    },
+    userEmail: {
+        fontSize: 11,
+        color: COLORS.textMuted,
+    },
+
+    /* Titles & Card Blocks */
+    sectionTitle: {
+        fontSize: 11,
+        color: COLORS.accentGold,
+        letterSpacing: 1.2,
+        marginBottom: 8,
+        marginTop: 8,
+        marginLeft: 4,
+    },
+    bloccontainer: {
+        backgroundColor: COLORS.cardBg,
+        borderRadius: 18,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        marginBottom: 16,
+        overflow: 'hidden',
+    },
+
+    /* Item List Paramètres */
+    paramitem: {
         flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 14,
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(255, 255, 255, 0.04)',
     },
-    SearchBar: {
-        color: '#fff',
-        width: '70%',
+    containericonimg: {
+        width: 38,
+        height: 38,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
     },
-    icons: {
-        position: 'absolute',
-        left: 20,
-        top: 11,
-        zIndex: 999,
+    labelmenucont: {
+        flex: 1,
     },
-    image: {
-        position: 'absolute',
-        left: 270,
-        top: 10,
-        zIndex: 999,
+    itemlisttext: {
+        fontSize: 13,
+        color: COLORS.textPrimary,
     },
-    btnsubmit: {
-        borderRadius: 15,
-        backgroundColor: '#ECB817',
-        borderColor: '#fff',
+    itemlisthelptext: {
+        fontSize: 11,
+        color: COLORS.textMuted,
+        marginTop: 1,
+    },
+    logoutText: {
+        fontSize: 13,
+        color: '#F43F5E',
+    },
+
+    /* Style Alerte Personnalisée */
+    alertContainer: {
+        backgroundColor: COLORS.bgSecondary,
+        borderRadius: 20,
         borderWidth: 1,
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingLeft: 20,
-        paddingRight: 20,
-        width: 60,
-        height: 45,
-        position: 'absolute',
-        left: 325,
-        top: 553,
+        borderColor: COLORS.borderLight,
+        padding: 16,
     },
-    btnsubmit1: {
-        backgroundColor: '#ECB817',
+    alertTitle: {
+        fontSize: 15,
+        color: COLORS.textPrimary,
+        textAlign: 'center',
     },
-    option: {
-        marginBottom: 20
+    alertMessage: {
+        fontSize: 12,
+        color: COLORS.textMuted,
+        textAlign: 'center',
+        marginTop: 6,
     },
-    exit: {
-        color: '#ff0000',
-        alignSelf: 'center'
+    alertCancelBtn: {
+        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+        borderRadius: 10,
+        paddingHorizontal: 16,
+        paddingVertical: 8,
     },
-    exitcontainer: {
-        padding: 10
-    }
+    alertConfirmBtn: {
+        backgroundColor: '#F43F5E',
+        borderRadius: 10,
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+    },
+    alertCancelText: {
+        color: COLORS.textPrimary,
+        fontSize: 12,
+    },
+    alertConfirmText: {
+        color: COLORS.textPrimary,
+        fontSize: 12,
+    },
 });

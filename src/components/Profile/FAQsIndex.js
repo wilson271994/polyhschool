@@ -1,139 +1,133 @@
 import React, { PureComponent } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Animated, StatusBar, Modal, Share, ImageBackground } from 'react-native';
+import {
+    SafeAreaView,
+    View,
+    Text,
+    ScrollView,
+    TouchableOpacity,
+    TextInput,
+    Animated,
+    StatusBar,
+    Modal,
+    Share,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { faqstyle, C } from '../../assets/styles/faqs';
+import Entypo from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { switchProfilPageAction, switchSupportHomeAction } from '../../navigations/rootNavigation';
-import { styles } from '../../assets/styles';
 
+import { faqstyle } from '../../assets/styles/faqs';
+import { styles } from '../../assets/styles';
+import { COLORS } from '../../assets/styles/theme';
+import {
+    switchProfilPageAction,
+    switchSupportHomeAction,
+} from '../../navigations/rootNavigation';
 
 const FAQ_DATA = [
     {
         id: 1,
-        category: "Général",
-        question: "Comment créer un compte ?",
-        answer: "Pour créer un compte, cliquez sur le bouton 'S'inscrire' sur l'écran d'accueil. Remplissez le formulaire avec vos informations personnelles (nom, email, mot de passe). Vous recevrez un email de confirmation avec un lien pour activer votre compte. Une fois l'email confirmé, vous pourrez vous connecter et accéder à toutes les fonctionnalités.",
-        icon: "account-plus",
+        category: 'Général',
+        question: 'Comment créer un compte ?',
+        answer:
+            "Pour créer un compte, cliquez sur le bouton 'S'inscrire' sur l'écran d'accueil. Remplissez le formulaire avec vos informations personnelles. Vous recevrez un e-mail de confirmation pour valider l'activation.",
+        icon: 'account-plus-outline',
         votes: 45,
         views: 1234,
     },
     {
         id: 2,
-        category: "Général",
-        question: "Comment réinitialiser mon mot de passe ?",
-        answer: "Si vous avez oublié votre mot de passe, cliquez sur 'Mot de passe oublié ?' sur l'écran de connexion. Entrez votre adresse email et vous recevrez un lien pour réinitialiser votre mot de passe. Suivez les instructions dans l'email pour créer un nouveau mot de passe sécurisé.",
-        icon: "lock-reset",
+        category: 'Général',
+        question: 'Comment réinitialiser mon mot de passe ?',
+        answer:
+            "Si vous avez oublié votre mot de passe, cliquez sur 'Mot de passe oublié ?' sur l'écran de connexion. Entrez votre adresse e-mail et suivez les instructions envoyées par e-mail.",
+        icon: 'lock-reset',
         votes: 32,
         views: 892,
     },
     {
         id: 3,
-        category: "Paiement",
-        question: "Quels sont les modes de paiement acceptés ?",
-        answer: "Nous acceptons les paiements par carte bancaire (Visa, MasterCard, American Express), Mobile Money (MTN Momo, Orange Money), et les transferts bancaires. Tous les paiements sont sécurisés par un système de cryptage SSL 256 bits pour garantir la sécurité de vos transactions.",
-        icon: "credit-card",
+        category: 'Paiement',
+        question: 'Quels sont les modes de paiement acceptés ?',
+        answer:
+            'Nous acceptons les cartes bancaires (Visa, MasterCard), Mobile Money (MTN MoMo, Orange Money) ainsi que les virements bancaires sécurisés par cryptage SSL.',
+        icon: 'credit-card-outline',
         votes: 67,
         views: 2341,
     },
     {
         id: 4,
-        category: "Paiement",
-        question: "Comment obtenir un remboursement ?",
-        answer: "Pour obtenir un remboursement, contactez notre service client dans les 14 jours suivant votre achat. Les remboursements sont traités sous 5 à 10 jours ouvrables selon votre mode de paiement. Vous devrez fournir la preuve d'achat et expliquer la raison du remboursement.",
-        icon: "cash-refund",
+        category: 'Paiement',
+        question: 'Comment obtenir un reçu ou un remboursement ?',
+        answer:
+            "Chaque paiement génère un reçu téléchargeable. Pour toute demande de remboursement, contactez le service comptabilité de l'établissement sous 14 jours.",
+        icon: 'cash-refund',
         votes: 28,
         views: 1567,
     },
     {
         id: 5,
-        category: "Technique",
+        category: 'Technique',
         question: "L'application ne se charge pas correctement",
-        answer: "Vérifiez votre connexion internet. Si le problème persiste, essayez de fermer complètement l'application et de la rouvrir. Vous pouvez également vider le cache dans les paramètres de l'application. Si rien ne fonctionne, contactez notre support technique avec les détails de votre appareil.",
-        icon: "cellphone-cog",
+        answer:
+            "Vérifiez votre connexion réseau. Si le souci persiste, redémarrez l'application ou videz le cache dans les paramètres système de votre mobile.",
+        icon: 'cellphone-cog',
         votes: 89,
         views: 3456,
     },
     {
         id: 6,
-        category: "Technique",
-        question: "Comment mettre à jour l'application ?",
-        answer: "La mise à jour se fait automatiquement via votre store (Google Play ou App Store). Pour vérifier manuellement, allez dans votre store, recherchez notre application et cliquez sur 'Mettre à jour' si disponible. Assurez-vous d'avoir suffisamment d'espace de stockage.",
-        icon: "update",
-        votes: 23,
-        views: 678,
-    },
-    {
-        id: 7,
-        category: "Compte",
-        question: "Comment supprimer mon compte ?",
-        answer: "Pour supprimer définitivement votre compte, allez dans Paramètres > Compte > Supprimer mon compte. Vous devrez confirmer votre mot de passe. Attention : cette action est irréversible et toutes vos données seront supprimées définitivement.",
-        icon: "account-remove",
-        votes: 41,
-        views: 2100,
-    },
-    {
-        id: 8,
-        category: "Compte",
-        question: "Comment changer mon adresse email ?",
-        answer: "Rendez-vous dans Paramètres > Informations personnelles > Email. Entrez votre nouveau email et votre mot de passe pour confirmer. Un email de vérification sera envoyé à votre nouvelle adresse pour valider le changement.",
-        icon: "email-edit",
+        category: 'Compte',
+        question: 'Comment changer mon adresse e-mail ?',
+        answer:
+            "Rendez-vous dans Paramètres > Profil. Modifiez le champ e-mail et confirmez avec votre mot de passe de sécurité.",
+        icon: 'email-edit-outline',
         votes: 19,
         views: 543,
     },
     {
-        id: 9,
-        category: "Sécurité",
-        question: "Comment activer la double authentification ?",
-        answer: "Pour activer la double authentification (2FA), allez dans Paramètres > Sécurité > Double Authentification. Vous pouvez utiliser une application comme Google Authenticator ou recevoir des codes par SMS. Cela renforcera la sécurité de votre compte.",
-        icon: "shield-lock",
+        id: 7,
+        category: 'Sécurité',
+        question: 'Comment activer la double authentification ?',
+        answer:
+            'Allez dans Paramètres > Sécurité & 2FA. Vous pouvez activer la vérification par empreinte, reconnaissance faciale ou code par SMS/E-mail.',
+        icon: 'shield-lock-outline',
         votes: 56,
         views: 1890,
     },
-    {
-        id: 10,
-        category: "Sécurité",
-        question: "Que faire en cas de compte piraté ?",
-        answer: "Contactez immédiatement notre support via support@application.com. Changez votre mot de passe dans les plus brefs délais et vérifiez vos récentes activités. Désactivez les sessions actives depuis Paramètres > Sécurité > Sessions actives.",
-        icon: "alert-circle",
-        votes: 34,
-        views: 987,
-    },
 ];
 
-const CATEGORIES = ["Toutes", "Général", "Paiement", "Technique", "Compte", "Sécurité"];
+const CATEGORIES = ['Toutes', 'Général', 'Paiement', 'Technique', 'Compte', 'Sécurité'];
 
 class FAQsIndex extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            searchQuery: "",
-            selectedCategory: "Toutes",
+            searchQuery: '',
+            selectedCategory: 'Toutes',
             expandedId: null,
             showContactModal: false,
-            feedbackMessage: "",
+            feedbackMessage: '',
             feedbackRating: 0,
             showFeedbackToast: false,
             scrollY: new Animated.Value(0),
         };
-        this.searchInputRef = null;
     }
 
     getFilteredFAQs = () => {
         let filtered = FAQ_DATA;
 
-
-        if (this.state.selectedCategory !== "Toutes") {
-            filtered = filtered.filter(faq => faq.category === this.state.selectedCategory);
+        if (this.state.selectedCategory !== 'Toutes') {
+            filtered = filtered.filter((faq) => faq.category === this.state.selectedCategory);
         }
-
 
         if (this.state.searchQuery.trim()) {
             const query = this.state.searchQuery.toLowerCase();
-            filtered = filtered.filter(faq =>
-                faq.question.toLowerCase().includes(query) ||
-                faq.answer.toLowerCase().includes(query) ||
-                faq.category.toLowerCase().includes(query)
+            filtered = filtered.filter(
+                (faq) =>
+                    faq.question.toLowerCase().includes(query) ||
+                    faq.answer.toLowerCase().includes(query) ||
+                    faq.category.toLowerCase().includes(query)
             );
         }
 
@@ -141,27 +135,27 @@ class FAQsIndex extends PureComponent {
     };
 
     toggleExpand = (id) => {
-        this.setState(prevState => ({
-            expandedId: prevState.expandedId === id ? null : id
+        this.setState((prevState) => ({
+            expandedId: prevState.expandedId === id ? null : id,
         }));
     };
 
     _navigateToProfil = () => {
         switchProfilPageAction(true);
-    }
+    };
+
     _navigateToSupport = () => {
         switchSupportHomeAction(true);
-    }
-    handleVote = (id, type) => {
+    };
 
-        console.log(`Vote ${type} pour la FAQ ${id}`);
-        this.showTemporaryToast("Merci pour votre retour !");
+    handleVote = (id, type) => {
+        this.showTemporaryToast('Merci pour votre retour !');
     };
 
     shareFAQ = async (faq) => {
         try {
             await Share.share({
-                message: `${faq.question}\n\nRéponse: ${faq.answer.substring(0, 100)}...\n\nTéléchargez l'application pour en savoir plus !`,
+                message: `${faq.question}\n\nRéponse: ${faq.answer}\n\nRetrouvez plus d'infos sur l'application Poly-H School !`,
                 title: faq.question,
             });
         } catch (error) {
@@ -174,202 +168,116 @@ class FAQsIndex extends PureComponent {
         setTimeout(() => this.setState({ showFeedbackToast: false }), 3000);
     };
 
-    handleContactSupport = () => {
-        this.setState({ showContactModal: true });
-    };
-
     submitFeedback = () => {
-        const { feedbackMessage, feedbackRating } = this.state;
+        const { feedbackMessage } = this.state;
         if (feedbackMessage.trim()) {
-            console.log("Feedback envoyé:", { message: feedbackMessage, rating: feedbackRating });
-            this.showTemporaryToast("Merci pour votre message !");
-            this.setState({ showContactModal: false, feedbackMessage: "", feedbackRating: 0 });
+            this.showTemporaryToast('Votre message a été transmis au support.');
+            this.setState({ showContactModal: false, feedbackMessage: '', feedbackRating: 0 });
         } else {
-            this.showTemporaryToast("Veuillez écrire votre message");
+            this.showTemporaryToast('Veuillez saisir votre message.');
         }
     };
 
-    renderHeader = () => {
-        const headerOpacity = this.state.scrollY.interpolate({
-            inputRange: [0, 100],
-            outputRange: [0, 1],
-            extrapolate: 'clamp',
-        });
-
-        return (
-            <Animated.View style={[faqstyle.header, { opacity: headerOpacity }]}>
-                <View style={faqstyle.headerSection}>
-                    <View style={faqstyle.headertext}>
-                        <Text style={[faqstyle.headerTitle, styles.textBold]}>Centre d'Aide</Text>
-                    </View>
-                    <View style={faqstyle.headerbuttonContainer}>
-                        <TouchableOpacity
-                            style={faqstyle.headerButton}
-                            onPress={this._navigateToProfil}
-                        >
-                            <Icon name="close" size={20} color={C.text} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-            </Animated.View>
-        );
-    };
-
-    renderHero = () => {
-        return (
-            <View style={faqstyle.heroSection}>
-                <View style={faqstyle.heroContent}>
-                    <TouchableOpacity
-                        style={faqstyle.headerButton1}
-                        onPress={this._navigateToProfil}
-                    >
-                        <Icon name="close" size={24} color={C.text} />
-                    </TouchableOpacity>
-                    <Icon name="frequently-asked-questions" size={60} color={C.accent} />
-                    <Text style={[faqstyle.heroTitle, styles.textBold]}>Comment pouvons-nous vous aider ?</Text>
-                    <Text style={[faqstyle.heroSubtitle, styles.text]}>
-                        Trouvez des réponses rapides à vos questions
-                    </Text>
-                </View>
-
-                <View style={faqstyle.searchContainer}>
-                    <Icon name="magnify" size={24} color={C.textMuted} style={faqstyle.searchIcon} />
-                    <TextInput
-                        ref={ref => this.searchInputRef = ref}
-                        style={[faqstyle.searchInput, styles.text]}
-                        placeholder="Rechercher une question..."
-                        placeholderTextColor={C.textMuted}
-                        value={this.state.searchQuery}
-                        onChangeText={(text) => this.setState({ searchQuery: text })}
-                    />
-                    {this.state.searchQuery !== "" && (
-                        <TouchableOpacity onPress={() => this.setState({ searchQuery: "" })}>
-                            <Icon name="close-circle" size={20} color={C.textMuted} />
-                        </TouchableOpacity>
-                    )}
-                </View>
+    renderHero = () => (
+        <View style={faqstyle.heroSection}>
+            <View style={faqstyle.heroBadge}>
+                <Icon name="help-circle-outline" size={24} color={COLORS.accentGold} />
+                <Text style={[styles.textBold, faqstyle.heroBadgeText]}>CENTRE D'ASSISTANCE</Text>
             </View>
-        );
-    };
+            <Text style={[styles.textBold, faqstyle.heroTitle]}>Comment pouvons-nous vous aider ?</Text>
 
-    renderCategories = () => {
-        return (
-            <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={faqstyle.categoriesContainer}
-                contentContainerStyle={faqstyle.categoriesContent}
-            >
-                {CATEGORIES.map(category => (
+            <View style={faqstyle.searchBox}>
+                <Icon name="magnify" size={20} color={COLORS.textMuted} />
+                <TextInput
+                    style={[styles.text, faqstyle.searchInput]}
+                    placeholder="Rechercher une réponse..."
+                    placeholderTextColor={COLORS.textMuted}
+                    value={this.state.searchQuery}
+                    onChangeText={(text) => this.setState({ searchQuery: text })}
+                />
+                {this.state.searchQuery !== '' && (
+                    <TouchableOpacity onPress={() => this.setState({ searchQuery: '' })}>
+                        <Icon name="close-circle" size={18} color={COLORS.textMuted} />
+                    </TouchableOpacity>
+                )}
+            </View>
+        </View>
+    );
+
+    renderCategories = () => (
+        <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={faqstyle.categoriesRow}
+            contentContainerStyle={{ gap: 8 }}
+        >
+            {CATEGORIES.map((category) => {
+                const isActive = this.state.selectedCategory === category;
+                return (
                     <TouchableOpacity
                         key={category}
-                        style={[
-                            faqstyle.categoryChip,
-                            this.state.selectedCategory === category && faqstyle.categoryChipActive
-                        ]}
+                        style={[faqstyle.categoryChip, isActive && faqstyle.categoryChipActive]}
                         onPress={() => this.setState({ selectedCategory: category })}
+                        activeOpacity={0.8}
                     >
-                        <Text style={[
-                            faqstyle.categoryChipText, styles.textBold,
-                            this.state.selectedCategory === category && faqstyle.categoryChipTextActive
-                        ]}>
+                        <Text style={[styles.textBold, faqstyle.chipText, isActive && faqstyle.chipTextActive]}>
                             {category}
                         </Text>
                     </TouchableOpacity>
-                ))}
-            </ScrollView>
-        );
-    };
+                );
+            })}
+        </ScrollView>
+    );
 
-    renderFAQItem = (faq, index) => {
+    renderFAQItem = (faq) => {
         const isExpanded = this.state.expandedId === faq.id;
 
         return (
-            <Animated.View key={faq.id} style={faqstyle.faqCard}>
+            <View key={faq.id} style={faqstyle.faqCard}>
                 <TouchableOpacity
                     style={faqstyle.faqHeader}
                     onPress={() => this.toggleExpand(faq.id)}
-                    activeOpacity={0.9}
+                    activeOpacity={0.85}
                 >
-                    <View style={faqstyle.faqHeaderLeft}>
-                        <View style={faqstyle.faqIconContainer}>
-                            <Icon name={faq.icon} size={24} color={C.accent} />
-                        </View>
-                        <View style={faqstyle.faqInfo}>
-                            <View style={faqstyle.faqCategoryBadge}>
-                                <Text style={[faqstyle.faqCategoryText, styles.textBold]}>{faq.category}</Text>
-                            </View>
-                            <Text style={[faqstyle.faqQuestion, styles.textBold]}>{faq.question}</Text>
-                        </View>
+                    <View style={faqstyle.faqTitleGroup}>
+                        <Icon name={faq.icon} size={20} color={COLORS.accentGold} />
+                        <Text style={[styles.textBold, faqstyle.faqQuestion]}>{faq.question}</Text>
                     </View>
-                    <Animated.View style={{
-                        transform: [{
-                            rotate: isExpanded ? '180deg' : '0deg'
-                        }]
-                    }}>
-                        <Icon name="chevron-down" size={24} color={C.textMuted} />
-                    </Animated.View>
+                    <Icon
+                        name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                        size={22}
+                        color={COLORS.textMuted}
+                    />
                 </TouchableOpacity>
 
                 {isExpanded && (
-                    <Animated.View style={faqstyle.faqAnswerContainer}>
-                        <Text style={[faqstyle.faqAnswer, styles.text]}>{faq.answer}</Text>
+                    <View style={faqstyle.faqBody}>
+                        <Text style={[styles.text, faqstyle.faqAnswer]}>{faq.answer}</Text>
 
-                        <View style={faqstyle.faqActions}>
+                        <View style={faqstyle.faqFooter}>
                             <View style={faqstyle.faqStats}>
-                                <View style={faqstyle.statItem}>
-                                    <Icon name="thumb-up-outline" size={16} color={C.textMuted} />
-                                    <Text style={[faqstyle.statText, styles.text]}>{faq.votes}</Text>
-                                </View>
-                                <View style={faqstyle.statItem}>
-                                    <Icon name="eye-outline" size={16} color={C.textMuted} />
-                                    <Text style={[faqstyle.statText, styles.text]}>{faq.views}</Text>
-                                </View>
+                                <Icon name="eye-outline" size={14} color={COLORS.textMuted} />
+                                <Text style={[styles.text, faqstyle.statText]}>{faq.views} vues</Text>
                             </View>
 
                             <View style={faqstyle.actionButtons}>
                                 <TouchableOpacity
-                                    style={faqstyle.actionButton}
+                                    style={faqstyle.actionBtn}
                                     onPress={() => this.handleVote(faq.id, 'up')}
                                 >
-                                    <Icon name="thumb-up" size={18} color={C.accent} />
+                                    <Icon name="thumb-up-outline" size={16} color={COLORS.accentCyan} />
                                 </TouchableOpacity>
+
                                 <TouchableOpacity
-                                    style={faqstyle.actionButton}
-                                    onPress={() => this.handleVote(faq.id, 'down')}
-                                >
-                                    <Icon name="thumb-down" size={18} color={C.textMuted} />
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={faqstyle.actionButton}
+                                    style={faqstyle.actionBtn}
                                     onPress={() => this.shareFAQ(faq)}
                                 >
-                                    <Icon name="share-variant" size={18} color={C.textMuted} />
+                                    <Icon name="share-variant-outline" size={16} color={COLORS.textMuted} />
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    </Animated.View>
+                    </View>
                 )}
-            </Animated.View>
-        );
-    };
-
-    renderContactSection = () => {
-        return (
-            <View style={faqstyle.contactSection}>
-                <Text style={faqstyle.contactTitle}>Vous n'avez pas trouvé votre réponse ?</Text>
-                <Text style={[faqstyle.contactSubtitle, styles.text]}>
-                    Notre équipe de support est là pour vous aider
-                </Text>
-                <TouchableOpacity
-                    style={faqstyle.contactButton}
-                    onPress={this._navigateToSupport}
-                    // onPress={this.handleContactSupport}
-                >
-                    <Icon name="headset" size={20} color="#fff" />
-                    <Text style={[faqstyle.contactButtonText, styles.textBold]}>Contacter le support</Text>
-                </TouchableOpacity>
             </View>
         );
     };
@@ -385,51 +293,50 @@ class FAQsIndex extends PureComponent {
                 onRequestClose={() => this.setState({ showContactModal: false })}
             >
                 <View style={faqstyle.modalOverlay}>
-                    <View style={faqstyle.modalContainer}>
+                    <View style={faqstyle.modalContent}>
                         <View style={faqstyle.modalHeader}>
-                            <Text style={faqstyle.modalTitle}>Contacter le support</Text>
+                            <Text style={[styles.textBold, faqstyle.modalTitle]}>✉️ Contacter l'assistance</Text>
                             <TouchableOpacity onPress={() => this.setState({ showContactModal: false })}>
-                                <Icon name="close" size={24} color={C.textMuted} />
+                                <Icon name="close" size={24} color={COLORS.textPrimary} />
                             </TouchableOpacity>
                         </View>
 
                         <ScrollView showsVerticalScrollIndicator={false}>
-                            <Text style={[faqstyle.modalLabel, styles.textBold]}>Comment évaluez-vous notre aide ?</Text>
-                            <View style={faqstyle.ratingContainer}>
-                                {[1, 2, 3, 4, 5].map(rating => (
+                            <Text style={[styles.textBold, faqstyle.modalLabel]}>Évaluez votre expérience</Text>
+                            <View style={faqstyle.ratingRow}>
+                                {[1, 2, 3, 4, 5].map((star) => (
                                     <TouchableOpacity
-                                        key={rating}
-                                        style={[
-                                            faqstyle.ratingStar,
-                                            feedbackRating >= rating && faqstyle.ratingStarActive
-                                        ]}
-                                        onPress={() => this.setState({ feedbackRating: rating })}
+                                        key={star}
+                                        onPress={() => this.setState({ feedbackRating: star })}
                                     >
                                         <Icon
-                                            name={feedbackRating >= rating ? "star" : "star-outline"}
-                                            size={32}
-                                            color={feedbackRating >= rating ? "#FFD700" : C.textMuted}
+                                            name={feedbackRating >= star ? 'star' : 'star-outline'}
+                                            size={28}
+                                            color={feedbackRating >= star ? COLORS.accentGold : COLORS.textMuted}
                                         />
                                     </TouchableOpacity>
                                 ))}
                             </View>
 
-                            <Text style={[faqstyle.modalLabel, styles.textBold]}>Votre message</Text>
+                            <Text style={[styles.textBold, faqstyle.modalLabel]}>Votre message</Text>
                             <TextInput
-                                style={faqstyle.modalInput}
+                                style={[styles.text, faqstyle.modalInput]}
                                 multiline
-                                numberOfLines={5}
-                                placeholder="Décrivez votre problème..."
-                                placeholderTextColor={C.textMuted}
+                                numberOfLines={4}
+                                placeholder="Décrivez en détail votre requête..."
+                                placeholderTextColor={COLORS.textMuted}
                                 value={feedbackMessage}
                                 onChangeText={(text) => this.setState({ feedbackMessage: text })}
                             />
 
                             <TouchableOpacity
-                                style={faqstyle.modalSubmitButton}
+                                style={faqstyle.modalSubmitBtn}
                                 onPress={this.submitFeedback}
+                                activeOpacity={0.85}
                             >
-                                <Text style={faqstyle.modalSubmitText}>Envoyer</Text>
+                                <Text style={[styles.textBold, faqstyle.modalSubmitText]}>
+                                    Envoyer ma demande
+                                </Text>
                             </TouchableOpacity>
                         </ScrollView>
                     </View>
@@ -438,99 +345,96 @@ class FAQsIndex extends PureComponent {
         );
     };
 
-    renderFloatingButton = () => {
-        const scrollY = this.state.scrollY;
-        const translateY = scrollY.interpolate({
-            inputRange: [0, 200],
-            outputRange: [0, 100],
-            extrapolate: 'clamp',
-        });
-
-        return (
-            <Animated.View style={[faqstyle.floatingButton, { transform: [{ translateY }] }]}>
-                <TouchableOpacity
-                    style={faqstyle.floatingButtonTouch}
-                    onPress={() => this.scrollViewRef?.scrollTo({ y: y, animated: true })}
-                >
-                    <Icon name="chevron-up" size={28} color="#fff" />
-                </TouchableOpacity>
-            </Animated.View>
-        );
-    };
-
-    renderToast = () => {
-        const { showFeedbackToast } = this.state;
-        if (!showFeedbackToast) return null;
-
-        return (
-            <View style={faqstyle.toast}>
-                <Icon name="check-circle" size={20} color={C.accent} />
-                <Text style={[faqstyle.toastText, styles.text]}>{showFeedbackToast}</Text>
-            </View>
-        );
-    };
-
     render() {
         const filteredFAQs = this.getFilteredFAQs();
+        const { showFeedbackToast } = this.state;
 
         return (
-            <View style={faqstyle.container}>
-                <ImageBackground
-                    source={require('../../assets/images/background.jpg')}
-                    style={styles.backgroundapp}
-                    resizeMode="cover"
-                >
+            <SafeAreaView style={faqstyle.container}>
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} />
 
-                    <Animated.ScrollView
-                        ref={ref => this.scrollViewRef = ref}
-                        style={faqstyle.scrollView}
-                        showsVerticalScrollIndicator={false}
-                        onScroll={Animated.event(
-                            [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
-                            { useNativeDriver: false }
-                        )}
-                        scrollEventThrottle={16}
+                {/* Ambient Glows */}
+                <View style={faqstyle.topGlow} pointerEvents="none" />
+                <View style={faqstyle.bottomGlow} pointerEvents="none" />
+
+                {/* Navigation Bar */}
+                <View style={faqstyle.headerNav}>
+                    <TouchableOpacity
+                        style={faqstyle.backButton}
+                        onPress={this._navigateToProfil}
+                        activeOpacity={0.7}
                     >
-                        {this.renderHero()}
-                        {this.renderCategories()}
+                        <Entypo name="chevron-left" size={24} color={COLORS.textPrimary} />
+                    </TouchableOpacity>
 
-                        <View style={faqstyle.faqList}>
-                            {filteredFAQs.length > 0 ? (
-                                filteredFAQs.map((faq, index) => this.renderFAQItem(faq, index))
-                            ) : (
-                                <View style={faqstyle.emptyState}>
-                                    <Icon name="help-circle-outline" size={80} color={C.textMuted} />
-                                    <Text style={[faqstyle.emptyStateTitle, styles.textBold]}>Aucun résultat trouvé</Text>
-                                    <Text style={[faqstyle.emptyStateSubtitle, styles.text]}>
-                                        Essayez d'autres mots-clés ou parcourez les catégories
-                                    </Text>
-                                </View>
-                            )}
-                        </View>
+                    <View style={faqstyle.headerTitleWrapper}>
+                        <Text style={[styles.textBold, faqstyle.headerTitle]}>Foire Aux Questions</Text>
+                    </View>
+                </View>
 
-                        {this.renderContactSection()}
-                        <View style={{ height: 10 }} />
-                        <View style={faqstyle.footer} />
-                    </Animated.ScrollView>
+                <ScrollView
+                    contentContainerStyle={faqstyle.scrollContent}
+                    showsVerticalScrollIndicator={false}
+                >
+                    {this.renderHero()}
+                    {this.renderCategories()}
 
-                    {this.renderHeader()}
-                    {this.renderFloatingButton()}
-                    {this.renderContactModal()}
-                    {this.renderToast()}
+                    <View style={faqstyle.faqList}>
+                        {filteredFAQs.length > 0 ? (
+                            filteredFAQs.map((faq) => this.renderFAQItem(faq))
+                        ) : (
+                            <View style={faqstyle.emptyState}>
+                                <Icon name="file-search-outline" size={48} color={COLORS.accentGold} />
+                                <Text style={[styles.textBold, faqstyle.emptyTitle]}>Aucune question trouvée</Text>
+                                <Text style={[styles.text, faqstyle.emptySubtitle]}>
+                                    Essayez de rechercher avec d'autres mots-clés.
+                                </Text>
+                            </View>
+                        )}
+                    </View>
 
-                </ImageBackground>
-            </View>
+                    {/* Section Support Client */}
+                    <View style={faqstyle.contactCard}>
+                        <Icon name="headset" size={32} color={COLORS.accentGold} />
+                        <Text style={[styles.textBold, faqstyle.contactTitle]}>
+                            Vous ne trouvez pas votre réponse ?
+                        </Text>
+                        <Text style={[styles.text, faqstyle.contactSubtitle]}>
+                            Notre équipe d'assistance académique est à votre écoute.
+                        </Text>
+                        <TouchableOpacity
+                            style={faqstyle.contactButton}
+                            onPress={this._navigateToSupport}
+                            activeOpacity={0.85}
+                        >
+                            <Text style={[styles.textBold, faqstyle.contactButtonText]}>
+                                Contacter le support
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
+
+                {this.renderContactModal()}
+
+                {showFeedbackToast && (
+                    <View style={faqstyle.toast}>
+                        <Icon name="check-circle" size={18} color={COLORS.accentGold} />
+                        <Text style={[styles.text, faqstyle.toastText]}>{showFeedbackToast}</Text>
+                    </View>
+                )}
+            </SafeAreaView>
         );
     }
 }
 
-
-
 const mapDispatchToProps = (dispatch) => ({
-    ...bindActionCreators({
-        switchProfilPageAction,
-        switchSupportHomeAction
-    }, dispatch),
+    ...bindActionCreators(
+        {
+            switchProfilPageAction,
+            switchSupportHomeAction,
+        },
+        dispatch
+    ),
 });
 
 const mapStateToProps = (state) => ({

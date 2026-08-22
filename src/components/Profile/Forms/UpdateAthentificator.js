@@ -1,24 +1,33 @@
 import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, Image, ImageBackground, TextInput, Animated, ActivityIndicator } from 'react-native';
-import { UpdateNotificationPermissionAction } from '../../../reducers/actions/index.js';
+import {
+    SafeAreaView,
+    View,
+    Text,
+    TouchableOpacity,
+    Switch,
+    Animated,
+    ActivityIndicator,
+    StatusBar,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+
 import { styles } from '../../../assets/styles/index.js';
-import Toast from 'react-native-toast-message';
 import { profilstyle } from '../../../assets/styles/profil.js';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5.js';
+import { COLORS } from '../../../assets/styles/theme.js';
+import { UpdateNotificationPermissionAction } from '../../../reducers/actions/index.js';
 import { switchProfilPageAction } from '../../../navigations/rootNavigation.js';
 
 class UpdateAuthentification extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            receive_announce: false,
-            send_money: false,
-            receive_money: false,
-            payment_issue: false,
-            special_offer: false,
-            user_experience: false,
+            enable_biometric: false,
+            enable_face_id: false,
+            enable_email_auth: true,
+            enable_sms_auth: false,
             scrollY: new Animated.Value(0),
         };
 
@@ -29,241 +38,177 @@ class UpdateAuthentification extends PureComponent {
     }
 
     componentDidMount() {
-        this._loadNotifInfo();
+        this._loadAuthSettings();
     }
 
-    _loadNotifInfo = () => {
+    _loadAuthSettings = () => {
         const { user_infos } = this.props;
-        this.setState({
-            receive_announce: user_infos.can_notif_announce,
-            send_money: user_infos.can_notif_send_money,
-            receive_money: user_infos.can_notif_receive_money,
-            payment_issue: user_infos.can_notif_error_trans,
-            special_offer: user_infos.can_notif_special_offer,
-            user_experience: user_infos.can_notif_user_feedback,
-        })
-    }
+        if (user_infos) {
+            this.setState({
+                enable_biometric: !!user_infos.can_use_biometrics,
+                enable_face_id: !!user_infos.can_use_face_id,
+                enable_email_auth: user_infos.can_use_email_2fa !== undefined ? !!user_infos.can_use_email_2fa : true,
+                enable_sms_auth: !!user_infos.can_use_sms_2fa,
+            });
+        }
+    };
 
     _navigateToProfil = () => {
         switchProfilPageAction(true);
-    }
+    };
 
-    _toggleReceiveAnounce = () => {
-        const { receive_announce } = this.state;
-        this.setState({ receive_announce: !receive_announce });
-    }
-
-    _toggleSendMoney = () => {
-        const { send_money } = this.state;
-        this.setState({ send_money: !send_money });
-    }
-
-    _toggleReceiveMoney = () => {
-        const { receive_money } = this.state;
-        this.setState({ receive_money: !receive_money });
-    }
-
-    _togglePaymentIssueMoney = () => {
-        const { payment_issue } = this.state;
-        this.setState({ payment_issue: !payment_issue });
-    }
-
-    _toggleSpecialOffer = () => {
-        const { special_offer } = this.state;
-        this.setState({ special_offer: !special_offer });
-    }
-
-    _toggleUserExperience = () => {
-        const { user_experience } = this.state;
-        this.setState({ user_experience: !user_experience });
-    }
-
-    _updateNotify = () => {
+    _updateAuthSettings = () => {
         const { user_token } = this.props;
-        const { receive_announce, send_money, receive_money, payment_issue, special_offer, user_experience } = this.state;
+        const { enable_biometric, enable_face_id, enable_email_auth, enable_sms_auth } = this.state;
+
         const data = JSON.stringify({
             token: user_token,
-            can_notif_announce: receive_announce,
-            can_notif_send_money: send_money,
-            can_notif_receive_money: receive_money,
-            can_notif_error_trans: payment_issue,
-            can_notif_special_offer: special_offer,
-            can_notif_user_feedback: user_experience,
-        })
-        UpdateNotificationPermissionAction(data)
-    }
-    renderHeader = () => {
-        const headerOpacity = this.state.scrollY.interpolate({
-            inputRange: [0, 100],
-            outputRange: [0, 1],
-            extrapolate: 'clamp',
+            can_use_biometrics: enable_biometric,
+            can_use_face_id: enable_face_id,
+            can_use_email_2fa: enable_email_auth,
+            can_use_sms_2fa: enable_sms_auth,
         });
 
-        return (
-            <Animated.View style={[profilstyle.header, { opacity: headerOpacity }]}>
-                <View style={styles.section}>
-                    <View style={profilstyle.headerSection}>
-                        <View style={profilstyle.headerbuttonContainer}>
-                            <TouchableOpacity
-                                style={profilstyle.headerButton}
-                                onPress={this._navigateToProfil}>
-                                <Image style={styles.backstyle} source={require('../../../assets/images/back.png')} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={profilstyle.headertext}>
-                            <Text style={[profilstyle.headerTitle, styles.textBold]}>Authentification à double facteur(2FA)</Text>
-                        </View>
+        UpdateNotificationPermissionAction(data);
+    };
 
+    render2FAItem = (title, subtitle, iconName, iconColor, value, onValueChange) => (
+        <View style={profilstyle.cardItem}>
+            <View style={profilstyle.authItemContent}>
+                <View style={[profilstyle.authIconContainer, { backgroundColor: `${iconColor}15` }]}>
+                    <Icon name={iconName} size={22} color={iconColor} />
+                </View>
+                <View style={profilstyle.authTextWrapper}>
+                    <Text style={[styles.textBold, profilstyle.authTitle]}>{title}</Text>
+                    <Text style={[styles.text, profilstyle.authSubtitle]}>{subtitle}</Text>
+                </View>
+                <Switch
+                    value={value}
+                    onValueChange={onValueChange}
+                    trackColor={{ false: '#334155', true: COLORS.accentGold }}
+                    thumbColor={COLORS.textPrimary}
+                />
+            </View>
+        </View>
+    );
+
+    render() {
+        const { is_loading } = this.props;
+        const { enable_biometric, enable_face_id, enable_email_auth, enable_sms_auth } = this.state;
+
+        return (
+            <SafeAreaView style={profilstyle.containerform}>
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} />
+
+                {/* Ambient Glows */}
+                <View style={profilstyle.topGlow} pointerEvents="none" />
+                <View style={profilstyle.bottomGlow} pointerEvents="none" />
+
+                {/* Header Bar */}
+                <View style={profilstyle.headerNav}>
+                    <TouchableOpacity
+                        style={profilstyle.backButton}
+                        onPress={this._navigateToProfil}
+                        activeOpacity={0.7}
+                    >
+                        <Entypo name="chevron-left" size={24} color={COLORS.textPrimary} />
+                    </TouchableOpacity>
+
+                    <View style={profilstyle.headerTitleWrapper}>
+                        <Text style={[styles.textBold, profilstyle.headerTitle]}>Sécurité & 2FA</Text>
                     </View>
                 </View>
-            </Animated.View>
-        );
-    };
-    render() {
-        const { user_infos, is_loading, site_infos } = this.props;
-        const {
-            receive_announce,
-            send_money,
-            receive_money,
-            payment_issue,
-            special_offer,
-            user_experience
-        } = this.state;
-        return (
-            <View style={profilstyle.containerform}>
-                <ImageBackground
-                    source={require('../../../assets/images/background.jpg')}
-                    style={styles.backgroundapp}
-                    resizeMode="cover"
+
+                <Animated.ScrollView
+                    contentContainerStyle={profilstyle.scrollContent}
+                    onScroll={this.handleScroll}
+                    scrollEventThrottle={16}
+                    showsVerticalScrollIndicator={false}
                 >
-                    <Animated.ScrollView
-                        style={profilstyle.container}
-                        onScroll={this.handleScroll}
-                        scrollEventThrottle={16}
-                        showsVerticalScrollIndicator={false}
-                    >
+                    {/* Card d'Information */}
+                    <View style={profilstyle.infoBox2FA}>
+                        <Icon name="shield-check" size={26} color={COLORS.accentGold} />
+                        <Text style={[styles.text, profilstyle.infoBox2FAText]}>
+                            Activez la double authentification pour protéger la connexion à votre compte et vos transactions académiques.
+                        </Text>
+                    </View>
 
-                        <View style={profilstyle.section}>
-                            <View style={styles.section}>
-                                <View style={styles.back}>
-                                    <TouchableOpacity onPress={this._navigateToProfil}>
-                                        <Image style={styles.backstyle} source={require('../../../assets/images/back.png')} />
-                                    </TouchableOpacity>
-                                </View>
-                                <Text style={[styles.sectionTitle, styles.textBold,]}>Authentification à double facteur(2FA)</Text>
-                            </View>
-                        </View>
+                    <View style={profilstyle.formContainer}>
+                        {this.render2FAItem(
+                            'Empreinte digitale',
+                            "Autoriser la connexion rapide par capteur d'empreinte",
+                            'fingerprint',
+                            COLORS.accentGold,
+                            enable_biometric,
+                            (val) => this.setState({ enable_biometric: val })
+                        )}
 
-                        <View style={profilstyle.formcontainer}>
+                        {this.render2FAItem(
+                            'Reconnaissance faciale',
+                            "Autoriser la validation par reconnaissance faciale (Face ID)",
+                            'face-recognition',
+                            COLORS.accentCyan,
+                            enable_face_id,
+                            (val) => this.setState({ enable_face_id: val })
+                        )}
 
-                            
-                
+                        {this.render2FAItem(
+                            'Vérification par Email',
+                            "Recevoir un code de sécurité à 6 chiffres par e-mail",
+                            'email-outline',
+                            COLORS.accentGold,
+                            enable_email_auth,
+                            (val) => this.setState({ enable_email_auth: val })
+                        )}
 
-                            <View style={profilstyle.formcheckitem}>
-                                <View style={profilstyle.labelcheckitem}>
-                                    <Text style={[styles.textBold, profilstyle.label]}>Empreinte digitale</Text>
-                                    <Text style={[styles.text, profilstyle.sublabel]}>Autoriser l'authentification par empreinte digitale</Text>
-                                </View>
-                                <View style={profilstyle.checkbtncont}>
-                                    <TouchableOpacity onPress={this._toggleSpecialOffer}
-                                        style={[profilstyle.checkbtn, special_offer ? profilstyle.ischeckbtn : '']}>
-                                        {
-                                            special_offer ?
-                                                <FontAwesome5Icon name='check' style={profilstyle.ischeckicon} />
-                                                : null
-                                        }
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
+                        {this.render2FAItem(
+                            'Vérification par SMS',
+                            'Recevoir un code de confirmation par SMS sur votre mobile',
+                            'message-lock-outline',
+                            COLORS.accentCyan,
+                            enable_sms_auth,
+                            (val) => this.setState({ enable_sms_auth: val })
+                        )}
 
-                            <View style={profilstyle.formcheckitem}>
-                                <View style={profilstyle.labelcheckitem}>
-                                    <Text style={[styles.textBold, profilstyle.label]}>Reconnaissance faciale</Text>
-                                    <Text style={[styles.text, profilstyle.sublabel]}>Autoriser l'authentification par reconnaissance faciale</Text>
-                                </View>
-                                <View style={profilstyle.checkbtncont}>
-                                    <TouchableOpacity onPress={this._toggleReceiveAnounce}
-                                        style={[profilstyle.checkbtn, receive_announce ? profilstyle.ischeckbtn : '']}>
-                                        {
-                                            receive_announce ?
-                                                <FontAwesome5Icon name='check' style={profilstyle.ischeckicon} />
-                                                : null
-                                        }
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-
-                            <View style={profilstyle.formcheckitem}>
-                                <View style={profilstyle.labelcheckitem}>
-                                    <Text style={[styles.textBold, profilstyle.label]}>Vérification par Email</Text>
-                                    <Text style={[styles.text, profilstyle.sublabel]}>Autoriser l'authentification par envoir d'email</Text>
-                                </View>
-                                <View style={profilstyle.checkbtncont}>
-                                    <TouchableOpacity onPress={this._toggleReceiveAnounce}
-                                        style={[profilstyle.checkbtn, receive_announce ? profilstyle.ischeckbtn : '']}>
-                                        {
-                                            receive_announce ?
-                                                <FontAwesome5Icon name='check' style={profilstyle.ischeckicon} />
-                                                : null
-                                        }
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-
-                            <View style={profilstyle.formcheckitem}>
-                                <View style={profilstyle.labelcheckitem}>
-                                    <Text style={[styles.textBold, profilstyle.label]}>Vérification par SMS</Text>
-                                    <Text style={[styles.text, profilstyle.sublabel]}>Autoriser l'authentification par envoie de sms</Text>
-                                </View>
-                                <View style={profilstyle.checkbtncont}>
-                                    <TouchableOpacity onPress={this._toggleReceiveAnounce}
-                                        style={[profilstyle.checkbtn, receive_announce ? profilstyle.ischeckbtn : '']}>
-                                        {
-                                            receive_announce ?
-                                                <FontAwesome5Icon name='check' style={profilstyle.ischeckicon} />
-                                                : null
-                                        }
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-
-                            <TouchableOpacity onPress={this._updateNotify}
-                                style={profilstyle.submitButton}
-                                disabled={is_loading ? true : false}
-                            >
-                                {
-                                    is_loading ?
-                                        <ActivityIndicator size="small" color="#fff" />
-                                        :
-                                        <Text style={[styles.textBold, profilstyle.submitBtnText]}>Enregistrer</Text>
-                                }
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ height: 60 }} />
-                    </Animated.ScrollView>
-                    {this.renderHeader()}
-                </ImageBackground>
-            </View>
+                        {/* Bouton de Soumission */}
+                        <TouchableOpacity
+                            onPress={this._updateAuthSettings}
+                            style={profilstyle.submitButton}
+                            activeOpacity={0.85}
+                            disabled={is_loading}
+                        >
+                            {is_loading ? (
+                                <ActivityIndicator size="small" color={COLORS.textDark} />
+                            ) : (
+                                <>
+                                    <Icon name="shield-lock-outline" size={20} color={COLORS.textDark} style={{ marginRight: 8 }} />
+                                    <Text style={[styles.textBold, profilstyle.submitBtnText]}>
+                                        Enregistrer la sécurité 2FA
+                                    </Text>
+                                </>
+                            )}
+                        </TouchableOpacity>
+                    </View>
+                </Animated.ScrollView>
+            </SafeAreaView>
         );
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        ...bindActionCreators({
+const mapDispatchToProps = (dispatch) => ({
+    ...bindActionCreators(
+        {
             UpdateNotificationPermissionAction,
-            switchProfilPageAction
-        }, dispatch),
-    }
-};
+            switchProfilPageAction,
+        },
+        dispatch
+    ),
+});
 
-const mapStateToProps = (state) => {
-    return {
-        is_loading: state.loader.is_loading,
-        user_infos: state.auth.user_infos,
-        user_token: state.auth.user_token,
-        site_infos: state.auth.site_infos,
-    }
-}
+const mapStateToProps = (state) => ({
+    is_loading: state.loader.is_loading,
+    user_infos: state.auth.user_infos,
+    user_token: state.auth.user_token,
+});
 
-export default connect(mapStateToProps, mapDispatchToProps, null)(UpdateAuthentification);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateAuthentification);

@@ -22,6 +22,7 @@ import { styles } from '../../assets/styles';
 import { sigupstyle } from '../../assets/styles/signup';
 import { AccountActivationAction, resentActivationCodeAction } from '../../reducers/actions';
 import { switchSignupForm2Action } from '../../navigations/rootNavigation';
+import { COLORS } from '../../assets/styles/theme';
 
 class Activation extends PureComponent {
     constructor(props) {
@@ -102,7 +103,7 @@ class Activation extends PureComponent {
 
         return (
             <View style={sigupstyle.container}>
-                <StatusBar barStyle="light-content" backgroundColor="#011638" />
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} />
 
                 {/* Ambient Glowing Orbs */}
                 <View style={sigupstyle.topGlow} />

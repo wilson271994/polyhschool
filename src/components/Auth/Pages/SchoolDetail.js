@@ -21,8 +21,7 @@ import { htmlStyles, schooldetailstyle } from '../../../assets/styles/school_det
 import { switchSchoolSelectionAction } from '../../../navigations/rootNavigation.js';
 import { styles } from '../../../assets/styles/index.js';
 import { BASE_URL } from '../../../api/config.js';
-
-const { width } = Dimensions.get('window');
+import { COLORS } from '../../../assets/styles/theme.js';
 
 class School_Detail extends PureComponent {
     constructor(props) {
@@ -386,7 +385,7 @@ class School_Detail extends PureComponent {
     render() {
         return (
             <SafeAreaView style={schooldetailstyle.container}>
-                <StatusBar barStyle="light-content" backgroundColor="#011638" />
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary}  />
 
                 {/* Ambient Glow Orbs */}
                 <View style={schooldetailstyle.topGlow} />
