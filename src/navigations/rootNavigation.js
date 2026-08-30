@@ -9,14 +9,12 @@ import {
     SET_HOME_PARENT, SET_REGISTER_1, SET_REGISTER_2, SET_SCHOOL_SELECTION_PAGE, SET_SCHOOL_DETAILS_PAGE,
     SET_SCHOOL_SELECTION_PARENT_PAGE, SET_SCHOOL_DETAILS_PARENT_PAGE,
     SET_STUDENT_MENU_PAGE,
-    SET_STUDENT_AGENDA_PAGE,
     SET_STUDENT_ABSENCES_PAGE,
     SET_STUDENT_INFOS_PAGE,
     SET_STUDENT_PLANNING_PAGE,
     SET_STUDENT_PROGRESS_PAGE,
     SET_STUDENT_ACTIVITIES_PAGE,
     SET_TEACHER_LIST_PAGE,
-    SET_STUDENT_HOMEWORK_PAGE,
     SET_SCHOOL_FEES_PAGE,
     SET_STUDENT_REMARKS_PAGE,
     SET_CHILD_INFOS_PAGE,
@@ -82,7 +80,8 @@ import {
     SET_NEW_CHOOSE_ADMISSION_TYPE_PAGE,
     SET_NEW_UPLOAD_DOCUMENT_PAGE,
     SET_SIGNUP3_FORM,
-    SET_TEACHER_INFOS
+    SET_TEACHER_INFOS,
+    TOGGLE_FOOTER_VISIBILITY
 } from "../reducers/actions/types"
 import { store } from "../reducers/store";
 
@@ -173,6 +172,7 @@ export const switchSchoolSelectionAction = (data) => {
         store.dispatch({ type: SET_SCHOOL_DETAILS_PAGE, value: false });
     }
 }
+
 export const switchSchoolDetailsAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_SCHOOL_DETAILS_PAGE, value: data });
@@ -185,6 +185,7 @@ export const switchSchoolDetailsAction = (data) => {
         store.dispatch({ type: SET_SCHOOL_SELECTION_PAGE, value: false });
     }
 }
+
 export const switchActivationFormAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_ACTIVATION_FORM, value: data });
@@ -197,7 +198,6 @@ export const switchActivationFormAction = (data) => {
         store.dispatch({ type: SET_SCHOOL_DETAILS_PAGE, value: false });
     }
 }
-
 
 export const setSelectedSchoolAction = (school) => {
     store.dispatch({
@@ -289,8 +289,9 @@ export const switchHomePageAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_BOOK_SHOP_DETAIL_DETAILS, value: false });
     }
 }
+
 /**
- * Sub PAGE
+ * HOME SUB PAGE
  */
 export const switchMenuStudentPageAction = (data) => {
     if (data) {
@@ -299,7 +300,6 @@ export const switchMenuStudentPageAction = (data) => {
         store.dispatch({ type: SET_SUPPORT_HOME, value: false });
         store.dispatch({ type: SET_SUPPORT_CHAT, value: false });
         store.dispatch({ type: SET_NOTIF_HOME, value: false });
-
 
         //Sub page
         store.dispatch({ type: SET_CHILD_INFOS_PAGE, value: false });
@@ -328,11 +328,11 @@ export const switchMenuStudentPageAction = (data) => {
         store.dispatch({ type: SET_NEW_UPLOAD_DOCUMENT_PAGE, value: false});
 
         //Sub Sub page
-
         store.dispatch({ type: SET_STUDENT_BOOK_DETAILS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_BOOK_SHOP_DETAILS_PAGE, value: false });
     }
 }
+
 export const switchChildInfosPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_CHILD_INFOS_PAGE, value: data });
@@ -368,6 +368,7 @@ export const switchChildInfosPageAction = (data) => {
         store.dispatch({ type: SET_NEW_UPLOAD_DOCUMENT_PAGE, value: false});
     }
 }
+
 export const switchListTeacherPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_LIST_TEACHER_PAGE, value: data });
@@ -403,6 +404,7 @@ export const switchListTeacherPageAction = (data) => {
         store.dispatch({ type: SET_NEW_UPLOAD_DOCUMENT_PAGE, value: false});
     }
 }
+
 export const switchPlanningStudentPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_PLANNING_STUDENT_PAGE, value: data });
@@ -438,6 +440,7 @@ export const switchPlanningStudentPageAction = (data) => {
         store.dispatch({ type: SET_NEW_UPLOAD_DOCUMENT_PAGE, value: false});
     }
 }
+
 export const switchAbsenceStudentPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_ABSENCES_STUDENT_PAGE, value: data });
@@ -473,6 +476,7 @@ export const switchAbsenceStudentPageAction = (data) => {
         store.dispatch({ type: SET_NEW_UPLOAD_DOCUMENT_PAGE, value: false});
     }
 }
+
 export const switchRemarkStudentPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_REMARK_STUDENT_PAGE, value: data });
@@ -508,6 +512,7 @@ export const switchRemarkStudentPageAction = (data) => {
         store.dispatch({ type: SET_NEW_UPLOAD_DOCUMENT_PAGE, value: false});
     }
 }
+
 export const switchHomeworkStudentPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_HOMEWORK_STUDENT_PAGE, value: data });
@@ -541,6 +546,7 @@ export const switchHomeworkStudentPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
+
 export const switchSchoolFeesPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_FEES_SCHOOL_PAGE, value: data });
@@ -574,6 +580,7 @@ export const switchSchoolFeesPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
+
 export const switchStudentProgressionPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_STUDENT_PROGRESSION_PAGE, value: data });
@@ -587,7 +594,8 @@ export const switchStudentProgressionPageAction = (data) => {
         store.dispatch({ type: SET_PLANNING_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_ABSENCES_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_REMARK_STUDENT_PAGE, value: false });
-        store.dispatch({ type: SET_HOMEWORK_STUDENT_PAGE, value: false });
+  SET_HOMEWORK_STUDENT_PAGE
+
         store.dispatch({ type: SET_FEES_SCHOOL_PAGE, value: false });
         store.dispatch({ type: SET_ACTIVITIES_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
@@ -607,6 +615,7 @@ export const switchStudentProgressionPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
+
 export const switchActivitiesStudentPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_ACTIVITIES_STUDENT_PAGE, value: data });
@@ -640,6 +649,7 @@ export const switchActivitiesStudentPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
+
 export const switchAgendaStudentPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: data });
@@ -673,6 +683,7 @@ export const switchAgendaStudentPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
+
 export const switchAdvanceRemarkFilterPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_ADVANCE_REMARKS_FILTER_PAGE, value: data });
@@ -706,6 +717,7 @@ export const switchAdvanceRemarkFilterPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
+
 export const switchStudentTransportPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_STUDENT_TRANSPORT_PAGE, value: data });
@@ -739,6 +751,7 @@ export const switchStudentTransportPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
+
 export const switchStudentHostingPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_STUDENT_HOSTING_PAGE, value: data });
@@ -772,6 +785,7 @@ export const switchStudentHostingPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
+
 export const switchInfosTeacherPageAction = (status, data) => {
     if (data) {
         store.dispatch({ type: SET_INFOS_TEACHER_PAGE, value: status });
@@ -874,6 +888,7 @@ export const switchStudentLibraryPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
+
 export const switchStudentBookDetailsPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_STUDENT_BOOK_DETAILS_PAGE, value: data });
@@ -907,6 +922,7 @@ export const switchStudentBookDetailsPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
+
 export const switchStudentBookShopPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_STUDENT_BOOK_SHOP_PAGE, value: data });
@@ -940,6 +956,7 @@ export const switchStudentBookShopPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
+
 export const switchStudentBookShopDetaisPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_STUDENT_BOOK_SHOP_DETAILS_PAGE, value: data });
@@ -973,6 +990,7 @@ export const switchStudentBookShopDetaisPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
+
 export const switchStudentCVPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_STUDENT_CV_PAGE, value: data });
@@ -1006,7 +1024,6 @@ export const switchStudentCVPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
-
 
 export const switchStudentChoolSelectedPageAction = (data) => {
     if (data) {
@@ -1042,7 +1059,6 @@ export const switchStudentChoolSelectedPageAction = (data) => {
     }
 }
 
-
 export const switchStudentChooseAccountPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_CHOOSE_ACCOUNT_FORM_PAGE, value: data });
@@ -1076,6 +1092,7 @@ export const switchStudentChooseAccountPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
+
 export const switchStudentChoolDetailsPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_SCHOOL_DETAILS_FORM_PAGE, value: data });
@@ -1109,7 +1126,6 @@ export const switchStudentChoolDetailsPageAction = (data) => {
         store.dispatch({ type: SET_NEW_STUDENT_FORM_PAGE, value: false });
     }
 }
-
 
 export const switchStudentNewStudentFormPageAction = (data) => {
     if (data) {
@@ -1145,7 +1161,6 @@ export const switchStudentNewStudentFormPageAction = (data) => {
     }
 }
 
-
 export const switchNewAdmissionTypePageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_NEW_CHOOSE_ADMISSION_TYPE_PAGE, value: data });
@@ -1179,6 +1194,7 @@ export const switchNewAdmissionTypePageAction = (data) => {
         store.dispatch({ type: SET_SCHOOL_DETAILS_FORM_PAGE, value: false });
     }
 }
+
 export const switchNewUploadDocumentPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_NEW_UPLOAD_DOCUMENT_PAGE, value: data });
@@ -1212,6 +1228,7 @@ export const switchNewUploadDocumentPageAction = (data) => {
         store.dispatch({ type: SET_SCHOOL_DETAILS_FORM_PAGE, value: false });
     }
 }
+
 export const setSelectedBookAction = (book) => {
     store.dispatch({
         type: SET_SELECTED_BOOK,
@@ -1226,41 +1243,6 @@ export const setPaidBookAction = (bookId) => {
     });
 };
 
-/**
- * Course History 
- */
-
-export const switchCourseHistoryPageAction = (data) => {
-    if (data) {
-        store.dispatch({ type: SET_COURSE_HISTORY_PAGE, value: data });
-        store.dispatch({ type: SET_COURSE_HISTORY_HOME, value: data });
-        store.dispatch({ type: SET_PROFIL_PAGE, value: false });
-        store.dispatch({ type: SET_MESSAGE_PAGE, value: false });
-        store.dispatch({ type: SET_COURSE_PAGE, value: false });
-        store.dispatch({ type: SET_HOME_PAGE, value: false });
-
-        //Sub page
-        store.dispatch({ type: SET_COURSE_DETAIL_PAGE, value: false });
-        store.dispatch({ type: SET_PARENT_COURSE_HISTORY_PAGE, value: false });
-    }
-}
-
-
-export const switchCourseDetailsAction = (data) => {
-    if (data) {
-        store.dispatch({ type: SET_COURSE_DETAIL_PAGE, value: data });
-        store.dispatch({ type: SET_COURSE_HISTORY_HOME, value: false });
-        store.dispatch({ type: SET_PARENT_COURSE_HISTORY_PAGE, value: false });
-    }
-}
-
-export const switchParentCourseHistoryAction = (data) => {
-    if (data) {
-        store.dispatch({ type: SET_PARENT_COURSE_HISTORY_PAGE, value: data });
-        store.dispatch({ type: SET_COURSE_HISTORY_HOME, value: false });
-        store.dispatch({ type: SET_COURSE_DETAIL_PAGE, value: false });
-    }
-}
 
 /**
  * Course 
@@ -1309,10 +1291,42 @@ export const switchCourseParentAction = (data) => {
         store.dispatch({ type: SET_ADVANCE_COURSE_SEARCH, value: false });
     }
 }
+
+export const switchCourseHistoryPageAction = (data) => {
+    if (data) {
+        store.dispatch({ type: SET_COURSE_HISTORY_PAGE, value: data });
+        store.dispatch({ type: SET_COURSE_HISTORY_HOME, value: data });
+        store.dispatch({ type: SET_PROFIL_PAGE, value: false });
+        store.dispatch({ type: SET_MESSAGE_PAGE, value: false });
+        store.dispatch({ type: SET_COURSE_PAGE, value: false });
+        store.dispatch({ type: SET_HOME_PAGE, value: false });
+
+        //Sub page
+        store.dispatch({ type: SET_COURSE_DETAIL_PAGE, value: false });
+        store.dispatch({ type: SET_PARENT_COURSE_HISTORY_PAGE, value: false });
+    }
+}
+
+export const switchCourseDetailsAction = (data) => {
+    if (data) {
+        store.dispatch({ type: SET_COURSE_DETAIL_PAGE, value: data });
+        store.dispatch({ type: SET_COURSE_HISTORY_HOME, value: false });
+        store.dispatch({ type: SET_PARENT_COURSE_HISTORY_PAGE, value: false });
+    }
+}
+
+export const switchParentCourseHistoryAction = (data) => {
+    if (data) {
+        store.dispatch({ type: SET_PARENT_COURSE_HISTORY_PAGE, value: data });
+        store.dispatch({ type: SET_COURSE_HISTORY_HOME, value: false });
+        store.dispatch({ type: SET_COURSE_DETAIL_PAGE, value: false });
+    }
+}
+
+
 /**
  * Message 
  */
-
 export const switchMessagePageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_MESSAGE_PAGE, value: data });
@@ -1332,6 +1346,7 @@ export const switchMessagePageAction = (data) => {
         store.dispatch({ type: SET_ARCHIVED_MESSAGE_PAGE, value: false });
     }
 }
+
 export const switchChatPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_CHAT_INDEX_PAGE, value: data });
@@ -1344,6 +1359,7 @@ export const switchChatPageAction = (data) => {
         store.dispatch({ type: SET_ARCHIVED_MESSAGE_PAGE, value: false });
     }
 }
+
 export const switchAdvanceMessageFilterPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_ADVANCE_MESSAGE_FILTER_PAGE, value: data });
@@ -1356,6 +1372,7 @@ export const switchAdvanceMessageFilterPageAction = (data) => {
         store.dispatch({ type: SET_ARCHIVED_MESSAGE_PAGE, value: false });
     }
 }
+
 export const switchContactPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_CONTACT_PAGE, value: data });
@@ -1368,6 +1385,7 @@ export const switchContactPageAction = (data) => {
         store.dispatch({ type: SET_ARCHIVED_MESSAGE_PAGE, value: false });
     }
 }
+
 export const switchContactProfilePageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_CONTACT_PROFILE_PAGE, value: data });
@@ -1380,6 +1398,7 @@ export const switchContactProfilePageAction = (data) => {
         store.dispatch({ type: SET_ARCHIVED_MESSAGE_PAGE, value: false });
     }
 }
+
 export const switchContactNotificationPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_CONTACT_NOTIFICATION_PAGE, value: data });
@@ -1392,6 +1411,7 @@ export const switchContactNotificationPageAction = (data) => {
         store.dispatch({ type: SET_ARCHIVED_MESSAGE_PAGE, value: false });
     }
 }
+
 export const switchChatMediaPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_MEDIA_CHAT_PAGE, value: data });
@@ -1404,6 +1424,7 @@ export const switchChatMediaPageAction = (data) => {
         store.dispatch({ type: SET_ARCHIVED_MESSAGE_PAGE, value: false });
     }
 }
+
 export const switchArchivedMessagePageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_ARCHIVED_MESSAGE_PAGE, value: data });
@@ -1417,6 +1438,7 @@ export const switchArchivedMessagePageAction = (data) => {
     }
 }
 
+
 /**
  * Profil 
  */
@@ -1426,13 +1448,13 @@ export const switchProfilPageAction = (data) => {
         store.dispatch({ type: SET_PROFIL_PAGE, value: data });
         store.dispatch({ type: SET_PROFIL_HOME, value: data });
 
-        //navigation page
+        //Disconnect all pages
         store.dispatch({ type: SET_MESSAGE_PAGE, value: false });
         store.dispatch({ type: SET_COURSE_PAGE, value: false });
         store.dispatch({ type: SET_HOME_PAGE, value: false });
         store.dispatch({ type: SET_COURSE_HISTORY_PAGE, value: false });
 
-        //Sub page
+        //Disconnect Sub pages
         store.dispatch({ type: SET_PROFIL_UPDATE_INFO, value: false });
         store.dispatch({ type: SET_FAQS_PAGE, value: false });
         store.dispatch({ type: SET_KYC_PAGE, value: false });
@@ -1442,9 +1464,12 @@ export const switchProfilPageAction = (data) => {
         store.dispatch({ type: SET_ADD_DESCRIPTION_PAGE, value: false });
         store.dispatch({ type: SET_UPDATE_AUTHENTIFICATION_PAGE, value: false });
         store.dispatch({ type: SET_UPDATE_PASSWORD_PAGE, value: false });
+        store.dispatch({ type: SET_SUPPORT_HOME, value: false });
+
+        //Disconnect sub sub pages
+        store.dispatch({ type: SET_SUPPORT_CHAT, value: false });
     }
 }
-
 
 export const switchProfilUpdateInfoAction = (data) => {
     if (data) {
@@ -1475,6 +1500,7 @@ export const switchFaqsPageAction = (data) => {
         store.dispatch({ type: SET_UPDATE_PASSWORD_PAGE, value: false });
     }
 }
+
 export const switchKycPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_KYC_PAGE, value: data });
@@ -1504,6 +1530,7 @@ export const switchTransactionHistoryPageAction = (data) => {
         store.dispatch({ type: SET_UPDATE_PASSWORD_PAGE, value: false });
     }
 }
+
 export const switchUpdateNotifyPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_UPDATE_NOTIFICATION_PAGE, value: data });
@@ -1518,6 +1545,7 @@ export const switchUpdateNotifyPageAction = (data) => {
         store.dispatch({ type: SET_UPDATE_PASSWORD_PAGE, value: false });
     }
 }
+
 export const switchUpdateLanguagePageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_UPDATE_LANGUAGE_PAGE, value: data });
@@ -1532,6 +1560,7 @@ export const switchUpdateLanguagePageAction = (data) => {
         store.dispatch({ type: SET_UPDATE_PASSWORD_PAGE, value: false });
     }
 }
+
 export const switchAddDescriptionPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_ADD_DESCRIPTION_PAGE, value: data });
@@ -1546,6 +1575,7 @@ export const switchAddDescriptionPageAction = (data) => {
         store.dispatch({ type: SET_UPDATE_PASSWORD_PAGE, value: false });
     }
 }
+
 export const switchUpdateAuthentificationPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_UPDATE_AUTHENTIFICATION_PAGE, value: data });
@@ -1560,6 +1590,7 @@ export const switchUpdateAuthentificationPageAction = (data) => {
         store.dispatch({ type: SET_UPDATE_PASSWORD_PAGE, value: false });
     }
 }
+
 export const switchUpdatePasswordPageAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_UPDATE_PASSWORD_PAGE, value: data });
@@ -1574,11 +1605,59 @@ export const switchUpdatePasswordPageAction = (data) => {
         store.dispatch({ type: SET_UPDATE_AUTHENTIFICATION_PAGE, value: false });
     }
 }
-export const switchSupportPageFromProfilAction = (data) => {
+
+
+/**
+ * Support 
+ */
+export const switchSupportHomeAction = (data) => {
     if (data) {
+        store.dispatch({ type: SET_PROFIL_PAGE, value: data });
         store.dispatch({ type: SET_SUPPORT_HOME, value: data });
-        store.dispatch({ type: SET_HOME_PAGE, value: data });
+
+        //Disconnect all pages
+        store.dispatch({ type: SET_MESSAGE_PAGE, value: false });
+        store.dispatch({ type: SET_COURSE_PAGE, value: false });
+        store.dispatch({ type: SET_HOME_PAGE, value: false });
+        store.dispatch({ type: SET_COURSE_HISTORY_PAGE, value: false });
+
+        //Disconnect Sub pages
+        store.dispatch({ type: SET_PROFIL_HOME, value: false });
+        store.dispatch({ type: SET_UPDATE_PASSWORD_PAGE, value: false });
+        store.dispatch({ type: SET_PROFIL_UPDATE_INFO, value: false });
+        store.dispatch({ type: SET_FAQS_PAGE, value: false });
+        store.dispatch({ type: SET_KYC_PAGE, value: false });
+        store.dispatch({ type: SET_TRANSACTION_HISTORY_PAGE, value: false });
+        store.dispatch({ type: SET_UPDATE_NOTIFICATION_PAGE, value: false });
+        store.dispatch({ type: SET_UPDATE_LANGUAGE_PAGE, value: false });
+        store.dispatch({ type: SET_ADD_DESCRIPTION_PAGE, value: false });
+        store.dispatch({ type: SET_UPDATE_AUTHENTIFICATION_PAGE, value: false });
+
+        //Disconnect sub sub pages
         store.dispatch({ type: SET_SUPPORT_CHAT, value: false });
+    }
+}
+
+export const switchSupportChatAction = (data) => {
+    if (data) {
+        //Connect active page
+        store.dispatch({ type: SET_PROFIL_PAGE, value: data });
+
+        //Connect active sub sub page
+        store.dispatch({ type: SET_SUPPORT_CHAT, value: data });
+
+        //Disconnect all sub sub pages
+        store.dispatch({ type: SET_SUPPORT_HOME, value: false });
+        
+        //Disconnect other pages
+        store.dispatch({ type: SET_HOME_PAGE, value: false });
+        store.dispatch({ type: SET_COURSE_PAGE, value: false });
+        store.dispatch({ type: SET_MESSAGE_PAGE, value: false });
+        store.dispatch({ type: SET_STUDENT_PROGRESSION_PAGE, value: false });
+
+        //Disconnect others Sub Pages
+        store.dispatch({ type: SET_PROFIL_HOME, value: false });
+        store.dispatch({ type: SET_UPDATE_PASSWORD_PAGE, value: false });
         store.dispatch({ type: SET_PROFIL_UPDATE_INFO, value: false });
         store.dispatch({ type: SET_PROFIL_HOME, value: false });
         store.dispatch({ type: SET_FAQS_PAGE, value: false });
@@ -1587,34 +1666,7 @@ export const switchSupportPageFromProfilAction = (data) => {
         store.dispatch({ type: SET_UPDATE_NOTIFICATION_PAGE, value: false });
         store.dispatch({ type: SET_UPDATE_LANGUAGE_PAGE, value: false });
         store.dispatch({ type: SET_ADD_DESCRIPTION_PAGE, value: false });
-        store.dispatch({ type: SET_UPDATE_PASSWORD_PAGE, value: false });
         store.dispatch({ type: SET_UPDATE_AUTHENTIFICATION_PAGE, value: false });
-    }
-}
-
-
-/**
- * Support 
- */
-export const switchSupportHomeAction = (data) => {
-    switchHomePageAction(true);
-    //switchHomeParentAction(true)
-    if (data) {
-        store.dispatch({ type: SET_SUPPORT_HOME, value: data });
-        store.dispatch({ type: SET_SYS_HOME, value: false });
-        store.dispatch({ type: SET_SUPPORT_CHAT, value: false });
-        store.dispatch({ type: SET_NOTIF_HOME, value: false });
-    }
-}
-
-export const switchSupportChatAction = (data) => {
-    switchHomePageAction(true);
-    //switchHomeParentAction(true)
-    if (data) {
-        store.dispatch({ type: SET_SYS_HOME, value: false });
-        store.dispatch({ type: SET_SUPPORT_CHAT, value: data });
-        store.dispatch({ type: SET_SUPPORT_HOME, value: false });
-        store.dispatch({ type: SET_NOTIF_HOME, value: false });
     }
 }
 
@@ -1635,13 +1687,13 @@ export const switchHomeParentAction = (data) => {
         store.dispatch({ type: SET_SCHOOL_DETAILS_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type: SET_HOMEWORK_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -1673,13 +1725,14 @@ export const switchRegister1Action = (data) => {
         store.dispatch({ type: SET_HOME_PARENT, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+  SET_HOMEWORK_STUDENT_PAGE
+
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false })
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -1708,13 +1761,14 @@ export const switchRegister2Action = (data) => {
         store.dispatch({ type: SET_HOME_PARENT, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+  SET_HOMEWORK_STUDENT_PAGE
+
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -1742,13 +1796,13 @@ export const switchSchoolSelectionParentAction = (data) => {
         store.dispatch({ type: SET_HOME_PARENT, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type: SET_HOMEWORK_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -1763,6 +1817,7 @@ export const switchSchoolSelectionParentAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchSchoolDetailsParentAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_SCHOOL_DETAILS_PARENT_PAGE, value: data });
@@ -1775,13 +1830,15 @@ export const switchSchoolDetailsParentAction = (data) => {
         store.dispatch({ type: SET_HOME_PARENT, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -1796,6 +1853,7 @@ export const switchSchoolDetailsParentAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchParentUploadDocumentAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_PARENT_UPLOAD_DOCUMENT_PAGE, value: data });
@@ -1808,13 +1866,15 @@ export const switchParentUploadDocumentAction = (data) => {
         store.dispatch({ type: SET_HOME_PARENT, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });;
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -1829,6 +1889,7 @@ export const switchParentUploadDocumentAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchParentAdmissionTypeAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_CHOOSE_PARENT_ADMISSION_TYPE_PAGE, value: data });
@@ -1841,13 +1902,15 @@ export const switchParentAdmissionTypeAction = (data) => {
         store.dispatch({ type: SET_HOME_PARENT, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });;
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -1860,6 +1923,7 @@ export const switchParentAdmissionTypeAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_BOOK_SHOP_PAGE, value: false });
     }
 }
+
 export const switchStudentMenuAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: data });
@@ -1868,14 +1932,16 @@ export const switchStudentMenuAction = (data) => {
         store.dispatch({ type: SET_REGISTER_1, value: false });
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -1890,9 +1956,10 @@ export const switchStudentMenuAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchStudentAgendaAction = (data) => {
     if (data) {
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: data });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: data });
         store.dispatch({ type: SET_SCHOOL_DETAILS_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_REGISTER_1, value: false });
         store.dispatch({ type: SET_REGISTER_2, value: false });
@@ -1904,7 +1971,9 @@ export const switchStudentAgendaAction = (data) => {
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -1928,13 +1997,15 @@ export const switchStudentAbsencesAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -1949,6 +2020,7 @@ export const switchStudentAbsencesAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchStudentInfosAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: data });
@@ -1957,13 +2029,15 @@ export const switchStudentInfosAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -1978,6 +2052,7 @@ export const switchStudentInfosAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchStudentPlanningAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: data });
@@ -1987,13 +2062,14 @@ export const switchStudentPlanningAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+  SET_HOMEWORK_STUDENT_PAGE
+
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -2008,6 +2084,7 @@ export const switchStudentPlanningAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchStudentProgressAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: data });
@@ -2016,43 +2093,15 @@ export const switchStudentProgressAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
-        store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
-        store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
-        store.dispatch({ type: SET_TRANSPORT_STUDENT_PAGE, value: false });
-        store.dispatch({ type: SET_HOSTING_STUDENT_PAGE, value: false });
-        store.dispatch({ type: SET_TEACHER_INFOS_PAGE, value: false });
-        store.dispatch({ type: SET_PARENT_STUDENT_PROJECT_PAGE, value: false });
-        store.dispatch({ type: SET_PARENT_STUDENT_LIBRAIRY_PAGE, value: false });
-        store.dispatch({ type: SET_PARENT_STUDENT_BOOK_DETAIL_PAGE, value: false });
-        store.dispatch({ type: SET_PARENT_STUDENT_BOOK_SHOP_PAGE, value: false });
-        store.dispatch({ type: SET_PARENT_STUDENT_BOOK_SHOP_DETAIL_DETAILS, value: false });
-        store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
-    }
-}
-export const switchStudentActivitiesAction = (data) => {
-    if (data) {
-        store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: data });
-        store.dispatch({ type: SET_SYS_HOME, value: false });
-        store.dispatch({ type: SET_SCHOOL_DETAILS_PARENT_PAGE, value: false });
-        store.dispatch({ type: SET_REGISTER_1, value: false });
-        store.dispatch({ type: SET_REGISTER_2, value: false });
-        store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
-        store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -2076,13 +2125,15 @@ export const switchTeacherListAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -2100,13 +2151,15 @@ export const switchTeacherListAction = (data) => {
 
 export const switchStudentHomeworkAction = (data) => {
     if (data) {
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: data });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: data });
         store.dispatch({ type: SET_SCHOOL_DETAILS_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_REGISTER_1, value: false });
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
@@ -2127,6 +2180,7 @@ export const switchStudentHomeworkAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchSchoolFeesAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: data });
@@ -2135,14 +2189,16 @@ export const switchSchoolFeesAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
         store.dispatch({ type: SET_TRANSPORT_STUDENT_PAGE, value: false });
@@ -2156,6 +2212,7 @@ export const switchSchoolFeesAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchStudentRemarksAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: data });
@@ -2164,14 +2221,16 @@ export const switchStudentRemarksAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
         store.dispatch({ type: SET_TRANSPORT_STUDENT_PAGE, value: false });
@@ -2185,6 +2244,7 @@ export const switchStudentRemarksAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchAdvanceRemarkSearchAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: data });
@@ -2193,14 +2253,16 @@ export const switchAdvanceRemarkSearchAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_TRANSPORT_STUDENT_PAGE, value: false });
@@ -2214,6 +2276,7 @@ export const switchAdvanceRemarkSearchAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchTransportStudentAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_TRANSPORT_STUDENT_PAGE, value: data });
@@ -2222,14 +2285,16 @@ export const switchTransportStudentAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -2243,6 +2308,7 @@ export const switchTransportStudentAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchHostingStudentAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_HOSTING_STUDENT_PAGE, value: data });
@@ -2251,14 +2317,16 @@ export const switchHostingStudentAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -2272,6 +2340,7 @@ export const switchHostingStudentAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchTeacherInfosAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_TEACHER_INFOS_PAGE, value: data });
@@ -2280,14 +2349,16 @@ export const switchTeacherInfosAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -2310,14 +2381,16 @@ export const switchParentStudentProjectAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -2331,6 +2404,7 @@ export const switchParentStudentProjectAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchParentStudentLibrarytAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_PARENT_STUDENT_LIBRAIRY_PAGE, value: data });
@@ -2339,14 +2413,16 @@ export const switchParentStudentLibrarytAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -2360,6 +2436,7 @@ export const switchParentStudentLibrarytAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchParentStudentBookDetailAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_PARENT_STUDENT_BOOK_DETAIL_PAGE, value: data });
@@ -2368,14 +2445,16 @@ export const switchParentStudentBookDetailAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -2389,6 +2468,7 @@ export const switchParentStudentBookDetailAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchParentStudentBookShopAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_PARENT_STUDENT_BOOK_SHOP_PAGE, value: data });
@@ -2397,14 +2477,16 @@ export const switchParentStudentBookShopAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -2418,6 +2500,7 @@ export const switchParentStudentBookShopAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchParentStudentBookShopDetailAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_PARENT_STUDENT_BOOK_SHOP_DETAIL_DETAILS, value: data });
@@ -2426,14 +2509,16 @@ export const switchParentStudentBookShopDetailAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:   SET_HOMEWORK_STUDENT_PAGE
+
+, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -2447,6 +2532,7 @@ export const switchParentStudentBookShopDetailAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: false });
     }
 }
+
 export const switchParentStudentCvAction = (data) => {
     if (data) {
         store.dispatch({ type: SET_PARENT_STUDENT_CV_PAGE, value: data });
@@ -2455,14 +2541,14 @@ export const switchParentStudentCvAction = (data) => {
         store.dispatch({ type: SET_REGISTER_2, value: false });
         store.dispatch({ type: SET_SCHOOL_SELECTION_PARENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_MENU_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_AGENDA_PAGE, value: false });
+        store.dispatch({ type: SET_AGENDA_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ABSENCES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_INFOS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PLANNING_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_PROGRESS_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_ACTIVITIES_PAGE, value: false });
         store.dispatch({ type: SET_TEACHER_LIST_PAGE, value: false });
-        store.dispatch({ type: SET_STUDENT_HOMEWORK_PAGE, value: false });
+        store.dispatch({ type:SET_HOMEWORK_STUDENT_PAGE, value: false });
         store.dispatch({ type: SET_SCHOOL_FEES_PAGE, value: false });
         store.dispatch({ type: SET_STUDENT_REMARKS_PAGE, value: false });
         store.dispatch({ type: SET_ADVANCE_REMARKS_SEARCH_PAGE, value: false });
@@ -2476,6 +2562,8 @@ export const switchParentStudentCvAction = (data) => {
         store.dispatch({ type: SET_PARENT_STUDENT_BOOK_SHOP_DETAIL_DETAILS, value: false });
     }
 }
+
+
 /**
  * Notif 
  */
@@ -2487,4 +2575,12 @@ export const switchNotifHomeAction = (data) => {
         store.dispatch({ type: SET_NOTIF_HOME, value: data });
         store.dispatch({ type: SET_SUPPORT_HOME, value: false });
     }
+}
+
+
+/**
+ * Footer Visibility
+ */
+export const switchFooterVisibilityAction = (data) => {
+    store.dispatch({ type: TOGGLE_FOOTER_VISIBILITY, value: data });
 }

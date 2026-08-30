@@ -17,61 +17,31 @@ import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 
-import { feestyle } from '../../assets/styles/schoolfees.js';
-import { styles } from '../../assets/styles/index.js';
-import { switchHomePageAction } from '../../navigations/rootNavigation.js';
+import { feestyle } from '../../../assets/styles/schoolfees.js';
+import { styles } from '../../../assets/styles/index.js';
+import { switchHomePageAction } from '../../../navigations/rootNavigation.js';
+import Moment from 'moment';
+import 'moment/locale/fr';
+import { COLORS } from '../../../assets/styles/theme.js';
+import { Dropdown } from 'react-native-element-dropdown';
+import Toast from 'react-native-toast-message';
+import { CreateFeeExtensionAction } from '../../../reducers/actions/index.js';
 
-class School_Fees extends PureComponent {
+class Fees extends PureComponent {
     constructor(props) {
         super(props);
         const today = new Date();
-
         this.state = {
             selectedTab: 'Frais payé', // 'Frais payé' | 'Moratoire'
             moratoireFilter: 'Tous',
             scrollY: new Animated.Value(0),
-
-            monthlyFees: [
-                { id: 1, month: 'Septembre 2025', dueDate: '2025-09-05', amount: 50000, paid: true },
-                { id: 2, month: 'Octobre 2025', dueDate: '2025-10-05', amount: 50000, paid: true },
-                { id: 8, month: 'Avril 2026', dueDate: '2026-04-05', amount: 50000, paid: false },
-                { id: 9, month: 'Mai 2026', dueDate: '2026-05-05', amount: 50000, paid: false },
-            ],
-
-            paymentHistory: [
-                { id: 101, month: 'Septembre 2025', amount: 50000, date: '2025-09-03', method: 'Mobile Money' },
-                { id: 102, month: 'Octobre 2025', amount: 50000, date: '2025-10-02', method: 'Carte Bancaire' },
-                { id: 103, month: 'Novembre 2025', amount: 50000, date: '2025-11-04', method: 'Espèces' },
-                { id: 104, month: 'Décembre 2025', amount: 120000, date: '2025-12-01', method: 'Virement Bancaire' },
-                { id: 105, month: 'Janvier 2026', amount: 50000, date: '2026-01-10', method: 'Mobile Money' },
-            ],
-
             currentMonth: today.getMonth(),
             currentYear: today.getFullYear(),
             selectedDate: today,
-            selectedDueDate: null,
+            selectedDueDate: null, 
             filterMonth: 'Tous',
             filterYear: 'Tous',
-
-            moratoires: [
-                {
-                    id: 'm1',
-                    reason: 'Difficultés financières temporaires',
-                    amount: 75000,
-                    deadline: '30/04/2026',
-                    requestDate: '12 Fév 2026',
-                    status: 'En attente',
-                },
-                {
-                    id: 'm2',
-                    reason: 'Problème familial',
-                    amount: 150000,
-                    deadline: '15/05/2026',
-                    requestDate: '01 Mar 2026',
-                    status: 'Validé',
-                },
-            ],
-
+            moratoires: [],
             isMoratoireModalVisible: false,
             moratoireReason: '',
             moratoireAmount: '',
@@ -81,6 +51,8 @@ class School_Fees extends PureComponent {
             parentConsent: false,
             studentName: '',
             isLoadingStudentName: false,
+            isFocusInstallment:false,
+            selectedInstallment:''
         };
 
         this.handleScroll = Animated.event(
@@ -89,59 +61,21 @@ class School_Fees extends PureComponent {
         );
     }
 
-    _navigateToMenu = () => switchHomePageAction(true);
+    _navigateToHome = () => switchHomePageAction(true);
 
-    renderHeader = () => {
-        return (
-            <View style={feestyle.headerBar}>
-                <TouchableOpacity
-                    style={feestyle.backButton}
-                    onPress={this._navigateToMenu}
-                    activeOpacity={0.7}
-                >
-                    <Entypo name="chevron-left" size={24} color="#FFFFFF" />
-                </TouchableOpacity>
-                <Text style={[styles.textBold, feestyle.headerTitle]}>
-                    Frais de Scolarité
-                </Text>
-            </View>
-        );
-    };
-
-    markAsPaid = (id) => {
-        const fee = this.state.monthlyFees.find((item) => item.id === id);
-        if (!fee || fee.paid) return;
-
-        const paymentDate = new Date().toISOString().split('T')[0];
-        this.setState((prev) => ({
-            monthlyFees: prev.monthlyFees.map((item) =>
-                item.id === id ? { ...item, paid: true } : item
-            ),
-            paymentHistory: [
-                {
-                    id: Date.now(),
-                    month: fee.month,
-                    amount: fee.amount,
-                    date: paymentDate,
-                    method: 'Mobile Money',
-                },
-                ...prev.paymentHistory,
-            ],
-        }));
-        Alert.alert('Succès', 'Votre règlement a été enregistré avec succès.');
-    };
-
-    hasDueDate = (year, month, day) => {
+    _hasDueDate = (year, month, day) => {
+        const { student_infos } = this.props;
+        const installments = student_infos?.fee_installment || [];
         const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        return this.state.monthlyFees.some((fee) => fee.dueDate === dateKey);
+        return installments?.some((fee) => fee.due_date === dateKey);
     };
 
-    getDueInfo = (year, month, day) => {
+    _getDueInfo = (year, month, day) => {
         const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         return this.state.monthlyFees.find((fee) => fee.dueDate === dateKey);
     };
 
-    changeMonth = (delta) => {
+    _changeMonth = (delta) => {
         this.setState((prev) => {
             let newMonth = prev.currentMonth + delta;
             let newYear = prev.currentYear;
@@ -156,7 +90,7 @@ class School_Fees extends PureComponent {
         });
     };
 
-    goToToday = () => {
+    _goToToday = () => {
         const today = new Date();
         this.setState({
             currentMonth: today.getMonth(),
@@ -166,7 +100,7 @@ class School_Fees extends PureComponent {
         });
     };
 
-    renderMonthlyGrid = () => {
+    _renderMonthlyGrid = () => {
         const { currentMonth, currentYear, selectedDate } = this.state;
 
         // Jour de la semaine du 1er du mois (0 = Dimanche, 1 = Lundi, ..., 6 = Samedi)
@@ -185,8 +119,8 @@ class School_Fees extends PureComponent {
         // 2. Générer les jours du mois
         for (let day = 1; day <= daysInMonth; day++) {
             const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const hasDue = this.hasDueDate(currentYear, currentMonth, day);
-            const dueInfo = hasDue ? this.getDueInfo(currentYear, currentMonth, day) : null;
+            const hasDue = this._hasDueDate(currentYear, currentMonth, day);
+            const dueInfo = hasDue ? this._getDueInfo(currentYear, currentMonth, day) : null;
 
             const isSelected =
                 selectedDate &&
@@ -243,37 +177,40 @@ class School_Fees extends PureComponent {
         return cells;
     };
 
-    getFilteredHistory = () => {
-        const { paymentHistory, filterMonth, filterYear } = this.state;
+    _getFilteredHistory = () => {
+        const { filterMonth, filterYear } = this.state;
+        const { student_infos } = this.props;
+        const paymentHistory = student_infos?.fee_installment || [];
         return paymentHistory.filter((item) => {
-            const yearMatch = filterYear === 'Tous' || item.date.startsWith(filterYear);
-            const monthMatch = filterMonth === 'Tous' || item.month.toLowerCase().includes(filterMonth.toLowerCase());
-            return yearMatch && monthMatch;
+            const yearMatch = filterYear === 'Tous' || item.created_date.startsWith(filterYear);
+            const monthMatch = filterMonth === 'Tous' || Moment(item.created_date).format('MMMM').toLowerCase().includes(filterMonth.toLowerCase()); 
+            return yearMatch && monthMatch; 
         });
     };
 
-    getFilteredHistoryTotal = () => {
-        return this.getFilteredHistory().reduce((sum, item) => sum + item.amount, 0);
+    _getFilteredHistoryTotal = () => {
+        return this._getFilteredHistory().reduce((sum, item) => Number(sum) + Number(item.amount), 0);
     };
 
-    renderMonthlyItem = ({ item }) => {
-        const isSelected = this.state.selectedDueDate === item.dueDate;
+    __renderMonthlyItem = ({ item }) => {
+        const isSelected = this.state.selectedDueDate === item.due_date;
+        const choosedate = this.state.selectedDate;
         return (
             <View
                 style={[
                     feestyle.monthlyCard,
-                    item.paid && feestyle.paidMonthlyCard,
+                    item.is_pay && feestyle.paidMonthlyCard,
                     isSelected && feestyle.selectedMonthlyCard,
                 ]}
             >
                 <View style={feestyle.monthInfo}>
-                    <Text style={[styles.textBold, feestyle.monthName]}>{item.month}</Text>
-                    <Text style={[styles.text, feestyle.dueDate]}>Échéance : {item.dueDate}</Text>
+                    <Text style={[styles.textBold, feestyle.monthName]}>{Moment(item.due_date).format('MMMM')}</Text>   
+                    <Text style={[styles.text, feestyle.dueDate]}>Échéance : {Moment(item.due_date).format('D MMMM YYYY')}</Text> 
                     <Text style={[styles.textBold, feestyle.amount]}>
-                        {item.amount.toLocaleString()} FCFA
+                        {item.amount.toLocaleString()} FCFA 
                     </Text>
                 </View>
-                {item.paid ? (
+                {item.is_pay ? (
                     <View style={feestyle.paidBadge}>
                         <Icon name="check-circle" size={18} color="#10B981" />
                         <Text style={[styles.textBold, feestyle.paidText]}>Payé</Text>
@@ -281,7 +218,7 @@ class School_Fees extends PureComponent {
                 ) : (
                     <TouchableOpacity
                         style={feestyle.payButton}
-                        onPress={() => this.markAsPaid(item.id)}
+                        onPress={() => this._markAsPaid(item.id)}
                         activeOpacity={0.8}
                     >
                         <Icon name="wallet-outline" size={16} color="#011638" />
@@ -292,39 +229,26 @@ class School_Fees extends PureComponent {
         );
     };
 
-    renderPaymentHistoryItem = ({ item }) => (
+    _renderPaymentHistoryItem = ({ item }) => (
         <View style={feestyle.historyCard}>
             <View style={feestyle.historyLeft}>
                 <View style={feestyle.historyIconBox}>
                     <Icon name="cash-fast" size={20} color="#f6a100" />
                 </View>
                 <View style={feestyle.historyInfo}>
-                    <Text style={[styles.textBold, feestyle.historyMonth]}>{item.month}</Text>
-                    <Text style={[styles.text, feestyle.historyDate]}>{item.date}</Text>
+                    <Text style={[styles.textBold, feestyle.historyMonth]}>{Moment(item.created_date).format('MMMM')}</Text>
+                    <Text style={[styles.textBold, feestyle.historyNote]}>{item.note}</Text>
+                    <Text style={[styles.text, feestyle.historyDate]}>{Moment(item.created_date).format('D MMMM YYYY HH:MM')}</Text> 
                 </View>
             </View>
             <View style={feestyle.historyRight}>
-                <Text style={[styles.textBold, feestyle.historyAmount]}>
-                    +{item.amount.toLocaleString()} FCFA
+                <Text style={[styles.textBold, item.is_pay ? feestyle.historyAmount : feestyle.historyunPaidAmount]}>
+                    {item.is_pay ? '+' : '-'} {item.amount.toLocaleString()} FCFA
                 </Text>
                 <Text style={[styles.text, feestyle.historyMethod]}>{item.method}</Text>
             </View>
         </View>
     );
-
-    _openMoratoireModal = () => {
-        const name = this.props.user_infos?.name || `${this.props.user_infos?.first_name || ''} ${this.props.user_infos?.last_name || ''}`.trim() || 'l\'étudiant';
-        this.setState({
-            isMoratoireModalVisible: true,
-            moratoireReason: '',
-            moratoireAmount: '',
-            moratoireDeadline: null,
-            moratoireDeadlineInput: '',
-            deadlineError: '',
-            parentConsent: false,
-            studentName: name,
-        });
-    };
 
     _closeMoratoireModal = () => {
         this.setState({
@@ -380,7 +304,7 @@ class School_Fees extends PureComponent {
         }
     };
 
-    formatDate = (date) => {
+    _formatDate = (date) => {
         if (!date) return '';
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -388,55 +312,94 @@ class School_Fees extends PureComponent {
         return `${day}/${month}/${year}`;
     };
 
-    handleMoratoireSubmit = () => {
-        const { moratoireReason, moratoireAmount, moratoireDeadline, parentConsent, moratoires } = this.state;
+    /**
+     * MANAGE MORATOIRE
+     */
+    _openMoratoireModal = () => {
+        const name = this.props.user_infos?.name || `${this.props.user_infos?.first_name || ''} ${this.props.user_infos?.last_name || ''}`.trim() || 'l\'étudiant';
+        this.setState({
+            isMoratoireModalVisible: true,
+            moratoireReason: '',
+            moratoireAmount: '',
+            moratoireDeadline: null,
+            moratoireDeadlineInput: '',
+            deadlineError: '',
+            parentConsent: false,
+            studentName: name,
+        });
+    };
 
+    _handleMoratoireInstallmentChange = (data) => {
+        this.setState({selectedInstallment:data});
+    }
+
+    _submitMoratoire = () => {
+        const { moratoireReason, moratoireAmount, moratoireDeadline, parentConsent, selectedInstallment, moratoires } = this.state;
+        const {student_infos, user_token} = this.props;
+        const fee_extension_list = student_infos.fee_extension;
+        if (!selectedInstallment) {
+            Toast.show({
+                type: 'error',
+                props: { title: 'Erreur', description: 'Veuillez indiquer le motif du moratoire'}
+            });
+            return;
+        }
         if (!moratoireReason.trim()) {
-            Alert.alert('Erreur', 'Veuillez indiquer le motif du moratoire');
+            Toast.show({
+                type: 'error',
+                props: { title: 'Erreur', description: 'Veuillez indiquer le motif du moratoire'}
+            });
             return;
         }
         if (!moratoireAmount.trim() || isNaN(moratoireAmount)) {
-            Alert.alert('Erreur', 'Veuillez saisir un montant valide');
+            Toast.show({
+                type: 'error',
+                props: { title: 'Erreur', description: 'Veuillez saisir un montant valide'}
+            });
             return;
         }
         if (!moratoireDeadline) {
-            Alert.alert('Erreur', 'Veuillez entrer une date butoir valide (JJ/MM/AAAA)');
+            Toast.show({
+                type: 'error',
+                props: { title: 'Erreur', description: 'Veuillez entrer une date butoir valide (JJ/MM/AAAA)'}
+            });
             return;
         }
         if (!parentConsent) {
-            Alert.alert('Erreur', 'Vous devez accepter les conditions pour soumettre la demande.');
+            Toast.show({
+                type: 'error',
+                props: { title: 'Erreur', description: 'Vous devez accepter les conditions pour soumettre la demande.'}
+            });
             return;
         }
-
-        const newMoratoire = {
-            id: Date.now().toString(),
-            reason: moratoireReason.trim(),
-            amount: parseInt(moratoireAmount, 10),
-            deadline: this.formatDate(moratoireDeadline),
-            requestDate: new Date().toLocaleDateString('fr-FR', {
-                day: 'numeric',
-                month: 'short',
-                year: 'numeric',
-            }),
-            status: 'En attente',
-        };
-
-        this.setState({ moratoires: [newMoratoire, ...moratoires] });
-        this._closeMoratoireModal();
-        Alert.alert('Succès', 'Votre demande de moratoire a été enregistrée avec succès.');
+        var formData = new FormData();
+        formData.append('token', user_token);
+        formData.append('school', student_infos.school_id);
+        formData.append('student', student_infos.id);
+        formData.append('classe', student_infos.classe.id);
+        formData.append('schoolfee', selectedInstallment.id);
+        formData.append('reason', moratoireReason);
+        formData.append('promise_amount', moratoireAmount);
+        formData.append('promise_date', Moment(moratoireDeadline).format('YYYY-MM-DD'));
+        CreateFeeExtensionAction(formData, fee_extension_list, this._closeMoratoireModal);
     };
 
-    getFilteredMoratoires = () => {
-        const { moratoires, moratoireFilter } = this.state;
-        if (moratoireFilter === 'Tous') return moratoires;
-        return moratoires.filter((m) => m.status === moratoireFilter);
+    _getFilteredMoratoires = () => {
+        const { moratoireFilter } = this.state;
+        const { student_infos } = this.props;
+        var fee_extension_list = student_infos.fee_extension;
+        if (moratoireFilter === 'Tous') return fee_extension_list;
+        if (moratoireFilter === 'Validé') return fee_extension_list.filter((item) => item.is_approved);
+        if (moratoireFilter === 'En attente') return fee_extension_list.filter((item) => !item.is_approved && !item.is_rejected);
+        if (moratoireFilter === 'Rejeté') return fee_extension_list.filter((item) => item.is_rejected);
     };
 
-    renderMoratoireItem = ({ item }) => {
-        const isApproved = item.status === 'Validé';
-        const isPending = item.status === 'En attente';
-        const statusColor = isApproved ? '#10B981' : isPending ? '#f6a100' : '#EF4444';
-
+    _renderMoratoireItem = ({ item }) => {
+        const isApproved = item.is_approved;
+        const isPending = !item.is_approved;
+        const isRejected = item.is_rejected;
+        const statusColor = isApproved ? '#10B981' : isPending ? '#f6a100' : isRejected ? '#EF4444' : '#36D1DC';
+        const status = item.is_approved ? 'Validé' : !item.is_approved && !item.is_rejected ? 'En attente' :  item.is_rejected ? 'Rejeté' : 'Non disponible'; 
         return (
             <View style={feestyle.moratoireCard}>
                 <View style={feestyle.moratoireHeader}>
@@ -445,26 +408,36 @@ class School_Fees extends PureComponent {
                 </View>
 
                 <Text style={[styles.text, feestyle.moratoireAmount]}>
-                    Montant : <Text style={styles.textBold}>{item.amount.toLocaleString()} FCFA</Text>
+                    Montant promis : <Text style={styles.textBold}>{item.promise_amount.toLocaleString()} FCFA</Text>
+                </Text>
+
+                <Text style={[styles.text, feestyle.moratoireAmount]}>
+                    Montant approuvé : <Text style={styles.textBold}>{item.authorize_amount.toLocaleString()} FCFA</Text>
+                </Text>
+
+                <Text style={[styles.text, feestyle.moratoireDate]}>
+                    Date d'échéance accordée : <Text style={{ color: '#FFFFFF' }}>{item.authorize_date ? Moment(item.authorize_date).format('D MMMM YYYY') : 'Donnée non disponible'}</Text>
                 </Text>
                 <Text style={[styles.text, feestyle.moratoireDate]}>
-                    Date d'échéance accordée : <Text style={{ color: '#FFFFFF' }}>{item.deadline}</Text>
-                </Text>
-                <Text style={[styles.text, feestyle.moratoireDate]}>
-                    Demandé le {item.requestDate}
+                    Demandé le {Moment(item.created_date).format('D MMMM YYYY')}
                 </Text>
 
                 <View style={feestyle.moratoireStatusRow}>
                     <View style={[feestyle.statusIndicator, { backgroundColor: statusColor }]} />
                     <Text style={[styles.textBold, feestyle.moratoireStatus, { color: statusColor }]}>
-                        {item.status}
+                        {status}
                     </Text>
                 </View>
             </View>
         );
     };
 
-    renderFilterContainer = () => {
+    /**
+     * 
+     * @returns END MORATOIRE FUNCTION
+     */
+
+    _renderFilterContainer = () => {
         const { selectedTab, moratoireFilter } = this.state;
         const moratoireStatuses = ['Tous', 'En attente', 'Validé', 'Rejeté'];
 
@@ -517,9 +490,9 @@ class School_Fees extends PureComponent {
                 {selectedTab === 'Moratoire' && (
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 10 }}>
                         <View style={feestyle.filterChips}>
-                            {moratoireStatuses.map((status) => (
+                            {moratoireStatuses.map((status, key) => (
                                 <TouchableOpacity
-                                    key={status}
+                                    key={key}
                                     style={[
                                         feestyle.filterChip,
                                         moratoireFilter === status && feestyle.filterChipActive,
@@ -547,13 +520,12 @@ class School_Fees extends PureComponent {
 
     render() {
         const {
-            monthlyFees,
             selectedDueDate,
             filterMonth,
-            filterYear,
             selectedTab,
             currentMonth,
             currentYear,
+            selectedInstallment,
         } = this.state;
 
         const { student_infos } = this.props;
@@ -564,30 +536,38 @@ class School_Fees extends PureComponent {
         ];
         const daysOfWeek = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
 
+        const filteredMoratoires = this._getFilteredMoratoires();
+        const filteredHistory = this._getFilteredHistory();
+
+        const installments = student_infos?.fee_installment || [];
+        const totalFees = installments?.reduce((sum, item) => Number(sum) + (Number(item.amount)), 0) || 0;
+        const paidFees = installments?.reduce((sum, item) => item.is_pay ? Number(sum) + (Number(item.amount)) : 0, 0) || 0; 
+        const remainingFees = installments?.reduce((sum, item) => !item.is_pay ? Number(sum) + (Number(item.amount)) : 0, 0) || 0;
+
         const displayedFees = selectedDueDate
-            ? monthlyFees.filter((item) => item.dueDate === selectedDueDate)
-            : monthlyFees;
-
-        const filteredMoratoires = this.getFilteredMoratoires();
-        const filteredHistory = this.getFilteredHistory();
-
-        const installments = student_infos?.class_fees_installment || [];
-        const paidInstallments = student_infos?.student_installment_paid || [];
-        const unpaidInstallments = student_infos?.student_installment_notpaid || [];
-
-        const totalFees = installments.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
-        const paidFees = paidInstallments.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
-        const remainingFees = unpaidInstallments.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
+            ? installments.filter((item) => item.due_date === selectedDueDate)
+            : installments;
 
         return (
             <SafeAreaView style={feestyle.container}>
-                <StatusBar barStyle="light-content" backgroundColor="#011638" />
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} /> 
 
                 {/* Ambient Glows */}
                 <View style={feestyle.topGlow} pointerEvents="none" />
                 <View style={feestyle.bottomGlow} pointerEvents="none" />
 
-                {this.renderHeader()}
+                <View style={feestyle.headerBar}>
+                    <TouchableOpacity
+                        style={feestyle.backButton}
+                        onPress={this._navigateToHome}
+                        activeOpacity={0.7}
+                    >
+                        <Entypo name="chevron-left" size={24} color="#FFFFFF" />
+                    </TouchableOpacity>
+                    <Text style={[styles.textBold, feestyle.headerTitle]}>
+                        Frais de Scolarité
+                    </Text>
+                </View>
 
                 <Animated.ScrollView
                     style={{ flex: 1 }}
@@ -596,7 +576,7 @@ class School_Fees extends PureComponent {
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: 110 }}
                 >
-                    {this.renderFilterContainer()}
+                    {this._renderFilterContainer()}
 
                     {selectedTab === 'Frais payé' ? (
                         <>
@@ -631,29 +611,29 @@ class School_Fees extends PureComponent {
                             {/* Calendrier Échéancier */}
                             <View style={feestyle.calendarCard}>
                                 <View style={feestyle.calendarNav}>
-                                    <TouchableOpacity onPress={() => this.changeMonth(-1)} style={feestyle.navBtn}>
+                                    <TouchableOpacity onPress={() => this._changeMonth(-1)} style={feestyle.navBtn}>
                                         <Icon name="chevron-left" size={22} color="#FFFFFF" />
                                     </TouchableOpacity>
                                     <Text style={[styles.textBold, feestyle.monthLabel]}>
                                         {monthNames[currentMonth]} {currentYear}
                                     </Text>
-                                    <TouchableOpacity onPress={this.goToToday} style={feestyle.todayButton}>
+                                    <TouchableOpacity onPress={this._goToToday} style={feestyle.todayButton}>
                                         <Icon name="calendar-today" size={16} color="#f6a100" />
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => this.changeMonth(1)} style={feestyle.navBtn}>
+                                    <TouchableOpacity onPress={() => this._changeMonth(1)} style={feestyle.navBtn}>
                                         <Icon name="chevron-right" size={22} color="#FFFFFF" />
                                     </TouchableOpacity>
                                 </View>
 
                                 <View style={feestyle.weekHeader}>
-                                    {daysOfWeek.map((d) => (
-                                        <Text key={d} style={[styles.text, feestyle.weekText]}>
+                                    {daysOfWeek.map((d, key) => (
+                                        <Text key={key} style={[styles.text, feestyle.weekText]}>
                                             {d}
                                         </Text>
                                     ))}
                                 </View>
 
-                                <View style={feestyle.daysGrid}>{this.renderMonthlyGrid()}</View>
+                                <View style={feestyle.daysGrid}>{this._renderMonthlyGrid()}</View>
                             </View>
 
                             {/* Section Mensualités */}
@@ -664,7 +644,7 @@ class School_Fees extends PureComponent {
                                 <FlatList
                                     data={displayedFees}
                                     keyExtractor={(item) => item.id.toString()}
-                                    renderItem={this.renderMonthlyItem}
+                                    renderItem={this.__renderMonthlyItem}
                                     scrollEnabled={false}
                                     ListEmptyComponent={
                                         <Text style={[styles.text, feestyle.emptyText]}>
@@ -690,11 +670,7 @@ class School_Fees extends PureComponent {
                                                 onPress={() => this.setState({ filterMonth: m })}
                                             >
                                                 <Text
-                                                    style={[
-                                                        styles.text,
-                                                        feestyle.subFilterText,
-                                                        filterMonth === m && [styles.textBold, feestyle.subFilterTextActive],
-                                                    ]}
+                                                    style={[feestyle.filterChipText, filterMonth === m && feestyle.filterChipTextActive]}
                                                 >
                                                     {m}
                                                 </Text>
@@ -706,7 +682,7 @@ class School_Fees extends PureComponent {
                                 <FlatList
                                     data={filteredHistory}
                                     keyExtractor={(item) => item.id.toString()}
-                                    renderItem={this.renderPaymentHistoryItem}
+                                    renderItem={this._renderPaymentHistoryItem}
                                     scrollEnabled={false}
                                     ListEmptyComponent={
                                         <Text style={[styles.text, feestyle.emptyText]}>
@@ -722,8 +698,8 @@ class School_Fees extends PureComponent {
                             <Text style={[styles.textBold, feestyle.sectionTitle]}>Mes Demandes de Moratoire</Text>
                             <FlatList
                                 data={filteredMoratoires}
-                                keyExtractor={(item) => item.id.toString()}
-                                renderItem={this.renderMoratoireItem}
+                                keyExtractor={(item) => item.id.toString()} 
+                                renderItem={this._submitMoratoire}
                                 scrollEnabled={false}
                                 ListEmptyComponent={
                                     <Text style={[styles.text, feestyle.emptyText]}>
@@ -734,6 +710,8 @@ class School_Fees extends PureComponent {
                         </View>
                     )}
                 </Animated.ScrollView>
+
+
 
                 {/* Bouton Flottant (Nouvelle demande) */}
                 {selectedTab === 'Moratoire' && (
@@ -769,6 +747,29 @@ class School_Fees extends PureComponent {
                             </View>
 
                             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 12 }}>
+                                <Text style={[styles.textBold, feestyle.modalLabel]}>Echéance concernée *</Text>
+                                <Dropdown
+                                    style={[feestyle.dropdown]}
+                                    placeholderStyle={feestyle.placeholderStyle}
+                                    selectedTextStyle={feestyle.selectedTextStyle}
+                                    inputSearchStyle={feestyle.inputSearchStyle}
+                                    containerStyle={feestyle.dropdownContainer}
+                                    itemTextStyle={feestyle.itemTextStyle}
+                                    data={installments}
+                                    labelField="name"
+                                    valueField="id"
+                                    placeholder={installments.length === 0 ? '⚠ Aucune echéance' : 'Sélectionner une echéance'}
+                                    value={selectedInstallment}
+                                    search
+                                    searchPlaceholder="Rechercher..."
+                                    onFocus={() => this.setState({ isFocusInstallment: true })}
+                                    onBlur={() => this.setState({ isFocusInstallment: false })}
+                                    onChange={this._handleMoratoireInstallmentChange}
+                                    renderLeftIcon={() => (
+                                        <Icon name="cube" size={18} color={COLORS.accentGold} style={{ marginRight: 8 }} />
+                                    )}
+                                />
+
                                 <Text style={[styles.textBold, feestyle.modalLabel]}>Motif justificatif *</Text>
                                 <TextInput
                                     style={[styles.text, feestyle.modalInput]}
@@ -841,7 +842,7 @@ class School_Fees extends PureComponent {
                                                 !this.state.moratoireDeadline ||
                                                 !this.state.parentConsent) && { opacity: 0.5 },
                                         ]}
-                                        onPress={this.handleMoratoireSubmit}
+                                        onPress={this._handleMoratoireSubmit}
                                         disabled={
                                             !this.state.moratoireReason.trim() ||
                                             !this.state.moratoireAmount.trim() ||
@@ -868,7 +869,8 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
     user_infos: state.auth.user_infos,
+    user_token: state.auth.user_token,
     student_infos: state.auth.student_infos,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(School_Fees);
+export default connect(mapStateToProps, mapDispatchToProps)(Fees);

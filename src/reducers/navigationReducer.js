@@ -12,7 +12,6 @@ import {
     SET_STUDENT_INFOS_PAGE,
     SET_STUDENT_PLANNING_PAGE,
     SET_STUDENT_PROGRESS_PAGE,
-    SET_STUDENT_ACTIVITIES_PAGE,
     SET_TEACHER_LIST_PAGE,
     SET_SCHOOL_FEES_PAGE,
     SET_STUDENT_REMARKS_PAGE,
@@ -75,6 +74,8 @@ import {
     SET_PARENT_UPLOAD_DOCUMENT_PAGE,
     SET_NEW_CHOOSE_ADMISSION_TYPE_PAGE,
     SET_NEW_UPLOAD_DOCUMENT_PAGE,
+    TOGGLE_FOOTER_VISIBILITY,
+    TOGGLE_HEADER_VISIBILITY,
 } from "./actions/types"
 
 
@@ -132,7 +133,6 @@ const initialState = {
     is_student_absences_page                : false,
     is_student_planning_page                : false,
     is_student_progress_page                : false,
-    is_student_activities_page              : false,
     is_teacher_list_page                    : false,
     is_student_homework_page                : false,
     is_school_fees_page                     : false,
@@ -207,6 +207,12 @@ const initialState = {
 
     selectedBook                            : null,
     paidBooks                               : {},
+
+    //Footer visibility
+    is_visible_footer                       : true,
+
+    //HEader visibility
+    is_visible_header                       :true,
 }
 
 const navigationReducer = (state = initialState, action) => {
@@ -452,11 +458,6 @@ const navigationReducer = (state = initialState, action) => {
                 ...state,
                 is_student_progress_page: action.value
             }
-        case SET_STUDENT_ACTIVITIES_PAGE:
-            return {
-                ...state,
-                is_student_activities_page: action.value
-            }
         case SET_TEACHER_LIST_PAGE:
             return {
                 ...state,
@@ -691,48 +692,61 @@ const navigationReducer = (state = initialState, action) => {
             }
 
 
-
         //School selection
         case SET_SCHOOL_SELECTION_PAGE:
             return {
                 ...state,
                 is_school_selection_page: action.value
                 }
-            case SET_SCHOOL_DETAILS_PAGE:
-                return {
-                    ...state,
-                    is_school_details_page: action.value
-                }
-            case SET_SCHOOL_SELECT_FORM_PAGE:
-                return {
-                    ...state,
-                    is_school_select_form_page: action.value
-                }
-            case SET_CHOOSE_ACCOUNT_FORM_PAGE:
-                return {
-                    ...state,
-                    is_choose_account_form_page: action.value
-                }
-            case SET_SCHOOL_DETAILS_FORM_PAGE:
-                return {
-                    ...state,
-                    is_school_details_form_page: action.value
-                }
-            case SET_NEW_STUDENT_FORM_PAGE:
-                return {
-                    ...state,
-                    is_new_student_form_page: action.value
-                }
-            case SET_NEW_CHOOSE_ADMISSION_TYPE_PAGE:
-                return {
-                    ...state,
-                    is_new_choose_admission_type_page: action.value
-                }
-            case SET_NEW_UPLOAD_DOCUMENT_PAGE:
-                return {
-                    ...state,
-                    is_new_upload_document_page: action.value
-                }
+        case SET_SCHOOL_DETAILS_PAGE:
+            return {
+                ...state,
+                is_school_details_page: action.value
+            }
+        case SET_SCHOOL_SELECT_FORM_PAGE:
+            return {
+                ...state,
+                is_school_select_form_page: action.value
+            }
+        case SET_CHOOSE_ACCOUNT_FORM_PAGE:
+            return {
+                ...state,
+                is_choose_account_form_page: action.value
+            }
+        case SET_SCHOOL_DETAILS_FORM_PAGE:
+            return {
+                ...state,
+                is_school_details_form_page: action.value
+            }
+        case SET_NEW_STUDENT_FORM_PAGE:
+            return {
+                ...state,
+                is_new_student_form_page: action.value
+            }
+        case SET_NEW_CHOOSE_ADMISSION_TYPE_PAGE:
+            return {
+                ...state,
+                is_new_choose_admission_type_page: action.value
+            }
+        case SET_NEW_UPLOAD_DOCUMENT_PAGE:
+            return {
+                ...state,
+                is_new_upload_document_page: action.value
+            }
+
+        //Toggle footer page visibility
+        case TOGGLE_FOOTER_VISIBILITY:
+            return {
+                ...state,
+                is_visible_footer: action.value
+            }
+
+        //Toggle header page visibility
+        case TOGGLE_HEADER_VISIBILITY:
+            return {
+                ...state,
+                is_visible_header: action.value
+            }
         default:
             return state
 

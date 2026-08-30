@@ -106,53 +106,60 @@ class BaseContainer extends Component {
     };
 
     renderHeader = () => {
+        const {is_visible_header} = this.props;
         return (
             <View style={navStyles.header}>
-                <TouchableOpacity style={navStyles.logoContainer} activeOpacity={0.8}>
-                    <Image
-                        source={require('../assets/images/logo.png')}
-                        style={navStyles.logoImage}
-                        resizeMode="contain"
-                    />
-                </TouchableOpacity>
+                {
+                    is_visible_header ?
+                        <>   
+                            <TouchableOpacity style={navStyles.logoContainer} activeOpacity={0.8}>
+                                <Image
+                                    source={require('../assets/images/logo.png')}
+                                    style={navStyles.logoImage}
+                                    resizeMode="contain"
+                                />
+                            </TouchableOpacity>
 
-                <View style={navStyles.headermiddle}>
-                    <Text style={[styles.textBold, navStyles.headermiddletext]}>Poly-H School</Text>
-                    <Text style={[styles.textBold, navStyles.headermiddlesubtext]}>L'intelligence qui transforme l'école pour bâtir la nation.</Text>
-                    <Text style={[styles.textBold, navStyles.headermiddlesubsubtext]}>Au-delà de l'imagination</Text>
-                </View>
-
-                <View style={navStyles.headerRight}>
-                    <TouchableOpacity
-                        onPress={this._navigateToSupport}
-                        style={navStyles.headerBtn}
-                        activeOpacity={0.75}
-                    >
-                        <View style={navStyles.videoWrapper}>
-                            <Video
-                                source={require('../assets/Gif/support.mp4')}
-                                style={navStyles.supportVideo}
-                                resizeMode="cover"
-                                repeat={true}
-                                muted={true}
-                                controls={false}
-                            />
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={this._navigateToNotification}
-                        style={navStyles.headerBtn}
-                        activeOpacity={0.75}
-                    >
-                        <View style={navStyles.iconWrapper}>
-                            <Icon name="bell-outline" size={22} color={COLORS.textPrimary} />
-                            <View style={navStyles.notifBadge}>
-                                <Text style={navStyles.notifBadgeText}>2</Text>
+                            <View style={navStyles.headermiddle}>
+                                <Text style={[styles.textBold, navStyles.headermiddletext]}>Poly-H School</Text>
+                                <Text style={[styles.textBold, navStyles.headermiddlesubtext]}>L'intelligence qui transforme l'école pour bâtir la nation.</Text>
+                                <Text style={[styles.textBold, navStyles.headermiddlesubsubtext]}>Au-delà de l'imagination</Text>
                             </View>
-                        </View>
-                    </TouchableOpacity>
-                </View>
+
+                            <View style={navStyles.headerRight}>
+                                <TouchableOpacity
+                                    onPress={this._navigateToSupport}
+                                    style={navStyles.headerBtn}
+                                    activeOpacity={0.75}
+                                >
+                                    <View style={navStyles.videoWrapper}>
+                                        <Video
+                                            source={require('../assets/Gif/support.mp4')}
+                                            style={navStyles.supportVideo}
+                                            resizeMode="cover"
+                                            repeat={true}
+                                            muted={true}
+                                            controls={false}
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    onPress={this._navigateToNotification}
+                                    style={navStyles.headerBtn}
+                                    activeOpacity={0.75}
+                                >
+                                    <View style={navStyles.iconWrapper}>
+                                        <Icon name="bell-outline" size={22} color={COLORS.textPrimary} />
+                                        <View style={navStyles.notifBadge}>
+                                            <Text style={navStyles.notifBadgeText}>2</Text>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </>
+                    :null
+                }
             </View>
         );
     };
@@ -164,6 +171,7 @@ class BaseContainer extends Component {
             is_message_page,
             is_profil_page,
             is_course_history_page,
+            is_visible_footer,
             is_loading,
         } = this.props;
 
@@ -222,38 +230,42 @@ class BaseContainer extends Component {
 
         return (
             <View style={navStyles.bottomNavContainer} pointerEvents="box-none">
-                <Animated.View
-                    style={[
-                        navStyles.bottomNav,
-                        {
-                            borderColor: is_loading ? animatedBorderColor : COLORS.borderGold,
-                            borderWidth: is_loading ? 2 : 1,
-                        },
-                    ]}
-                >
-                    {navItems.map((item) => (
-                        <TouchableOpacity
-                            key={item.key}
-                            onPress={item.action}
-                            style={navStyles.navItem}
-                            activeOpacity={0.8}
+                {
+                    is_visible_footer ?
+                        <Animated.View
+                            style={[
+                                navStyles.bottomNav,
+                                {
+                                    borderColor: is_loading ? animatedBorderColor : COLORS.borderGold,
+                                    borderWidth: is_loading ? 2 : 1,
+                                },
+                            ]}
                         >
-                            <View style={[item.active ? navStyles.iconBoxActive : navStyles.iconBox]}>
-                                <Icon
-                                    name={item.active ? item.icon : item.iconInactive}
-                                    size={item.active ? 22 : 20}
-                                    color={item.active ? COLORS.bgPrimary : COLORS.textMuted}
-                                />
-                            </View>
-                            <Text
-                                style={[item.active ? navStyles.navLabelActive : navStyles.navLabel]}
-                                numberOfLines={1}
-                            >
-                                {item.label}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
-                </Animated.View>
+                            {navItems.map((item) => (
+                                <TouchableOpacity
+                                    key={item.key}
+                                    onPress={item.action}
+                                    style={navStyles.navItem}
+                                    activeOpacity={0.8}
+                                >
+                                    <View style={[item.active ? navStyles.iconBoxActive : navStyles.iconBox]}>
+                                        <Icon
+                                            name={item.active ? item.icon : item.iconInactive}
+                                            size={item.active ? 22 : 20}
+                                            color={item.active ? COLORS.bgPrimary : COLORS.textMuted}
+                                        />
+                                    </View>
+                                    <Text
+                                        style={[item.active ? navStyles.navLabelActive : navStyles.navLabel]}
+                                        numberOfLines={1}
+                                    >
+                                        {item.label}
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
+                        </Animated.View>
+                    : null
+                }
             </View>
         );
     };
@@ -314,6 +326,8 @@ const mapStateToProps = (state) => ({
     is_message_page: state.navigation.is_message_page,
     is_course_history_page: state.navigation.is_course_history_page,
     is_profil_page: state.navigation.is_profil_page,
+    is_visible_footer: state.navigation.is_visible_footer,
+    is_visible_header:state.navigation.is_visible_header,
     user_token: state.auth.user_token,
 });
 

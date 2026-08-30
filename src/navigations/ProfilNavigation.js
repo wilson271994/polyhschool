@@ -14,6 +14,8 @@ import UpdateLanguage from "../components/Profile/Forms/UpdateLanguage";
 import AddDescription from "../components/Profile/Forms/AddDescription";
 import UpdateAthentificator from "../components/Profile/Forms/UpdateAthentificator";
 import UpdatePassword from "../components/Profile/Forms/UpdatePassword";
+import Support from "../components/Profile/Support/Support";
+import SupportChat from "../components/Profile/Support/SupportChat";
 
 class ProfilNavigation extends Component {
     constructor(props) {
@@ -35,20 +37,9 @@ class ProfilNavigation extends Component {
             is_add_description_page,
             is_update_authentification_page,
             is_update_password_page,
+            is_support_home,
+            is_support_chat
         } = this.props;
-        console.log(
-            is_profil_home,
-            is_profil_update_info,
-            is_profil_update_kyc,
-            is_profil_update_notif,
-            is_profil_faq, 
-            is_profil_referal,
-            is_transaction_history,
-            is_update_language_page,
-            is_add_description_page,
-            is_update_authentification_page,
-            is_update_password_page
-        )
         return (
             <View style={{ flex:1 }}>
                 {
@@ -71,11 +62,21 @@ class ProfilNavigation extends Component {
                         <UpdateNotify />
                     :null
                 }
-                 {
+                {
                     is_profil_faq ?
                         <FAQsIndex />
                     :null
                 } 
+                {
+                    is_support_home ?
+                        <Support />
+                    :null
+                }
+                {
+                    is_support_chat ?
+                        <SupportChat />
+                    :null
+                }
                 {
                     is_transaction_history ?
                         <TransactionHistory />
@@ -128,6 +129,8 @@ const mapStateToProps = (state) => {
         is_add_description_page                 : state.navigation.is_add_description_page,
         is_update_authentification_page         : state.navigation.is_update_authentification_page,
         is_update_password_page                 : state.navigation.is_update_password_page,
+        is_support_home                         : state.navigation.is_support_home,
+        is_support_chat                         : state.navigation.is_support_chat
     }
 }
 

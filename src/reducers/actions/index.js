@@ -282,7 +282,6 @@ export const SignupAction = (postdata) => {
 
 }
 
-
 /**
  * 
  * @param {*} postdata 
@@ -338,7 +337,6 @@ export const AccountActivationAction = (postdata) => {
         store.dispatch({ type: IS_LOADING, value: false });
     }
 }
-
 
 /**
  * 
@@ -445,7 +443,6 @@ export const addChildAction = (postdata, gardiant_data) => {
  * @param {*} postdata 
  * Logout Account
  */
-
 export const SchoolAppSubscription = (postdata) => {
     store.dispatch({ type: IS_LOADING, value: true })
     axiosClient.post(`${BASE_URL}/api-school/school-student-registration`, postdata)
@@ -564,6 +561,8 @@ export const LogoutAction = (postdata) => {
         })
 }
 
+
+
 /**
  * 
  * @param {*} postdata 
@@ -571,16 +570,21 @@ export const LogoutAction = (postdata) => {
  */
 
 // Ajouter un événement agenda
-export const AddAgendaAction = (data) => {
+export const CreateAgendaAction = (data, events, _callBack) => {
     store.dispatch({ type: IS_LOADING, value: true });
-    axiosClient.post(`${BASE_URL}/api-school/agenda`, data)
+    axiosClient.post(`${BASE_URL}/api-school/create-student-agenda`, data)
         .then((res) => {
             if (res.data.status === 200) {
-                store.dispatch({ type: IS_LOADING, value: false });
                 Toast.show({
                     type: 'success',
                     props: { title: 'Succès', description: 'Événement ajouté avec succès' }
                 });
+
+                const new_event = res.data.result.new_task;
+                var objectList = events;
+                objectList.push(new_event);
+                _callBack();
+                store.dispatch({ type: IS_LOADING, value: false });
             } else {
                 store.dispatch({ type: IS_LOADING, value: false });
                 Toast.show({
@@ -659,8 +663,6 @@ export const DeleteAgendaAction = (data) => {
  * @param {*} postdata 
  * List Student Activities
  */
-
-
 export const FetchStudentActivitiesAction = (token) => {
     store.dispatch({ type: IS_LOADING, value: true });
     axios.get(`${BASE_URL}/api-school/student-activities?token=${token}`)
@@ -690,7 +692,6 @@ export const FetchStudentActivitiesAction = (token) => {
  * @param {*} postdata 
  * Upload Documents
  */
-
 export const UploadDocumentAction = (postdata) => {
     store.dispatch({ type: IS_LOADING, value: true });
     axiosClient.post(`${BASE_URL}/api-school/upload-admission-documents`, postdata)
@@ -738,7 +739,6 @@ export const UploadDocumentAction = (postdata) => {
  * @param {*} postdata 
  * UpdateProfilAction
  */
-
 export const UpdateProfilAction = (postdata) => {
     store.dispatch({ type: IS_LOADING, value: true })
     axiosClient.post(`${BASE_URL}/api-auth/user-update-info`, postdata)
@@ -785,7 +785,6 @@ export const UpdateProfilAction = (postdata) => {
  * @param {*} postdata 
  * UpdateKycAction
  */
-
 export const UpdateKycAction = (formdata) => {
     store.dispatch({ type: IS_LOADING, value: true})
     axiosClient.post(`${BASE_URL}/api-auth`, formdata)
@@ -832,8 +831,6 @@ export const UpdateKycAction = (formdata) => {
  * @param {*} postdata 
  * UpdateNotification
  */
-
-
 export const UpdateNotificationPermissionAction = (postdata) => {
     store.dispatch({ type: IS_LOADING, value: true })
     axiosClient.post(`${BASE_URL}/api-school/update-gardian-notification`, postdata)
@@ -880,3 +877,47 @@ export const UpdateNotificationPermissionAction = (postdata) => {
             store.dispatch({ type: IS_LOADING, value: false });
         })
 }
+
+
+
+/**
+ * 
+ * @param {*} postdata 
+ * Manage Payment fee extension
+ */
+
+// Create request for extension
+export const CreateFeeExtensionAction = (data, moratoires, _callBack) => {
+    store.dispatch({ type: IS_LOADING, value: true });
+    axiosClient.post(`${BASE_URL}/api-school/create-fee-extension`, data)
+        .then((res) => {
+            if (res.data.status === 200) {
+                store.dispatch({ type: IS_LOADING, value: false });
+                Toast.show({
+                    type: 'success',
+                    props: { title: 'Succès', description: res.data.message }
+                });
+
+                const newObject = res.data.result.fee_extension;
+
+                //Update the current list
+                var extensionList = moratoires;
+                extensionList.push(newObject)
+                _callBack();
+                
+            } else {
+                store.dispatch({ type: IS_LOADING, value: false });
+                Toast.show({
+                    type: 'error',
+                    props: { title: 'Erreur', description: res.data.message || 'Une erreur est survenue' }
+                });
+            }
+        })
+        .catch(() => {
+            store.dispatch({ type: IS_LOADING, value: false });
+            Toast.show({
+                type: 'info',
+                props: { title: 'Connexion internet!', description: 'Votre débit internet est instable. Vérifiez votre connectivité et réessayez' }
+            });
+        });
+};

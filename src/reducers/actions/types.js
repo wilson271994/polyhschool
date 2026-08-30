@@ -176,3 +176,9 @@ export const FAQ_LIST                                       = 'FAQ_LIST';
 
 //DETAIL ACTION
 export const SET_TEACHER_INFOS                              = 'SET_TEACHER_INFOS';
+
+//FOOTER VISIBILITY
+export const TOGGLE_FOOTER_VISIBILITY                       = 'TOGGLE_FOOTER_VISIBILITY';
+
+//HEADER VISIBILITY
+export const TOGGLE_HEADER_VISIBILITY                       = 'TOGGLE_HEADER_VISIBILITY';

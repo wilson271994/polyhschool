@@ -15,9 +15,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Slider } from 'react-native-elements/dist/slider/Slider';
 
-import { switchHomePageAction } from '../../navigations/rootNavigation';
-import { homeworkstyle } from '../../assets/styles/studenthomework';
-import { COLORS } from '../../assets/styles/theme';
+import { switchHomePageAction } from '../../../navigations/rootNavigation';
+import { homeworkstyle } from '../../../assets/styles/studenthomework';
+import { COLORS } from '../../../assets/styles/theme';
 
 const STORAGE_KEY = '@StudentHomework_progress';
 

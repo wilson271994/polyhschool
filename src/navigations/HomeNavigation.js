@@ -3,34 +3,29 @@ import React, { Component } from "react";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { View } from "react-native";
-import Support from "../components/Profile/Support";
-import SupportChat from "../components/Profile/SupportChat";
 import Enregistrement1 from "../components/Home/Parent/Enregistrement1";
 import Enregistrement2 from "../components/Home/Parent/Enregistrement2";
 import School_Selection from "../components/Home/Parent/School_Selection";
 import Home from "../screens/Home";
-import StudentMenu from "../components/ParentMenu/StudentMenu.js";
-import StudentAgenda from "../components/ParentMenu/StudentAgenda.js";
 import StudentAbsences from "../components/ParentMenu/StudentAbsences.js";
 import StudentProgress from "../components/ParentMenu/StudentProgress.js";
-import StudentActivities from "../components/ParentMenu/StudentActivities.js";
 import TeachersList from "../components/ParentMenu/TeachersList.js";
 import NotificationIndex from "../components/Home/NotificationIndex";
 import ChildInfos from "../components/ParentMenu/ChildInfos.js";
-import StudentHomework from "../components/ParentMenu/StudentHomework.js";
 import SchoolFees from "../components/ParentMenu/SchoolFees.js";
 import StudentRemarks from "../components/ParentMenu/StudentRemarks.js";
 import Student_Infos from "../components/StudentMenu/Student_Infos";
-import Student_Menu from "../components/StudentMenu/Student_Menu";
+import Student_Menu from "../components/Home/Pages/Menu.js";
 import Teachers_List from "../components/StudentMenu/Teachers_List";
-import Student_Planning from "../components/StudentMenu/Student_Planning";
-import Student_Absences from "../components/StudentMenu/Student_Absences";
+
+import Planning from "../components/Home/Pages/Planning.js";
+import Absences from "../components/Home/Pages/Absences.js";
 import Student_Remarks from "../components/StudentMenu/Student_Remarks";
-import Student_Homework from "../components/StudentMenu/Student_Homework";
-import School_Fees from "../components/StudentMenu/School_Fees";
+import Homework from "../components/Home/Pages/Homework.js";
+
+import Fees from "../components/Home/Pages/Fees.js";
 import Student_Progress from "../components/StudentMenu/Student_Progress";
-import Student_Activities from "../components/StudentMenu/Student_Activities";
-import Student_Agenda from "../components/StudentMenu/Student_Agenda";
+import Activities from "../components/Home/Pages/Activities.js";
 import AdvanceRemarksFilter from "../components/ParentMenu/AdvanceRemarksFilter.js";
 import Advance_Remarks_Filter from "../components/StudentMenu/Advance_Remarks_Filter.js";
 import Student_Transport from "../components/StudentMenu/Student_Transport.js";
@@ -59,6 +54,7 @@ import ChooseAdmission from "../components/Home/Parent/ChooseAdmission.js";
 import UploadAdmissionDocument from "../components/Home/Parent/UploadAdmissionDocument.js";
 import NewChooseAdmission from "../components/PolyHForm/NewChooseAdmission.js";
 import NewUploadAdmissionDocument from "../components/PolyHForm/NewUploadAdmissionDocument.js";
+import Agenda from "../components/Home/Pages/Agenda.js";
 
 class HomeNavigation extends Component {
     constructor(props) {
@@ -76,10 +72,7 @@ class HomeNavigation extends Component {
             is_school_details_parent_page,
             is_parent_choose_admission_type,
             is_parent_upload_document_page,
-            is_support_home,
-            is_support_chat,
             is_notif_home,
-            is_student_menu_page,
             is_student_absences_page,
             is_student_infos_page,
             is_student_planning_page,
@@ -95,7 +88,6 @@ class HomeNavigation extends Component {
             is_homework_student_page,
             is_fees_school_page,
             is_student_progression_page,
-            is_student_activities_page,
             is_agenda_student_page,
             is_advance_remarks_filter_page,
             is_advance_remarks_search_page,
@@ -122,7 +114,7 @@ class HomeNavigation extends Component {
             is_new_student_form_page,
             is_new_choose_admission_type_page,
             is_new_upload_document_page,
-
+            is_activities_student_page,
         } = this.props;
         return (
             <View style={{ flex:1 }}>
@@ -134,16 +126,6 @@ class HomeNavigation extends Component {
                 {
                     is_notif_home ?
                         <NotificationIndex />
-                    :null
-                }
-                {
-                    is_support_home ?
-                        <Support />
-                    :null
-                }
-                {
-                    is_support_chat ?
-                        <SupportChat />
                     :null
                 }
                 {
@@ -174,11 +156,6 @@ class HomeNavigation extends Component {
                 {
                     is_parent_upload_document_page ?
                         <UploadAdmissionDocument />
-                    :null
-                }
-                {
-                    is_student_menu_page ?
-                        <StudentMenu />
                     :null
                 }
                 {
@@ -228,12 +205,12 @@ class HomeNavigation extends Component {
                 }
                 {
                     is_student_planning_page ?
-                        <Student_Planning/>
+                        <Planning/>
                     :null
                 }
                 {
                     is_absences_student_page ?
-                        <Student_Absences/>
+                        <Absences/>
                     :null
                 }
                 {
@@ -243,12 +220,12 @@ class HomeNavigation extends Component {
                 }
                 {
                     is_homework_student_page ?
-                        <Student_Homework/>
+                        <Homework/>
                     :null
                 }
                 {
                     is_fees_school_page ?
-                        <School_Fees/>
+                        <Fees/>
                     :null
                 }
                 {
@@ -257,13 +234,13 @@ class HomeNavigation extends Component {
                     :null
                 }
                 {
-                    is_student_activities_page ?
-                        <Student_Activities/>
+                    is_activities_student_page ?
+                        <Activities/>
                     :null
                 }
                 {
                     is_agenda_student_page ?
-                        <Student_Agenda/>
+                        <Agenda/>
                     :null
                 }
                 
@@ -409,19 +386,15 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
     return {
         is_sys_home                                 : state.navigation.is_sys_home,
-        is_support_home                             : state.navigation.is_support_home,
-        is_support_chat                             : state.navigation.is_support_chat,
         is_notif_home                               : state.navigation.is_notif_home,
         is_register_1                               : state.navigation.is_register_1,
         is_school_details_parent_page               : state.navigation.is_school_details_parent_page,
         is_school_selection_parent_page             : state.navigation.is_school_selection_parent_page,
         is_register_2                               : state.navigation.is_register_2,
-        is_student_menu_page                        : state.navigation.is_student_menu_page,
         is_student_absences_page                    : state.navigation.is_student_absences_page,
         is_student_infos_page                       : state.navigation.is_student_infos_page,
         is_student_planning_page                    : state.navigation.is_student_planning_page,
         is_student_progress_page                    : state.navigation.is_student_progress_page,
-        is_student_activities_page                  : state.navigation.is_student_activities_page,
         is_teacher_list_page                        : state.navigation.is_teacher_list_page,
         is_school_fees_page                         : state.navigation.is_school_fees_page,
         is_student_remarks_page                     : state.navigation.is_student_remarks_page,

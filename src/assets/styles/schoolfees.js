@@ -1,11 +1,10 @@
 import { StyleSheet, Dimensions } from 'react-native';
-
-const { width } = Dimensions.get('window');
+import { COLORS } from './theme';
 
 export const feestyle = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#011638',
+        backgroundColor: COLORS.bgPrimary,
     },
 
     /* Glow Orbs */
@@ -36,7 +35,7 @@ export const feestyle = StyleSheet.create({
         paddingVertical: 14,
         borderBottomWidth: 1,
         borderBottomColor: 'rgba(255, 255, 255, 0.08)',
-        backgroundColor: '#011638',
+        backgroundColor: COLORS.bgPrimary,
     },
     backButton: {
         width: 36,
@@ -46,6 +45,7 @@ export const feestyle = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 12,
+        borderColor: COLORS.borderLight,
     },
     headerTitle: {
         fontSize: 18,
@@ -58,11 +58,11 @@ export const feestyle = StyleSheet.create({
     },
     tabContainer: {
         flexDirection: 'row',
-        backgroundColor: '#030D1E',
+        backgroundColor: 'rgba(0, 31, 63, 0.6)',
         borderRadius: 16,
         padding: 4,
         borderWidth: 1,
-        borderColor: '#1E293B',
+        borderColor: COLORS.borderLight,
     },
     tabButton: {
         flex: 1,
@@ -92,32 +92,26 @@ export const feestyle = StyleSheet.create({
         paddingHorizontal: 14,
         paddingVertical: 6,
         borderRadius: 20,
-        backgroundColor: '#030D1E',
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+        marginRight: 8,
         borderWidth: 1,
-        borderColor: '#1E293B',
+        borderColor: COLORS.borderLight,
     },
     filterChipActive: {
-        borderColor: '#f6a100',
-        backgroundColor: 'rgba(246, 161, 0, 0.12)',
-    },
-    filterChipText: {
-        fontSize: 12,
-        color: '#94A3B8',
-    },
-    filterChipTextActive: {
-        color: '#f6a100',
+        backgroundColor: 'rgba(54, 209, 220, 0.15)',
+        borderColor: COLORS.accentCyan,
     },
 
     /* Resume Statistique */
     statsContainer: {
         flexDirection: 'row',
-        backgroundColor: 'rgba(1, 22, 56, 0.75)',
+        backgroundColor: COLORS.cardBg,
         borderRadius: 18,
         paddingVertical: 14,
         paddingHorizontal: 12,
         marginBottom: 16,
         borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.08)',
+        borderColor: COLORS.borderLight,
         alignItems: 'center',
     },
     statCard: {
@@ -152,12 +146,12 @@ export const feestyle = StyleSheet.create({
     /* Calendrier */
     /* ── Calendrier Ultra Moderne & Lumineux ── */
     calendarCard: {
-        backgroundColor: 'rgba(3, 13, 30, 0.85)',
+        backgroundColor: COLORS.cardBg,
         borderRadius: 24,
         padding: 16,
         marginBottom: 16,
         borderWidth: 1,
-        borderColor: 'rgba(246, 161, 0, 0.25)', // Bordure dorée subtile
+        borderColor: COLORS.borderLight,
         shadowColor: '#f6a100',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
@@ -168,13 +162,13 @@ export const feestyle = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        backgroundColor: COLORS.cardBg,
         paddingHorizontal: 12,
         paddingVertical: 8,
         borderRadius: 16,
         marginBottom: 14,
         borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.08)',
+        borderColor: COLORS.borderLight,
     },
     navBtn: {
         width: 34,
@@ -316,12 +310,12 @@ export const feestyle = StyleSheet.create({
 
     /* Sections Verre */
     sectionGlass: {
-        backgroundColor: 'rgba(1, 22, 56, 0.75)',
+        backgroundColor: COLORS.cardBg,
         borderRadius: 20,
         padding: 16,
         marginBottom: 16,
         borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.08)',
+        borderColor: COLORS.borderLight,
     },
     sectionTitle: {
         fontSize: 15,
@@ -334,12 +328,12 @@ export const feestyle = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#030D1E',
+        backgroundColor: COLORS.cardBg, 
         borderRadius: 14,
         padding: 12,
         marginBottom: 8,
         borderWidth: 1,
-        borderColor: '#1E293B',
+        borderColor: COLORS.borderLight,
     },
     paidMonthlyCard: {
         borderColor: 'rgba(16, 185, 129, 0.2)',
@@ -399,20 +393,22 @@ export const feestyle = StyleSheet.create({
         paddingHorizontal: 12,
         paddingVertical: 4,
         borderRadius: 12,
-        backgroundColor: '#030D1E',
-        marginRight: 6,
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+        marginRight: 8,
         borderWidth: 1,
-        borderColor: '#1E293B',
+        borderColor: COLORS.borderLight,
     },
     subFilterChipActive: {
-        borderColor: '#f6a100',
+        backgroundColor: 'rgba(54, 209, 220, 0.15)',
+        borderColor: COLORS.accentCyan,
     },
-    subFilterText: {
+    filterChipText: {
         fontSize: 11,
-        color: '#64748B',
+        color: COLORS.textSecondary,
     },
-    subFilterTextActive: {
-        color: '#f6a100',
+    filterChipTextActive: {
+        color: COLORS.accentCyan,
+        fontWeight: 'bold',
     },
 
     historyCard: {
@@ -441,6 +437,11 @@ export const feestyle = StyleSheet.create({
         fontSize: 13,
         color: '#FFFFFF',
     },
+    historyNote:{
+        fontSize: 12,
+        color: '#64748B',
+        fontStyle:'italic'
+    },
     historyDate: {
         fontSize: 11,
         color: '#64748B',
@@ -452,6 +453,10 @@ export const feestyle = StyleSheet.create({
         fontSize: 12,
         color: '#10B981',
     },
+    historyunPaidAmount: {
+        fontSize: 12,
+        color: '#EF4444',
+    },
     historyMethod: {
         fontSize: 10,
         color: '#94A3B8',
@@ -459,12 +464,12 @@ export const feestyle = StyleSheet.create({
 
     /* Moratoire Card */
     moratoireCard: {
-        backgroundColor: '#030D1E',
+        backgroundColor: COLORS.cardBg,
         borderRadius: 14,
         padding: 12,
         marginBottom: 10,
         borderWidth: 1,
-        borderColor: '#1E293B',
+        borderColor: COLORS.borderLight,
     },
     moratoireHeader: {
         flexDirection: 'row',
@@ -505,7 +510,7 @@ export const feestyle = StyleSheet.create({
     /* Floating Button */
     floatingButton: {
         position: 'absolute',
-        bottom: 85,
+        bottom: 100,
         right: 20,
         width: 52,
         height: 52,
@@ -530,14 +535,14 @@ export const feestyle = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
     },
     modalContainer: {
-        backgroundColor: '#011638',
+        backgroundColor: COLORS.cardBg,
         borderTopLeftRadius: 28,
         borderTopRightRadius: 28,
         paddingHorizontal: 20,
         paddingBottom: 24,
-        maxHeight: '85%',
+        maxHeight: '100%',
         borderTopWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.1)',
+        borderColor: COLORS.borderLight,
     },
     modalHandle: {
         width: 36,
@@ -563,19 +568,19 @@ export const feestyle = StyleSheet.create({
     },
     modalLabel: {
         fontSize: 12,
-        color: '#f6a100',
+        color: COLORS.textPrimary,
         marginTop: 10,
-        marginBottom: 6,
+        marginBottom: 10,
     },
     modalInput: {
-        backgroundColor: '#030D1E',
+        backgroundColor: COLORS.cardBg,
         borderRadius: 12,
         paddingHorizontal: 12,
         paddingVertical: 10,
         fontSize: 13,
         color: '#FFFFFF',
         borderWidth: 1,
-        borderColor: '#1E293B',
+        borderColor: COLORS.borderLight,
     },
     errorText: {
         fontSize: 11,
@@ -591,7 +596,7 @@ export const feestyle = StyleSheet.create({
     },
     checkboxLabel: {
         flex: 1,
-        fontSize: 11,
+        fontSize: 13,
         color: '#CBD5E1',
         lineHeight: 16,
     },
@@ -602,7 +607,7 @@ export const feestyle = StyleSheet.create({
     },
     modalCancelButton: {
         flex: 1,
-        backgroundColor: '#030D1E',
+        backgroundColor: COLORS.bgSecondary,
         paddingVertical: 12,
         borderRadius: 12,
         alignItems: 'center',
@@ -629,5 +634,45 @@ export const feestyle = StyleSheet.create({
         color: '#64748B',
         paddingVertical: 16,
         fontSize: 12,
+    },
+
+
+     /* Dropdowns */
+    dropdown: {
+        height: 48,
+        backgroundColor: COLORS.cardBg,
+        borderRadius: 14,
+        borderWidth: 1,
+        borderColor: COLORS.borderLight,
+        paddingHorizontal: 12,
+        marginBottom: 12,
+    },
+    dropdownFocused: {
+        borderColor: COLORS.borderLight,
+        backgroundColor: COLORS.cardBg,
+    },
+    dropdownContainer: {
+        backgroundColor: COLORS.bgSecondary,
+        borderColor: COLORS.borderLight,
+        borderRadius: 10,
+    },
+    placeholderStyle: {
+        fontSize: 13,
+        color: COLORS.textMuted,
+    },
+    selectedTextStyle: {
+        fontSize: 13,
+        color: COLORS.textPrimary,
+    },
+    inputSearchStyle: {
+        height: 40,
+        fontSize: 13,
+        color: COLORS.textPrimary,
+        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+        borderRadius: 10,
+    },
+    itemTextStyle: {
+        fontSize: 13,
+        color: COLORS.textPrimary,
     },
 });

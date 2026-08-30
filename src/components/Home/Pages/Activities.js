@@ -12,12 +12,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { activitiestyles } from '../../assets/styles/studentactivities';
-import { COLORS } from '../../assets/styles/theme';
-import { switchHomePageAction } from '../../navigations/rootNavigation';
-import { styles } from '../../assets/styles';
+import { activitiestyles } from '../../../assets/styles/studentactivities';
+import { COLORS } from '../../../assets/styles/theme';
+import { switchHomePageAction } from '../../../navigations/rootNavigation';
+import { styles } from '../../../assets/styles';
 
-class Student_Activities extends PureComponent {
+class Activities extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -304,4 +304,4 @@ const mapStateToProps = (state) => ({
     user_infos: state.auth.user_infos,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Student_Activities);
+export default connect(mapStateToProps, mapDispatchToProps)(Activities);

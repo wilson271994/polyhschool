@@ -48,7 +48,6 @@ class SettingIndex extends PureComponent {
         };
     }
 
-    _backToHome = () => switchHomePageAction(true);
     _toggleDarkMode = (value) => this.setState({ darkModeEnabled: value });
 
     _navigateToProfilUpdate = () => switchProfilUpdateInfoAction(true);
@@ -119,9 +118,6 @@ class SettingIndex extends PureComponent {
 
                 {/* Top Header */}
                 <View style={settingstyle.headerContainer}>
-                    <TouchableOpacity style={settingstyle.backButton} onPress={this._backToHome} activeOpacity={0.7}>
-                        <Entypo name="chevron-left" size={24} color={COLORS.textPrimary} />
-                    </TouchableOpacity>
                     <View style={settingstyle.headerTitleWrapper}>
                         <Text style={[styles.textBold, settingstyle.headerTitle]}>Mon Compte</Text>
                     </View>
@@ -176,7 +172,7 @@ class SettingIndex extends PureComponent {
                     {/* Section: Finances */}
                     <Text style={[styles.textBold, settingstyle.sectionTitle]}>FINANCES & TRANSACTIONS</Text>
                     <View style={settingstyle.bloccontainer}>
-                        {this.renderMenuItem('credit-card-clock-outline', COLORS.accentGold, 'Historique des transactions', 'Consultez vos paiements et reçus', this._navigateToTransactions)}
+                        {this.renderMenuItem('credit-card', COLORS.accentGold, 'Historique des transactions', 'Consultez vos paiements et reçus', this._navigateToTransactions)}
                     </View>
 
                     {/* Section: Support */}
@@ -188,9 +184,9 @@ class SettingIndex extends PureComponent {
 
                     {/* Section: Session */}
                     <Text style={[styles.textBold, settingstyle.sectionTitle]}>SESSION</Text>
-                    <View style={settingstyle.bloccontainer}>
+                    <View style={settingstyle.bloccontainer}> 
                         <TouchableOpacity style={settingstyle.paramitem} onPress={this._toggleLogout} activeOpacity={0.75}>
-                            <View style={[settingstyle.containericonimg, { backgroundColor: 'rgba(244, 63, 94, 0.15)' }]}>
+                            <View style={[settingstyle.containericonimg, { backgroundColor: 'rgba(244, 63, 94, 0.15)' }]}> 
                                 <Icon name="logout" size={22} color="#F43F5E" />
                             </View>
                             <View style={settingstyle.labelmenucont}>

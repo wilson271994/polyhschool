@@ -3,8 +3,8 @@ import { COLORS } from './theme';
 
 export const profilstyle = StyleSheet.create({
     /* ==========================================================================
-       1. CONTENEURS ET GLOWS D'AMBIANCE
-       ========================================================================== */
+    1. CONTENEURS ET GLOWS D'AMBIANCE
+    ========================================================================== */
     containerform: {
         flex: 1,
         backgroundColor: COLORS.bgPrimary,
@@ -349,8 +349,8 @@ export const profilstyle = StyleSheet.create({
     },
 
     /* ==========================================================================
-       7. SÉCURITÉ 2FA (UpdateAuthentification.js)
-       ========================================================================== */
+    7. SÉCURITÉ 2FA (UpdateAuthentification.js)
+    ========================================================================== */
     infoBox2FA: {
         flexDirection: 'row',
         alignItems: 'center',

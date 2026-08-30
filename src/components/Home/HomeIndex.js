@@ -21,8 +21,8 @@ import Toast from 'react-native-toast-message';
 import { homestyle } from '../../assets/styles/home.js';
 import { styles } from '../../assets/styles/index.js';
 import { COLORS } from '../../assets/styles/theme.js';
-import { FetchShoolUserInfos, switchHeaderAction } from '../../reducers/actions/index.js';
-import Student_Menu from '../StudentMenu/Student_Menu.js';
+import { FetchSchoolPreloadDataAction, FetchShoolUserInfos, switchHeaderAction } from '../../reducers/actions/index.js';
+import Student_Menu from './Pages/Menu.js';
 import { switchStudentChooseAccountPageAction } from '../../navigations/rootNavigation.js';
 import { BASE_URL } from '../../api/config.js';
 import { ImagePickerModal } from './Modal/ImagePickerModal.js';
@@ -46,7 +46,7 @@ class HomeIndex extends PureComponent {
 
     componentDidMount() {
         this._handleRefresh();
-        this.startWelcomeAnimation(); // <-- AJOUTÉ : Lancement de l'animation
+        this.startWelcomeAnimation();
     }
 
     _startSpin = () => {
@@ -72,6 +72,7 @@ class HomeIndex extends PureComponent {
 
         if (user_token) {
             await FetchShoolUserInfos(user_token);
+            await FetchSchoolPreloadDataAction();
         }
 
         setTimeout(() => {
@@ -420,7 +421,8 @@ const mapDispatchToProps = (dispatch) => ({
     ...bindActionCreators({
         switchHeaderAction,
         switchStudentChooseAccountPageAction,
-        FetchShoolUserInfos
+        FetchShoolUserInfos,
+        FetchSchoolPreloadDataAction
     }, dispatch),
 });
 

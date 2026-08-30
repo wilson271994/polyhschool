@@ -26,12 +26,15 @@ export const agendastyle = StyleSheet.create({
     backgroundColor: 'rgba(54, 209, 220, 0.10)',
   },
 
-  /* Header local standardisé */
-  localHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    marginBottom: 14,
+  /* Bar d'Entête */
+  headerBar: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+      paddingVertical: 14,
+      borderBottomWidth: 1,
+      borderBottomColor: 'rgba(255, 255, 255, 0.08)',
+      backgroundColor: COLORS.bgPrimary,
   },
   btnBackCustom: {
     width: 36,
@@ -256,7 +259,7 @@ export const agendastyle = StyleSheet.create({
   timeField: {
     width: '48%',
   },
-  timeLabel: {
+  inputLabel: {
     fontSize: 11,
     color: COLORS.textMuted,
     marginBottom: 4,
@@ -271,7 +274,7 @@ export const agendastyle = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.borderLight,
   },
-  timeError: {
+  textError: {
     fontSize: 10,
     color: '#F43F5E',
     marginTop: 2,
@@ -317,6 +320,7 @@ export const agendastyle = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 10,
     backgroundColor: COLORS.accentGold,
+    width:75
   },
   buttonTextCancel: {
     color: COLORS.textMuted,

@@ -17,10 +17,10 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 
-import { supportchatstyle } from '../../assets/styles/supportchat';
-import { switchSupportHomeAction, switchProfilPageAction } from '../../navigations/rootNavigation';
-import { styles } from '../../assets/styles';
-import { COLORS } from '../../assets/styles/theme';
+import { supportchatstyle } from '../../../assets/styles/supportchat';
+import { switchSupportHomeAction, switchFooterVisibilityAction } from '../../../navigations/rootNavigation';
+import { styles } from '../../../assets/styles';
+import { COLORS } from '../../../assets/styles/theme';
 
 class SupportChat extends PureComponent {
     constructor(props) {
@@ -118,8 +118,9 @@ class SupportChat extends PureComponent {
         setTimeout(() => this.setState({ toast: '' }), 2500);
     };
 
-    _navigateToProfil = () => {
-        switchProfilPageAction(true);
+    _navigateToSupport = () => {
+        switchSupportHomeAction(true);
+        switchFooterVisibilityAction(true);
     };
 
     updateMessageStatus = (messageId, status) => {
@@ -248,7 +249,7 @@ class SupportChat extends PureComponent {
                 <View style={supportchatstyle.headerNav}>
                     <TouchableOpacity
                         style={supportchatstyle.backButton}
-                        onPress={this._navigateToProfil}
+                        onPress={this._navigateToSupport}
                         activeOpacity={0.7}
                     >
                         <Entypo name="chevron-left" size={24} color={COLORS.textPrimary} />
@@ -357,7 +358,7 @@ const mapDispatchToProps = (dispatch) => ({
     ...bindActionCreators(
         {
             switchSupportHomeAction,
-            switchProfilPageAction
+            switchFooterVisibilityAction
         },
         dispatch
     ),

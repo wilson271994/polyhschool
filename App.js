@@ -7,6 +7,7 @@ import SplashScreen from 'react-native-splash-screen';
 import Toast from 'react-native-toast-message';
 import { ToastConfig } from './src/assets/utils/toastCustom';
 import BaseContainer from './src/Base/BaseContainer'
+import { COLORS } from './src/assets/styles/theme';
 
 export default App = () => {
     const [loading, setLoading] = useState(true);
@@ -20,7 +21,7 @@ export default App = () => {
     return (
         <Provider store={store}>
             <NavigationContainer>
-                <StatusBar backgroundColor="#1B497D" />
+                <StatusBar backgroundColor={COLORS.bgPrimary} />
                 <BaseContainer />
                 <Toast
                     position='top'

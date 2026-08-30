@@ -4,17 +4,17 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { COLORS } from '../../assets/styles/theme.js';
-import { styles } from '../../assets/styles/index.js';
+import { COLORS } from '../../../assets/styles/theme.js';
+import { styles } from '../../../assets/styles/index.js';
 import {
     studentmenustyle,
     ORBIT_SIZE,
-} from '../../assets/styles/studentmenu.js';
+} from '../../../assets/styles/studentmenu.js';
 
 import {
     switchAgendaStudentPageAction,
     switchSchoolFeesAction,
-    switchFeesSchoolPageAction,
+    switchSchoolFeesPageAction,
     switchHomeworkStudentPageAction,
     switchRemarkStudentPageAction,
     switchListTeacherPageAction,
@@ -22,10 +22,10 @@ import {
     switchStudentTransportPageAction,
     switchStudentHostingPageAction,
     switchStudentLibraryPageAction,
-    switchStudentActivitiesAction,
+    switchActivitiesStudentPageAction,
     switchStudentProgressAction,
     switchStudentPlanningAction
-} from '../../navigations/rootNavigation.js';
+} from '../../../navigations/rootNavigation.js';
 
 class Student_Menu extends PureComponent {
     constructor(props) {
@@ -81,13 +81,13 @@ class Student_Menu extends PureComponent {
             key: 'activity',
             label: 'Activités',
             icon: 'account-group-outline',
-            action: () => switchStudentActivitiesAction(true),
+            action: () => switchActivitiesStudentPageAction(true),
         },
         {
             key: 'fees',
             label: 'Frais Scolaires',
             icon: 'cash-multiple',
-            action: () => switchStudentActivitiesAction(true),
+            action: () => switchSchoolFeesPageAction(true),
         },
     ];
 
@@ -263,7 +263,8 @@ const mapDispatchToProps = (dispatch) => ({
             switchStudentHostingPageAction,
             switchSchoolFeesAction,
             switchStudentLibraryPageAction,
-            switchAgendaStudentPageAction
+            switchAgendaStudentPageAction,
+            switchActivitiesStudentPageAction
         },
         dispatch
     ),

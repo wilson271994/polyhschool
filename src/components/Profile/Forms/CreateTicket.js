@@ -1,7 +1,7 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
-import {connect} from 'react-redux';
-import { TouchableOpacity, View, Modal, Text, TextInput, Button} from 'react-native';
+import { connect } from 'react-redux';
+import { TouchableOpacity, View, Modal, Text, TextInput, Button } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -10,142 +10,142 @@ import { ScrollView } from 'react-native';
 import { supportstyle } from '../../../assets/styles/support';
 
 const dataconfid = [
-    {label:'Commercial', value:1},
-    {label:'Technique', value:2}
-] 
+    { label: 'Commercial', value: 1 },
+    { label: 'Technique', value: 2 }
+]
 
 class CreateTicket extends PureComponent {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            groupcoverValue:{},
-            groupnameValue:'',
-            grouplinkValue:'',
-            groupdescriptionValue:'',
-            confidValue:1,
-            confidLabel:'Public',
-            isFocusConfid:false,
-            catValue:2,
-            catLabel:'Cars and Vehicles',
-            isFocusCat:false,
-            is_alert:false,
-            alert_title:'',
-            alert_subtitle:'',
-            isVisibleTckCrModal : false
+            groupcoverValue: {},
+            groupnameValue: '',
+            grouplinkValue: '',
+            groupdescriptionValue: '',
+            confidValue: 1,
+            confidLabel: 'Public',
+            isFocusConfid: false,
+            catValue: 2,
+            catLabel: 'Cars and Vehicles',
+            isFocusCat: false,
+            is_alert: false,
+            alert_title: '',
+            alert_subtitle: '',
+            isVisibleTckCrModal: false
         }
     };
 
     state = {
         selectedImage: null,
-      };
+    };
 
-      chooseImage = () => {
+    chooseImage = () => {
         const options = {
-          title: 'Sélectionner une image',
-          storageOptions: {
-            skipBackup: true,
-            path: 'images',
-          },
+            title: 'Sélectionner une image',
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
         };
 
         ImagePicker.showImagePicker(options, (response) => {
             console.log('Response = ', response);
-      
-            if (response.didCancel) {
-              console.log('User cancelled image picker');
-            } else if (response.error) {
-              console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-              console.log('User tapped custom button: ', response.customButton);
-            } else {
-              const source = { uri: response.uri };
-      
-              this.setState({
-                selectedImage: source,
-              });
-            }
-          });
-        };
 
-    componentDidMount(){}
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                const source = { uri: response.uri };
+
+                this.setState({
+                    selectedImage: source,
+                });
+            }
+        });
+    };
+
+    componentDidMount() { }
 
     _openPickupImage = () => {
         MultipleImagePicker.openPicker({
-            mediaType:'image',
-            singleSelectedMode:true
+            mediaType: 'image',
+            singleSelectedMode: true
         })
-        .then((data) => {
-            let image = {
-                'name':data.fileName,
-                'uri': 'file://' + data.realPath,
-                'type':data.mime,
-                'info_file':data.type
-            }
-            this.setState({coverPubValue:image});
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((data) => {
+                let image = {
+                    'name': data.fileName,
+                    'uri': 'file://' + data.realPath,
+                    'type': data.mime,
+                    'info_file': data.type
+                }
+                this.setState({ coverPubValue: image });
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     _handleFocusConfid = () => {
-        const {isFocusConfid} = this.state;
-        this.setState({isFocusConfid:!isFocusConfid});
+        const { isFocusConfid } = this.state;
+        this.setState({ isFocusConfid: !isFocusConfid });
     }
 
     _handleConfid = (item) => {
         this.setState({
-            confidValue:item.value,
-            confidLabel:item.label
+            confidValue: item.value,
+            confidLabel: item.label
         })
     }
 
     _handleFocusCat = () => {
-        const  {isFocusCat} = this.state;
-        this.setState({isFocusCat:!isFocusCat});
+        const { isFocusCat } = this.state;
+        this.setState({ isFocusCat: !isFocusCat });
     }
 
     _handleCat = (item) => {
         this.setState({
-            catValue:item.value,
-            catLabel:item.label
+            catValue: item.value,
+            catLabel: item.label
         })
     }
 
     _handleNameGroup = (value) => {
-        const {groupnameValue} = this.state;
+        const { groupnameValue } = this.state;
         this.setState({
-            grouplinkValue:groupnameValue.split(' ').join(''),
-            groupnameValue:value
+            grouplinkValue: groupnameValue.split(' ').join(''),
+            groupnameValue: value
         })
     }
 
     _createGroup = () => {
-        const {groupdescriptionValue, grouplinkValue, groupnameValue, catValue, confidValue} = this.state;
-        const {_handleModalClose} = this.props;
-        if(grouplinkValue && groupnameValue && catValue && confidValue && groupdescriptionValue){
+        const { groupdescriptionValue, grouplinkValue, groupnameValue, catValue, confidValue } = this.state;
+        const { _handleModalClose } = this.props;
+        if (grouplinkValue && groupnameValue && catValue && confidValue && groupdescriptionValue) {
             const data = {
-                group_name:grouplinkValue,
-                group_title:groupnameValue,
-                about:groupdescriptionValue,
-                category:catValue,
-                privacy:confidValue
-            } 
-        }else{
+                group_name: grouplinkValue,
+                group_title: groupnameValue,
+                about: groupdescriptionValue,
+                category: catValue,
+                privacy: confidValue
+            }
+        } else {
             this.setState({
-                is_alert:true,
-                alert_title:'Formulaire non valide!',
-                alert_subtitle:'Veuillez remplir tous les champs'
+                is_alert: true,
+                alert_title: 'Formulaire non valide!',
+                alert_subtitle: 'Veuillez remplir tous les champs'
             })
         }
         _handleModalClose();
     }
 
     _handleCloseAlert = () => {
-        this.setState({is_alert:false});
+        this.setState({ is_alert: false });
     }
 
-    render(){
+    render() {
         const {
             _closeModalTicketCreation,
             isVisibleTckCrModal
@@ -165,13 +165,13 @@ class CreateTicket extends PureComponent {
             groupnameValue,
             groupdescriptionValue
         } = this.state;
-        return( 
+        return (
             <Modal
-                    animationType='none'
-                    transparent
-                    visible={isVisibleTckCrModal}
-                    onRequestClose={_closeModalTicketCreation}
-                >
+                animationType='none'
+                transparent
+                visible={isVisibleTckCrModal}
+                onRequestClose={_closeModalTicketCreation}
+            >
                 <ScrollView style={supportstyle.modalContainer}>
                     <View >
                         <View >
@@ -179,10 +179,10 @@ class CreateTicket extends PureComponent {
                                 Nouveau Ticket
                             </Text>
                         </View>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={_closeModalTicketCreation}
-                            >
-                            <AntDesign name='closecircle'  />
+                        >
+                            <AntDesign name='closecircle' />
                         </TouchableOpacity>
                     </View>
 
@@ -191,7 +191,7 @@ class CreateTicket extends PureComponent {
                             <Text style={supportstyle.entetelogin}>TItre du problème</Text>
                             <TextInput
                                 style={supportstyle.inputtextlogin}
-                                placeholder={ 'Nom du groupe...'}
+                                placeholder={'Nom du groupe...'}
                                 onChangeText={(value) => this._handleNameGroup(value)}
                             />
                         </View>
@@ -200,7 +200,7 @@ class CreateTicket extends PureComponent {
                             <Text style={supportstyle.entetelogin}>Desscrtiption</Text>
                             <TextInput
                                 style={supportstyle.inputtextlogin}
-                                placeholder={ 'Décrire votre problème...'}
+                                placeholder={'Décrire votre problème...'}
                                 onChangeText={(value) => this._handleNameGroup(value)}
                             />
                         </View>
@@ -229,30 +229,27 @@ class CreateTicket extends PureComponent {
                         </View>
                         <View style={supportstyle.image}>
                             {this.state.selectedImage && <Image source={this.state.selectedImage} style={{ width: 200, height: 200 }} />}
-                            <Button title="Associer une image" onPress={this.chooseImage}  />
+                            <Button title="Associer une image" onPress={this.chooseImage} />
                         </View>
                     </View>
 
-                    <View style={supportstyle.footerlogin}> 
-                        <TouchableOpacity 
+                    <View style={supportstyle.footerlogin}>
+                        <TouchableOpacity
                             style={supportstyle.btn}
-                            >
+                        >
                             <Text style={supportstyle.textbtnsubmit}>
-                                
+
                                 Envoyer
-                                
+
                             </Text>
-                            <MaterialCommunityIcons size={25}  color='#ECB818' name='send' style={supportstyle.icon} />
+                            <MaterialCommunityIcons size={25} color='#ECB818' name='send' style={supportstyle.icon} />
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
             </Modal>
-
         )
     }
-
-
-} 
+}
 
 const mapDispatchToProps = (dispatch) => {
     return {

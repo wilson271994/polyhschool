@@ -11,11 +11,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { planningstyle } from '../../assets/styles/studentplanning';
-import { COLORS } from '../../assets/styles/theme';
-import { switchHomePageAction } from '../../navigations/rootNavigation';
+import { planningstyle } from '../../../assets/styles/studentplanning';
+import { COLORS } from '../../../assets/styles/theme';
+import { switchHomePageAction } from '../../../navigations/rootNavigation';
+import { styles } from '../../../assets/styles';
 
-class Student_Planning extends PureComponent {
+class Planning extends PureComponent {
     constructor(props) {
         super(props);
         const today = new Date();
@@ -46,21 +47,20 @@ class Student_Planning extends PureComponent {
 
     _buildSchedule = () => {
         const { student_infos } = this.props;
-        const allTodayCourse = student_infos?.all_today_course || student_infos?.student_infos?.all_today_course || [];
-
+        const allTodayCourse = student_infos?.all_timetable || student_infos?.student_infos?.all_timetable || [];
         const schedule = allTodayCourse.reduce((acc, item) => {
             const dateKey = item?.date || item?.course_date || item?.start_date || '';
             if (!dateKey) return acc;
 
             if (!acc[dateKey]) acc[dateKey] = [];
             acc[dateKey].push({
-                id: item?.id || Math.random().toString(),
-                subject: item?.subject || item?.matiere || '--',
-                lesson: item?.lesson || item?.title || '--',
-                start: item?.start_time || item?.start || '--',
-                end: item?.end_time || item?.end || '--',
-                teacher: item?.teacher || item?.prof || '--',
-                room: item?.room || item?.salle || '--',
+                id          : item?.id || undefined,
+                subject     : item?.course.course_name || '--',
+                start_time  : item?.period_start_time || '--',
+                end_time    : item?.period_end_time || '--',
+                teacher     : item?.teacher.staff.name || '--',
+                sector      : item?.sector.name || '--', 
+                lessons     : item?.lessontimetable || []
             });
             return acc;
         }, {});
@@ -68,11 +68,11 @@ class Student_Planning extends PureComponent {
         this.setState({ schedule });
     };
 
-    _navigateToMenu = () => {
+    _navigateToHome = () => {
         switchHomePageAction(true);
     };
 
-    goToToday = () => {
+    _goToToday = () => {
         const today = new Date();
         this.setState({
             currentMonth: today.getMonth(),
@@ -81,7 +81,7 @@ class Student_Planning extends PureComponent {
         });
     };
 
-    changeMonth = (delta) => {
+    _changeMonth = (delta) => {
         this.setState(prev => {
             let newMonth = prev.currentMonth + delta;
             let newYear = prev.currentYear;
@@ -97,12 +97,12 @@ class Student_Planning extends PureComponent {
         });
     };
 
-    hasClasses = (year, month, day) => {
+    _hasClasses = (year, month, day) => {
         const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         return !!(this.state.schedule[dateKey] && this.state.schedule[dateKey].length > 0);
     };
 
-    renderMonthlyGrid = () => {
+    _renderMonthlyGrid = () => {
         const { currentMonth, currentYear, selectedDate } = this.state;
         const firstDay = new Date(currentYear, currentMonth, 1);
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -122,7 +122,7 @@ class Student_Planning extends PureComponent {
         // 2. Jours du mois
         for (let day = 1; day <= daysInMonth; day++) {
             const dateObj = new Date(currentYear, currentMonth, day);
-            const hasClass = this.hasClasses(currentYear, currentMonth, day);
+            const hasClass = this._hasClasses(currentYear, currentMonth, day);
             const isSelected = selectedDate && dateObj.toDateString() === selectedDate.toDateString();
             const isToday = isCurrentMonth && dateObj.getDate() === today.getDate();
 
@@ -168,10 +168,9 @@ class Student_Planning extends PureComponent {
 
         const dateKey = selectedDate ? this._formatDateKey(selectedDate) : '';
         const dayClasses = this.state.schedule[dateKey] || [];
-
         return (
             <SafeAreaView style={planningstyle.container}>
-                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary} />
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.bgPrimary}/>
 
                 {/* Halo Lumineux Poly-H */}
                 <View style={planningstyle.topGlow} pointerEvents="none" />
@@ -186,20 +185,20 @@ class Student_Planning extends PureComponent {
                     <View style={planningstyle.localHeader}>
                         <TouchableOpacity
                             style={planningstyle.btnBackCustom}
-                            onPress={this._navigateToMenu}
+                            onPress={this._navigateToHome}
                             activeOpacity={0.7}
                         >
                             <Icon name="chevron-left" size={26} color={COLORS.textPrimary} />
                         </TouchableOpacity>
                         <Text style={planningstyle.localTitleText}>
-                            Mon Planning
+                            Calendrier des cours
                         </Text>
                     </View>
 
                     {/* Calendrier Mensuel */}
                     <View style={planningstyle.calendarCard}>
                         <View style={planningstyle.calendarNav}>
-                            <TouchableOpacity onPress={() => this.changeMonth(-1)} style={planningstyle.navBtn}>
+                            <TouchableOpacity onPress={() => this._changeMonth(-1)} style={planningstyle.navBtn}>
                                 <Icon name="chevron-left" size={22} color={COLORS.textPrimary} />
                             </TouchableOpacity>
 
@@ -207,11 +206,11 @@ class Student_Planning extends PureComponent {
                                 {monthNames[currentMonth]} {currentYear}
                             </Text>
 
-                            <TouchableOpacity onPress={this.goToToday} style={planningstyle.todayButton}>
+                            <TouchableOpacity onPress={this._goToToday} style={planningstyle.todayButton}>
                                 <Icon name="calendar-today" size={18} color={COLORS.accentGold} />
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={() => this.changeMonth(1)} style={planningstyle.navBtn}>
+                            <TouchableOpacity onPress={() => this._changeMonth(1)} style={planningstyle.navBtn}>
                                 <Icon name="chevron-right" size={22} color={COLORS.textPrimary} />
                             </TouchableOpacity>
                         </View>
@@ -225,7 +224,7 @@ class Student_Planning extends PureComponent {
                         </View>
 
                         <View style={planningstyle.daysGrid}>
-                            {this.renderMonthlyGrid()}
+                            {this._renderMonthlyGrid()}
                         </View>
                     </View>
 
@@ -250,9 +249,9 @@ class Student_Planning extends PureComponent {
                             dayClasses.map(item => (
                                 <View key={item.id} style={planningstyle.classCard}>
                                     <View style={planningstyle.timeColumn}>
-                                        <Text style={planningstyle.startTime}>{item.start}</Text>
+                                        <Text style={planningstyle.startTime}>{item.start_time}</Text>
                                         <View style={planningstyle.timeLine} />
-                                        <Text style={planningstyle.endTime}>{item.end}</Text>
+                                        <Text style={planningstyle.endTime}>{item.end_time}</Text>
                                     </View>
 
                                     <View style={planningstyle.classInfo}>
@@ -261,15 +260,29 @@ class Student_Planning extends PureComponent {
                                                 {item.subject}
                                             </Text>
                                             <View style={planningstyle.roomBadge}>
-                                                <Text style={planningstyle.roomText}>{item.room}</Text>
+                                                <Text style={planningstyle.roomText}>Salle : {item.sector}</Text>
                                             </View>
                                         </View>
 
                                         <View style={planningstyle.detailRow}>
                                             <Icon name="book-open-variant" size={14} color={COLORS.accentCyan} />
-                                            <Text style={planningstyle.lessonText} numberOfLines={1}>
-                                                {item.lesson}
-                                            </Text>
+                                            {
+                                                item.lessons ?
+                                                    item.lessons.map((less, key) => 
+                                                        <View style={planningstyle.containerlesson} key={key}>
+                                                            <Text style={[styles.textBold, planningstyle.lessonText]} numberOfLines={1}>
+                                                                Lecon : {less.lesson.lesson_name}
+                                                            </Text>
+                                                            <Text style={[styles.text, planningstyle.lessonTime]} numberOfLines={1}>
+                                                                Periode : {less.period_start_time} - {less.period_end_time}
+                                                            </Text>
+                                                            <Text style={[styles.text, planningstyle.lessonTime]} numberOfLines={1}>
+                                                                Statut : {less.is_complete ? 'Termine' : 'En cours'}
+                                                            </Text>
+                                                        </View>
+                                                    )
+                                                :null
+                                            }
                                         </View>
 
                                         <View style={planningstyle.detailRow}>
@@ -300,4 +313,4 @@ const mapStateToProps = (state) => ({
     student_infos: state.auth.student_infos || {},
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Student_Planning);
+export default connect(mapStateToProps, mapDispatchToProps)(Planning);

@@ -10,7 +10,8 @@ import {
     KeyboardAvoidingView,
     Platform,
     Keyboard,
-    StatusBar
+    StatusBar,
+    ActivityIndicator
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-toast-message';
@@ -19,12 +20,15 @@ import { connect } from 'react-redux';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { SwipeablePanel } from 'rn-swipeable-panel';
 
-import { agendastyle } from '../../assets/styles/studentagenda';
-import { COLORS } from '../../assets/styles/theme';
-import { switchHomePageAction } from '../../navigations/rootNavigation';
-import { AddAgendaAction, UpdateAgendaAction, DeleteAgendaAction } from '../../reducers/actions/index.js';
+import { agendastyle } from '../../../assets/styles/studentagenda.js';
+import { COLORS } from '../../../assets/styles/theme.js';
+import { switchHomePageAction } from '../../../navigations/rootNavigation.js';
+import { UpdateAgendaAction, DeleteAgendaAction, CreateAgendaAction } from '../../../reducers/actions/index.js';
+import { styles } from '../../../assets/styles/index.js';
+import Moment from 'moment';
+import 'moment/locale/fr';
 
-class Student_Agenda extends PureComponent {
+class Agenda extends PureComponent {
     constructor(props) {
         super(props);
         const today = new Date();
@@ -36,12 +40,16 @@ class Student_Agenda extends PureComponent {
             isEditing: false,
             editingEventId: null,
             newEventTitle: '',
-            newEventType: 'Examen',
-            newEventStartTime: '09:00',
-            newEventEndTime: '17:00',
+            newEventDescription:'',
+            newEventType: '',
+            newEventDate: null,
+            newEventDateInput:'',
+            newEventStartTime: '',
+            newEventEndTime: '',
             newEventStartTimeError: '',
             newEventEndTimeError: '',
-            events: this.getMockEvents(),
+            newEventDateError: '',
+            events: this._getMockEvents(),
             showDeleteAlert: false,
             eventToDelete: null,
             isVisibleMenu: false,
@@ -49,11 +57,11 @@ class Student_Agenda extends PureComponent {
         };
     }
 
-    _navigateToMenu = () => {
+    _navigateToHome = () => {
         switchHomePageAction(true);
     };
 
-    getMockEvents = () => {
+    _getMockEvents = () => {
         const events = {};
         const todayStr = new Date().toISOString().split('T')[0];
 
@@ -71,7 +79,7 @@ class Student_Agenda extends PureComponent {
         return events;
     };
 
-    prevMonth = () => {
+    _prevMonth = () => {
         let { currentMonth, currentYear } = this.state;
         currentMonth--;
         if (currentMonth < 0) {
@@ -81,7 +89,7 @@ class Student_Agenda extends PureComponent {
         this.setState({ currentMonth, currentYear });
     };
 
-    nextMonth = () => {
+    _nextMonth = () => {
         let { currentMonth, currentYear } = this.state;
         currentMonth++;
         if (currentMonth > 11) {
@@ -91,7 +99,7 @@ class Student_Agenda extends PureComponent {
         this.setState({ currentMonth, currentYear });
     };
 
-    goToToday = () => {
+    _goToToday = () => {
         const today = new Date();
         this.setState({
             currentMonth: today.getMonth(),
@@ -100,7 +108,7 @@ class Student_Agenda extends PureComponent {
         });
     };
 
-    validateAndFormatTime = (text, fieldName) => {
+    _validateAndFormatTime = (text, fieldName) => {
         let cleaned = text.replace(/[^0-9]/g, '');
 
         if (cleaned.length > 4) {
@@ -138,7 +146,49 @@ class Student_Agenda extends PureComponent {
         return formatted;
     };
 
-    openAddModal = () => {
+    _formatEventDate = (text) => {
+        let cleaned = text.replace(/\D/g, '').substring(0, 8);
+        let formatted = cleaned;
+
+        if (cleaned.length > 2) {
+            formatted = cleaned.slice(0, 2) + '/' + cleaned.slice(2);
+        }
+        if (cleaned.length > 4) {
+            formatted = cleaned.slice(0, 2) + '/' + cleaned.slice(2, 4) + '/' + cleaned.slice(4);
+        }
+        return formatted;
+    };
+
+    _validateEventDate = (dateStr) => {
+        if (dateStr.length !== 10) return false;
+        const [jj, mm, aaaa] = dateStr.split('/').map(Number);
+        if (isNaN(jj) || isNaN(mm) || isNaN(aaaa)) return false;
+        if (aaaa < 2024 || aaaa > 2100) return false;
+        if (mm < 1 || mm > 12) return false;
+        if (jj < 1 || jj > 31) return false;
+
+        const date = new Date(aaaa, mm - 1, jj);
+        return date.getFullYear() === aaaa && date.getMonth() === mm - 1 && date.getDate() === jj;
+    };
+
+    _handleEventDateChange = (text) => {
+        const formatted = this._formatEventDate(text);
+        this.setState({ newEventDateInput: formatted });
+
+        if (formatted.length === 10) {
+            if (!this._validateEventDate(formatted)) {
+                this.setState({ newEventDateError: 'Date invalide', newEventDate: null });
+            } else {
+                const [jj, mm, aaaa] = formatted.split('/').map(Number);
+                const date = new Date(aaaa, mm - 1, jj);
+                this.setState({ newEventDateError: '', newEventDate: date });
+            }
+        } else {
+            this.setState({ newEventDateError: '', newEventDate: null });
+        }
+    };
+
+    _openAddModal = () => {
         this.setState({
             showModal: true,
             isEditing: false,
@@ -152,7 +202,7 @@ class Student_Agenda extends PureComponent {
         });
     };
 
-    openEditModal = (event) => {
+    _openEditModal = (event) => {
         this.setState({
             showModal: true,
             isEditing: true,
@@ -167,14 +217,16 @@ class Student_Agenda extends PureComponent {
         });
     };
 
-    saveEvent = () => {
+    _submitEvent = () => {
         const {
             selectedDate, newEventTitle, newEventType,
             newEventStartTime, newEventEndTime,
-            isEditing, editingEventId, events,
+            isEditing, editingEventId, newEventDescription, newEventDate
         } = this.state;
 
-        const { user_token } = this.props;
+        const { user_token, student_infos } = this.props;
+
+        var events = student_infos.all_agenda_task;
 
         if (!newEventTitle.trim()) {
             Toast.show({ type: 'error', text1: 'Titre requis' });
@@ -186,70 +238,58 @@ class Student_Agenda extends PureComponent {
             Toast.show({ type: 'error', text1: 'Heure invalide (HH:MM)' });
             return;
         }
+
         if (newEventStartTime >= newEventEndTime) {
             Toast.show({ type: 'error', text1: 'L\'heure de fin doit être après le début' });
             return;
         }
 
         const dateKey = selectedDate.toISOString().split('T')[0];
-        const colorMap = {
-            Examen: COLORS.success,
-            révisions: '#F43F5E',
-            Rattrapage: COLORS.accentGold,
-            réunions: COLORS.accentCyan,
-        };
 
-        const eventData = {
-            title: newEventTitle.trim(),
-            type: newEventType,
-            color: colorMap[newEventType] || COLORS.textMuted,
-            startTime: newEventStartTime,
-            endTime: newEventEndTime,
-        };
-
-        let updatedEvents = { ...events };
+        var updatedEvents = { ...events };
+        var formData = new FormData();
 
         if (isEditing) {
             updatedEvents[dateKey] = updatedEvents[dateKey].map(ev =>
                 ev.id === editingEventId ? { ...ev, ...eventData } : ev
             );
-
-            const data = new FormData();
-            data.append('token', user_token);
-            data.append('id', editingEventId);
-            data.append('title', eventData.title);
-            data.append('type', eventData.type);
-            data.append('start_time', eventData.startTime);
-            data.append('end_time', eventData.endTime);
-            data.append('date', dateKey);
-            UpdateAgendaAction(data);
+            formData.append('token', user_token);
+            formData.append('id', editingEventId);
+            formData.append('title', newEventTitle);
+            formData.append('description', newEventDescription);
+            formData.append('task_type', newEventType.id);
+            formData.append('start_time', newEventStartTime);
+            formData.append('end_time', newEventEndTime);
+            formData.append('date', Moment(newEventDate).format('YYYY-MM-DD'));
+            //UpdateAgendaAction(data);
         } else {
-            const newEvent = { id: Date.now(), ...eventData };
-            updatedEvents[dateKey] = [...(updatedEvents[dateKey] || []), newEvent];
-
-            const data = new FormData();
-            data.append('token', user_token);
-            data.append('title', eventData.title);
-            data.append('type', eventData.type);
-            data.append('start_time', eventData.startTime);
-            data.append('end_time', eventData.endTime);
-            data.append('date', dateKey);
-            AddAgendaAction(data);
+            formData.append('token', user_token);
+            formData.append('school', student_infos.school_id);
+            formData.append('student', student_infos.id);
+            formData.append('title', newEventTitle);
+            formData.append('description', newEventDescription);
+            formData.append('task_type', newEventType.id);
+            formData.append('start_time', newEventStartTime);
+            formData.append('end_time', newEventEndTime);
+            formData.append('date', Moment(newEventDate).format('YYYY-MM-DD'));
+            console.log(formData)
+            CreateAgendaAction(formData, events, this._closeSubmitEvent);
         }
+    };
 
+    _closeSubmitEvent = () => {
         this.setState({
-            events: updatedEvents,
             showModal: false,
             newEventTitle: '',
-            newEventType: 'Examen',
+            newEventType: '',
             newEventStartTime: '',
             newEventEndTime: '',
             isEditing: false,
             editingEventId: null,
         });
-    };
+    }
 
-    showDeleteConfirmation = (eventId) => {
+    _showDeleteConfirmation = (eventId) => {
         this.setState({
             showDeleteAlert: true,
             eventToDelete: eventId,
@@ -257,7 +297,7 @@ class Student_Agenda extends PureComponent {
         });
     };
 
-    confirmDelete = () => {
+    _confirmDelete = () => {
         const { eventToDelete, selectedDate, events } = this.state;
         const { user_token } = this.props;
 
@@ -281,19 +321,19 @@ class Student_Agenda extends PureComponent {
         }
     };
 
-    cancelDelete = () => {
+    _cancelDelete = () => {
         this.setState({ showDeleteAlert: false, eventToDelete: null });
     };
 
-    openEventMenu = (event) => {
+    _openEventMenu = (event) => {
         this.setState({ isVisibleMenu: true, selectedEvent: event });
     };
 
-    closeEventMenu = () => {
+    _closeEventMenu = () => {
         this.setState({ isVisibleMenu: false, selectedEvent: null });
     };
 
-    renderMonthlyGrid = () => {
+    _renderMonthlyGrid = () => {
         const { currentMonth, currentYear, selectedDate, events } = this.state;
         const firstDay = new Date(currentYear, currentMonth, 1);
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -347,8 +387,10 @@ class Student_Agenda extends PureComponent {
         return cells;
     };
 
-    renderSelectedDayEvents = () => {
-        const { selectedDate, events } = this.state;
+    _renderSelectedDayEvents = () => {
+        const { selectedDate } = this.state;
+        const { student_infos } = this.props;
+        const events = student_infos.all_agenda_task;
         const dateKey = selectedDate.toISOString().split('T')[0];
         const dayEvents = events[dateKey] || [];
 
@@ -362,7 +404,7 @@ class Student_Agenda extends PureComponent {
                     <TouchableOpacity
                         key={event.id}
                         style={[agendastyle.eventItem, { borderLeftColor: event.color }]}
-                        onPress={() => this.openEventMenu(event)}
+                        onPress={() => this._openEventMenu(event)}
                         activeOpacity={0.8}
                     >
                         <View style={agendastyle.eventContent}>
@@ -383,8 +425,10 @@ class Student_Agenda extends PureComponent {
         const {
             currentMonth, currentYear, selectedDate, showModal,
             isEditing, newEventTitle, newEventType, newEventStartTime,
-            newEventEndTime, newEventStartTimeError, newEventEndTimeError,
+            newEventEndTime, newEventStartTimeError, newEventEndTimeError, 
+            newEventDateError, newEventDateInput,
             showDeleteAlert, eventToDelete, isVisibleMenu, selectedEvent,
+            newEventDescription
         } = this.state;
 
         const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
@@ -392,6 +436,10 @@ class Student_Agenda extends PureComponent {
 
         const eventToDeleteObj = eventToDelete ?
             Object.values(this.state.events).flat().find(ev => ev.id === eventToDelete) : null;
+
+        const { student_infos, school_infos, is_loading } = this.props;
+        const current_school = school_infos.schools.filter((item) => item.id === student_infos.school_id);
+        const all_agenda_type = current_school[0].all_agenda_type;
 
         return (
             <SafeAreaView style={agendastyle.container}>
@@ -401,27 +449,29 @@ class Student_Agenda extends PureComponent {
                 <View style={agendastyle.topGlow} pointerEvents="none" />
                 <View style={agendastyle.bottomGlow} pointerEvents="none" />
 
+                {/* En-tête local standardisé Poly-H */}
+                <View style={agendastyle.headerBar}>
+                    <TouchableOpacity
+                        style={agendastyle.btnBackCustom}
+                        onPress={this._navigateToHome}
+                        activeOpacity={0.7}
+                    >
+                        <Icon name="chevron-left" size={26} color={COLORS.textPrimary} />
+                    </TouchableOpacity>
+                    <Text style={agendastyle.localTitleText}>Mon Agenda</Text>
+                </View>
+
+
                 <ScrollView
                     style={{ flex: 1 }}
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingTop: 10, paddingBottom: 110 }}
                 >
-                    {/* En-tête local standardisé Poly-H */}
-                    <View style={agendastyle.localHeader}>
-                        <TouchableOpacity
-                            style={agendastyle.btnBackCustom}
-                            onPress={this._navigateToMenu}
-                            activeOpacity={0.7}
-                        >
-                            <Icon name="chevron-left" size={26} color={COLORS.textPrimary} />
-                        </TouchableOpacity>
-                        <Text style={agendastyle.localTitleText}>Mon Agenda</Text>
-                    </View>
-
+                    
                     {/* Carte Calendrier */}
                     <View style={agendastyle.calendarCard}>
                         <View style={agendastyle.calendarHeader}>
-                            <TouchableOpacity onPress={this.prevMonth} style={agendastyle.navButton}>
+                            <TouchableOpacity onPress={this._prevMonth} style={agendastyle.navButton}>
                                 <Icon name="chevron-left" size={22} color={COLORS.textPrimary} />
                             </TouchableOpacity>
 
@@ -429,11 +479,11 @@ class Student_Agenda extends PureComponent {
                                 {monthNames[currentMonth]} {currentYear}
                             </Text>
 
-                            <TouchableOpacity onPress={this.goToToday} style={agendastyle.todayButton}>
+                            <TouchableOpacity onPress={this._goToToday} style={agendastyle.todayButton}>
                                 <Icon name="calendar-today" size={18} color={COLORS.accentGold} />
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={this.nextMonth} style={agendastyle.navButton}>
+                            <TouchableOpacity onPress={this._nextMonth} style={agendastyle.navButton}>
                                 <Icon name="chevron-right" size={22} color={COLORS.textPrimary} />
                             </TouchableOpacity>
                         </View>
@@ -447,7 +497,7 @@ class Student_Agenda extends PureComponent {
                         </View>
 
                         <View style={agendastyle.daysGrid}>
-                            {this.renderMonthlyGrid()}
+                            {this._renderMonthlyGrid()}
                         </View>
                     </View>
 
@@ -457,12 +507,12 @@ class Student_Agenda extends PureComponent {
                             <Text numberOfLines={1} style={agendastyle.eventsTitle}>
                                 Événements du {selectedDate.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}
                             </Text>
-                            <TouchableOpacity style={agendastyle.addButton} onPress={this.openAddModal} activeOpacity={0.8}>
+                            <TouchableOpacity style={agendastyle.addButton} onPress={this._openAddModal} activeOpacity={0.8}>
                                 <Icon name="plus-circle" size={28} color={COLORS.accentGold} />
                             </TouchableOpacity>
                         </View>
 
-                        {this.renderSelectedDayEvents()}
+                        {this._renderSelectedDayEvents()}
                     </View>
                 </ScrollView>
 
@@ -479,67 +529,98 @@ class Student_Agenda extends PureComponent {
                     >
                         <View style={agendastyle.modalContent}>
                             <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-                                <Text style={agendastyle.modalTitle}>
+                                <Text style={[styles.textBold, agendastyle.modalTitle]}>
                                     {isEditing ? 'Modifier l\'événement' : 'Nouvel événement'}
                                 </Text>
 
+                                <View>
+                                    <Text style={[styles.text, agendastyle.inputLabel]}>Titre de l'événement</Text>
+                                    <TextInput
+                                        style={agendastyle.modalInput}
+                                        placeholder="Titre de l'événement"
+                                        placeholderTextColor={COLORS.textMuted}
+                                        value={newEventTitle}
+                                        onChangeText={text => this.setState({ newEventTitle: text })}
+                                    />
+                                </View>
+                                
+                                <Text style={[styles.text, agendastyle.inputLabel]}>Description de l'événement</Text>
                                 <TextInput
                                     style={agendastyle.modalInput}
-                                    placeholder="Titre de l'événement"
+                                    placeholder="Description de l'événement"
                                     placeholderTextColor={COLORS.textMuted}
-                                    value={newEventTitle}
-                                    onChangeText={text => this.setState({ newEventTitle: text })}
+                                    value={newEventDescription}
+                                    onChangeText={text => this.setState({ newEventDescription: text })}
+                                    multiline
                                 />
+
+                                <Text style={[styles.text, agendastyle.inputLabel]}>Date de l'évènement *</Text>
+                                <TextInput
+                                    style={[
+                                        styles.text,
+                                        agendastyle.modalInput,
+                                        newEventDateError ? { borderColor: '#EF4444' } : null,
+                                    ]}
+                                    placeholder="JJ/MM/AAAA"
+                                    placeholderTextColor="#64748B"
+                                    value={newEventDateInput}
+                                    onChangeText={this._handleEventDateChange}
+                                    keyboardType="numeric"
+                                    maxLength={10}
+                                />
+                                {newEventDateError ? (
+                                    <Text style={[styles.text, agendastyle.textError]}>{newEventDateError}</Text>
+                                ) : null}
 
                                 <View style={agendastyle.timeRow}>
                                     <View style={agendastyle.timeField}>
-                                        <Text style={agendastyle.timeLabel}>Début</Text>
+                                        <Text style={[styles.text, agendastyle.inputLabel]}>Début</Text>
                                         <TextInput
                                             style={agendastyle.timeInput}
                                             placeholder="HH:MM"
                                             placeholderTextColor={COLORS.textMuted}
                                             value={newEventStartTime}
-                                            onChangeText={(text) => this.validateAndFormatTime(text, 'start')}
+                                            onChangeText={(text) => this._validateAndFormatTime(text, 'start')}
                                             keyboardType="numeric"
                                             maxLength={5}
                                         />
                                         {newEventStartTimeError ? (
-                                            <Text style={agendastyle.timeError}>{newEventStartTimeError}</Text>
+                                            <Text style={[styles.text, agendastyle.textError]}>{newEventStartTimeError}</Text>
                                         ) : null}
                                     </View>
 
                                     <View style={agendastyle.timeField}>
-                                        <Text style={agendastyle.timeLabel}>Fin</Text>
+                                        <Text style={[styles.text, agendastyle.inputLabel]}>Fin</Text>
                                         <TextInput
                                             style={agendastyle.timeInput}
                                             placeholder="HH:MM"
                                             placeholderTextColor={COLORS.textMuted}
                                             value={newEventEndTime}
-                                            onChangeText={(text) => this.validateAndFormatTime(text, 'end')}
+                                            onChangeText={(text) => this._validateAndFormatTime(text, 'end')}
                                             keyboardType="numeric"
                                             maxLength={5}
                                         />
                                         {newEventEndTimeError ? (
-                                            <Text style={agendastyle.timeError}>{newEventEndTimeError}</Text>
+                                            <Text style={[styles.text, agendastyle.textError]}>{newEventEndTimeError}</Text>
                                         ) : null}
                                     </View>
                                 </View>
 
                                 <View style={agendastyle.typeSelector}>
-                                    {['Examen', 'révisions', 'Rattrapage', 'réunions'].map(type => (
+                                    {all_agenda_type?.map((item, key) => (
                                         <TouchableOpacity
-                                            key={type}
+                                            key={key}
                                             style={[
                                                 agendastyle.typeButton,
-                                                newEventType === type && agendastyle.typeButtonActive,
+                                                newEventType === item && agendastyle.typeButtonActive,
                                             ]}
-                                            onPress={() => this.setState({ newEventType: type })}
+                                            onPress={() => this.setState({ newEventType: item })}
                                         >
                                             <Text style={[
                                                 agendastyle.typeText,
-                                                newEventType === type && { color: COLORS.textDark, fontWeight: 'bold' }
+                                                newEventType === item && { color: COLORS.textDark, fontWeight: 'bold' }
                                             ]}>
-                                                {type.charAt(0).toUpperCase() + type.slice(1)}
+                                                {item.name}
                                             </Text>
                                         </TouchableOpacity>
                                     ))}
@@ -557,10 +638,15 @@ class Student_Agenda extends PureComponent {
                                     <Text style={agendastyle.buttonTextCancel}>Annuler</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={agendastyle.confirmButton} onPress={this.saveEvent}>
-                                    <Text style={agendastyle.buttonTextConfirm}>
-                                        {isEditing ? 'Modifier' : 'Ajouter'}
-                                    </Text>
+                                <TouchableOpacity style={agendastyle.confirmButton} onPress={this._submitEvent}>
+                                    {is_loading ? (
+                                        <ActivityIndicator size="small" color={COLORS.textDark} />
+                                        ) : (
+                                            <Text style={agendastyle.buttonTextConfirm}>
+                                                {isEditing ? 'Modifier' : 'Ajouter'}
+                                            </Text>
+                                        )
+                                    }
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -582,8 +668,8 @@ class Student_Agenda extends PureComponent {
                     confirmText="Supprimer"
                     cancelButtonColor="rgba(255, 255, 255, 0.1)"
                     confirmButtonColor="#F43F5E"
-                    onCancelPressed={this.cancelDelete}
-                    onConfirmPressed={this.confirmDelete}
+                    onCancelPressed={this._cancelDelete}
+                    onConfirmPressed={this._confirmDelete}
                     contentContainerStyle={agendastyle.alertContainer}
                 />
 
@@ -594,7 +680,7 @@ class Student_Agenda extends PureComponent {
                     closeOnTouchOutside={true}
                     showCloseButton={true}
                     isActive={isVisibleMenu}
-                    onClose={this.closeEventMenu}
+                    onClose={this._closeEventMenu}
                     style={agendastyle.containermenu}
                 >
                     <View style={{ padding: 16 }}>
@@ -603,12 +689,12 @@ class Student_Agenda extends PureComponent {
                             <Text style={agendastyle.eventDetailTitle}>{selectedEvent?.title}</Text>
                         </View>
 
-                        <TouchableOpacity onPress={() => this.openEditModal(selectedEvent)} style={agendastyle.headermenuitem}>
+                        <TouchableOpacity onPress={() => this._openEditModal(selectedEvent)} style={agendastyle.headermenuitem}>
                             <Icon name="pencil" size={20} color={COLORS.accentCyan} />
                             <Text style={agendastyle.menulisttext}>Modifier l'événement</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => this.showDeleteConfirmation(selectedEvent?.id)} style={agendastyle.headermenuitem}>
+                        <TouchableOpacity onPress={() => this._showDeleteConfirmation(selectedEvent?.id)} style={agendastyle.headermenuitem}>
                             <Icon name="delete" size={20} color="#F43F5E" />
                             <Text style={[agendastyle.menulisttext, { color: '#F43F5E' }]}>Supprimer l'événement</Text>
                         </TouchableOpacity>
@@ -621,13 +707,18 @@ class Student_Agenda extends PureComponent {
 
 const mapDispatchToProps = (dispatch) => ({
     ...bindActionCreators({
-        switchHomePageAction
+        switchHomePageAction,
+        CreateAgendaAction,
+        UpdateAgendaAction
     }, dispatch),
 });
 
 const mapStateToProps = (state) => ({
+    is_loading: state.loader.is_loading,
     user_infos: state.auth.user_infos,
     user_token: state.auth.user_token,
+    student_infos: state.auth.student_infos,
+    school_infos: state.auth.school_infos,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Student_Agenda);
+export default connect(mapStateToProps, mapDispatchToProps)(Agenda);

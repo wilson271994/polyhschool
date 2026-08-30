@@ -16,15 +16,16 @@ import { Dropdown } from 'react-native-element-dropdown';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 
-import { styles } from '../../assets/styles';
-import { supportstyle } from '../../assets/styles/support';
-import { COLORS } from '../../assets/styles/theme';
-import CreateTicket from './Forms/CreateTicket';
+import { styles } from '../../../assets/styles';
+import { supportstyle } from '../../../assets/styles/support';
+import { COLORS } from '../../../assets/styles/theme';
+import CreateTicket from '../Forms/CreateTicket';
 import {
     switchHomePageAction,
     switchSupportChatAction,
     switchProfilPageAction,
-} from '../../navigations/rootNavigation';
+    switchFooterVisibilityAction,
+} from '../../../navigations/rootNavigation';
 
 class Support extends PureComponent {
     constructor(props) {
@@ -69,6 +70,7 @@ class Support extends PureComponent {
 
     _navigateToSupportChat = () => {
         switchSupportChatAction(true);
+        switchFooterVisibilityAction(false);
     };
 
     _navigateToProfil = () => {
@@ -302,6 +304,7 @@ const mapDispatchToProps = (dispatch) => ({
             switchHomePageAction,
             switchSupportChatAction,
             switchProfilPageAction,
+            switchFooterVisibilityAction
         },
         dispatch
     ),

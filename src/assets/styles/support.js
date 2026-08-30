@@ -127,7 +127,7 @@ export const supportstyle = StyleSheet.create({
     /* FAB (Floating Action Button) */
     fab: {
         position: 'absolute',
-        bottom: 90,
+        bottom: 100,
         right: 20,
         width: 52,
         height: 52,

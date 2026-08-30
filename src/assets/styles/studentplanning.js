@@ -249,12 +249,27 @@ export const planningstyle = StyleSheet.create({
     alignItems: 'center',
     marginTop: 4,
   },
+
+  //Lesson list container
+  containerlesson:{
+    padding:5,
+    backgroundColor:'#001F3F',
+    borderRadius:10,
+    marginLeft:10
+  },
   lessonText: {
     fontSize: 12,
     color: COLORS.textSecondary,
     marginLeft: 6,
     flex: 1,
   },
+  lessonTime:{
+    fontSize: 11,
+    color:'#eee',
+    marginLeft: 6,
+  },
+
+
   teacherText: {
     fontSize: 12,
     color: COLORS.textMuted,

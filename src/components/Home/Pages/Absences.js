@@ -2,13 +2,13 @@ import React, { PureComponent } from 'react';
 import { View, Text, Animated, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { styles } from '../../assets/styles';
-import { absencestyle } from '../../assets/styles/studentabsences';
-import { switchHomePageAction } from '../../navigations/rootNavigation';
+import { styles } from '../../../assets/styles';
+import { absencestyle } from '../../../assets/styles/studentabsences';
+import { switchHomePageAction } from '../../../navigations/rootNavigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
-class Student_Absences extends PureComponent {
+class Absences extends PureComponent {
     constructor(props) {
         super(props);
         const today = new Date();
@@ -131,7 +131,7 @@ class Student_Absences extends PureComponent {
                             <TouchableOpacity
                                 style={absencestyle.headerButton}
                                 onPress={this._navigateToMenu}>
-                                <Image style={styles.backstyle} source={require('../../assets/images/back.png')} />
+                                <Image style={styles.backstyle} source={require('../../../assets/images/back.png')} />
                             </TouchableOpacity>
                         </View>
                         <View style={absencestyle.headertext}>
@@ -158,7 +158,7 @@ class Student_Absences extends PureComponent {
         return (
             <View style={absencestyle.container}>
                 <ImageBackground
-                    source={require('../../assets/images/background.png')}
+                    source={require('../../../assets/images/background.png')}
                     style={styles.backgroundapp}
                     resizeMode="cover"
                 >
@@ -171,7 +171,7 @@ class Student_Absences extends PureComponent {
                         <View style={styles.section}>
                             <View style={styles.back}>
                                 <TouchableOpacity onPress={this._navigateToMenu}>
-                                    <Image style={styles.backstyle} source={require('../../assets/images/back.png')} />
+                                    <Image style={styles.backstyle} source={require('../../../assets/images/back.png')} />
                                 </TouchableOpacity>
                             </View>
                             <Text style={[styles.sectionTitle, styles.textBold,]}>Suivi des présences</Text>
@@ -267,4 +267,4 @@ const mapStateToProps = (state) => ({
     user_infos: state.auth.user_infos,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Student_Absences);
+export default connect(mapStateToProps, mapDispatchToProps)(Absences);
