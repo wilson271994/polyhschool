@@ -221,7 +221,7 @@ class Agenda extends PureComponent {
         const {
             selectedDate, newEventTitle, newEventType,
             newEventStartTime, newEventEndTime,
-            isEditing, editingEventId, newEventDescription, newEventDate
+            isEditing, editingEventId, newEventDescription, newEventDateInput
         } = this.state;
 
         const { user_token, student_infos } = this.props;
@@ -260,7 +260,7 @@ class Agenda extends PureComponent {
             formData.append('task_type', newEventType.id);
             formData.append('start_time', newEventStartTime);
             formData.append('end_time', newEventEndTime);
-            formData.append('date', Moment(newEventDate).format('YYYY-MM-DD'));
+            formData.append('date', Moment(newEventDateInput).format('YYYY-MM-DD'));
             //UpdateAgendaAction(data);
         } else {
             formData.append('token', user_token);
@@ -271,9 +271,11 @@ class Agenda extends PureComponent {
             formData.append('task_type', newEventType.id);
             formData.append('start_time', newEventStartTime);
             formData.append('end_time', newEventEndTime);
-            formData.append('date', Moment(newEventDate).format('YYYY-MM-DD'));
+            formData.append('date', Moment(newEventDateInput).format('YYYY-MM-DD'));
+
+            console.log(newEventDateInput)
             console.log(formData)
-            CreateAgendaAction(formData, events, this._closeSubmitEvent);
+            //CreateAgendaAction(formData, events, this._closeSubmitEvent);
         }
     };
 
